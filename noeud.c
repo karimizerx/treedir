@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-noeud *creer_noeud(bool b, char *nom)
+noeud *creer_noeud(bool b, char *nom) // Créer un noeud.
 {
     noeud *node = malloc(sizeof(noeud));
     node->est_dossier = b;
@@ -14,10 +14,28 @@ noeud *creer_noeud(bool b, char *nom)
     return node;
 }
 
-noeud *insert_noeud(noeud *node, char *chemin)
+noeud *insert_noeud(noeud *n, char *chemin)
 {
-
-    return NULL;
+    noeud *tmp = search_noeud(n, chemin);
+    if (tmp != NULL && tmp->est_dossier)
+    {
+        n->pere = tmp;
+        n->racine = tmp->racine;
+        liste_noeud *ln = tmp->fils;
+        while (ln != NULL)
+            ln = ln->succ;
+        ln = malloc(sizeof(liste_noeud));
+        ln->no = n;
+        ln->succ = NULL;
+    }
+    else
+    {
+        if (!tmp->est_dossier) // Cas 3.1 (ERREUR): Le chemin renvoie vers un fichier.
+            printf("Erreur dans 'cd' : Le chemin '%s' pointe vers un fichier.\n", *chemin);
+        else // Cas 3.2 (ERREUR) : Le chemin n'existe pas.
+            printf("Erreur dans 'cd' : Le chemin '%s' n'existe pas.\n", *chemin);
+        exit(EXIT_FAILURE); // On arrête donc le programme.
+    }
 }
 
 noeud *delete_noeud(noeud *node)
