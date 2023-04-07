@@ -26,5 +26,6 @@ extern noeud *delete_noeud(noeud *);
 extern noeud *search_noeud_list(liste_noeud *, char *);
 extern noeud *search_noeud_profondeur1(noeud *, char *);
 extern noeud *search_noeud(noeud *, char *);
+extern char *chemin_noeud(noeud *, char *);
 extern void print_noeud(noeud *);
 #endif

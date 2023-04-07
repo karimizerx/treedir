@@ -41,6 +41,37 @@ noeud *cd(noeud *courant, char *chemin)
     }
 }
 
-void pwd(noeud *courant)
+noeud *mkdir(noeud *courant, char *nom) // Créer un dossier à dans le dossier courant & renvoie le dossier créé.
 {
+    noeud *n = creer_noeud(true, nom);
+    n->pere = courant;
+    n->racine = courant->racine;
+    liste_noeud *ln = courant->fils;
+    while (ln != NULL)
+        ln = ln->succ;
+    ln = malloc(sizeof(liste_noeud));
+    ln->no = n;
+    ln->succ = NULL;
+    return n;
+}
+
+noeud *touch(noeud *courant, char *nom) // Créer un dossier à dans le dossier courant & renvoie le dossier créé.
+{
+    noeud *n = creer_noeud(false, nom);
+    n->pere = courant;
+    n->racine = courant->racine;
+    liste_noeud *ln = courant->fils;
+    while (ln != NULL)
+        ln = ln->succ;
+    ln = malloc(sizeof(liste_noeud));
+    ln->no = n;
+    ln->succ = NULL;
+    return n;
+}
+
+char *pwd(noeud *courant) // Affiche le chemin absolue du noeud n.
+{
+    char *chemin = chemin_noeud(courant, NULL);
+    printf("%s\n", *chemin);
+    return chemin;
 }

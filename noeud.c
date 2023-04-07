@@ -95,6 +95,22 @@ noeud *search_noeud(noeud *n, char *chem) // Cherche un noeud au boud du "chem" 
     }
 }
 
+char *chemin_noeud(noeud *n, char *chemin) // Prend un pointeur vers une chaine & écrit dans cette chaine le chemain absolue du noeud n.
+{
+    if (chemin == NULL)
+        chemin = malloc(sizeof(char));
+    if (n->pere == n->racine)
+    {
+        *chemin = '/' + *chemin;
+        return chemin;
+    }
+    else
+    {
+        *chemin = n->nom + '/' + *chemin;
+        return chemin_noeud(n->pere, chemin);
+    }
+}
+
 void print_noeud(noeud *node)
 {
 }

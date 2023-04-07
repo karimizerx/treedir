@@ -1,19 +1,19 @@
 #include "noeud.h"
 
-extern void ls(noeud *courant);
+extern void ls(noeud *);
 
-extern noeud *cd(noeud *courant, char *chem);
+extern noeud *cd(noeud *, char *);
 
-extern void pwd(noeud *courant);
+extern void pwd(noeud *);
 
-extern void mkdir(noeud *courant, char *nom);
+extern noeud *mkdir(noeud *, char *);
 
-extern void touch(noeud *courant, char *nom);
+extern noeud *touch(noeud *, char *);
 
-extern void rm(noeud *courant, char *nom);
+extern void rm(noeud *, char *);
 
-extern void cp(noeud *courant, char *chem1, char *chem2);
+extern void cp(noeud *, char *, char *);
 
-extern void mv(noeud *courant, char *chem1, char *chem2);
+extern void mv(noeud *, char *, char *);
 
-extern void print(noeud *courant);
+extern void print(noeud *);
