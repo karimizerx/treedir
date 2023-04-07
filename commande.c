@@ -10,19 +10,23 @@
 
 void ls(noeud *courant)
 {
-    liste_noeud *liste = courant.fils;
+    liste_noeud *liste = courant->fils;
     while (liste->no != NULL)
     {
         printf("%s   ", liste->no->nom);
         liste = liste->succ;
     }
-    printf("\n");
+    puts("");
 }
 
 void cd(noeud *courant, char *chem)
 {
-    if (chem == NULL)
-        courant = *(courant.racine);
+    // assert if chem existe
+    if (chem == NULL) // Cas 1 : Retour à la racine.
+        courant = courant->racine;
+    elif (*chem == '/')
+    {
+    }
 }
 
 void pwd(noeud *courant)
@@ -35,7 +39,7 @@ bool dansArb(noeud *courant, noeud *racine)
         return false;
     if (equal(courant, (racine)))
         return true;
-    liste_noeud *tmp = racine.fils;
+    liste_noeud *tmp = racine->fils;
     while (tmp->succ == NULL)
     {
         if (equal(courant, *(tmp->no)) || dansArb(courant, *(tmp->no)))
