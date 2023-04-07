@@ -8,7 +8,7 @@
 #include <string.h>
 #include <math.h>
 
-void ls(noeud courant)
+void ls(noeud *courant)
 {
     liste_noeud *liste = courant.fils;
     while (liste->no != NULL)
@@ -19,17 +19,17 @@ void ls(noeud courant)
     printf("\n");
 }
 
-void cd(noeud courant, char *chem)
+void cd(noeud *courant, char *chem)
 {
     if (chem == NULL)
         courant = *(courant.racine);
 }
 
-void pwd(noeud courant)
+void pwd(noeud *courant)
 {
 }
 
-bool dansArb(noeud courant, noeud racine)
+bool dansArb(noeud *courant, noeud *racine)
 {
     if (&racine == NULL)
         return false;
@@ -45,7 +45,7 @@ bool dansArb(noeud courant, noeud racine)
     return false;
 }
 
-noeud *dansList(noeud courant, liste_noeud tete)
+noeud *dansList(noeud *courant, liste_noeud *tete)
 {
     if (tete.no == NULL)
         return NULL;
@@ -54,7 +54,7 @@ noeud *dansList(noeud courant, liste_noeud tete)
     return dansList(courant, *(tete.succ));
 }
 
-bool equal(noeud o1, noeud o2)
+bool equal(noeud *o1, noeud *o2)
 {
     return o1.est_dossier == o2.est_dossier && o1.pere == o2.pere && o1.racine == o2.racine && o1.fils == o2.fils && equals(o1.nom, o2.nom);
 }
