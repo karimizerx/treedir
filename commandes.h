@@ -1,23 +1,19 @@
-#include <stdbool.h>
+#include "noeud.h"
 
-void ls(noeud courant);
+extern void ls(noeud courant);
 
-void cd(noeud courant, char *chem);
+extern void cd(noeud courant, char *chem);
 
-void cd(noeud courant);
+extern void pwd(noeud courant);
 
-void pwd(noeud courant);
+extern void mkdir(noeud courant, char *nom);
 
-void mkdir(noeud courant, char *nom);
+extern void touch(noeud courant, char *nom);
 
-void touch(noeud courant, char *nom);
+extern void rm(noeud courant, char *nom);
 
-void rm(noeud courant, char *nom);
+extern void cp(noeud courant, char *chem1, char *chem2);
 
-void cp(noeud courant, char *chem1, char *chem2);
+extern void mv(noeud courant, char *chem1, char *chem2);
 
-void mv(noeud courant, char *chem1, char *chem2);
-
-void print(noeud courant);
-
-bool verif(noeud courant);
+extern void print(noeud courant);

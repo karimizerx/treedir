@@ -1,5 +1,12 @@
-#include <commandes.h>
-#include <noeud.c>
+#include "noeud.h"
+#include "commandes.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <stddef.h>
+#include <stdbool.h>
+#include <string.h>
+#include <math.h>
 
 void ls(noeud courant)
 {
@@ -12,9 +19,14 @@ void ls(noeud courant)
     printf("\n");
 }
 
-void cd(noeud courant)
+void cd(noeud courant, char *chem)
 {
-    courant = *(courant.racine);
+    if (chem == NULL)
+        courant = *(courant.racine);
+}
+
+void pwd(noeud courant)
+{
 }
 
 bool dansArb(noeud courant, noeud racine)
