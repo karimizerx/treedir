@@ -1,10 +1,17 @@
 #include "noeud.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 noeud *creer_noeud(bool b, char *nom)
 {
-    return NULL;
+    noeud *node = malloc(sizeof(noeud));
+    node->est_dossier = b;
+    memcpy(node->nom, nom, 99); // On complète le tableau contenant le nom (avec 99 caractères max).
+    node->pere = NULL;
+    node->racine = NULL;
+    node->fils = NULL;
+    return node;
 }
 
 noeud *insert_noeud(noeud *node)
