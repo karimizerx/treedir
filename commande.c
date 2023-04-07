@@ -19,58 +19,46 @@ void ls(noeud *courant)
     puts("");
 }
 
-void cd(noeud *courant, char *chem)
+noeud *cd(noeud *courant, char *chem)
 {
-    // assert if chem existe
     if (chem == NULL) // Cas 1 : Retour à la racine.
-        courant = courant->racine;
-    elif (*chem == '/')
     {
+        courant = courant->racine;
+        return courant;
+    }
+    else if (*chem == '\0' || *chem == '.') // Cas 2 : On reste dans le dossier actuel (On est arrivé à la fin du chemin ou ".").
+        return courant;
+    else if (*chem == '..') // Cas 3 : On remonte au père avec "..".
+    {
+        courant = courant->pere;
+        return courant;
+    }
+    else
+    {
+        // On récupère le premier dossier dans le chemin.
+        char *chemin = malloc(sizeof(char));
+        unsigned i = 0;
+        while (*(chem + i) != '/' && *(chem + i) != '\0') // Tant qu'on est pas arrivé à la fin du chemin ou à un autre dossier ("/")
+        {
+            *chemin += *(chem + i);
+            ++i;
+        }
+
+        // Si on arrive ici, c'est que chem + i pointe vers / ou vers la fin.
+
+        if (search_noeud(courant, chemin) != NULL) // Cas 4.1 : On a trouvé le sous-chmein, on peut donc continuer à chercher.
+        {
+            courant = search_noeud(courant, chemin);
+            return cd(courant, chem + i + 1);
+        }
+        else // Cas 4.2 : On a pas trouvé de sous-chemin correspondant, donc il n'y en a pas.
+        {
+            puts("Erreur dans 'cd' : le chemin n'existe pas.");
+            exit(EXIT_FAILURE);
+        }
     }
 }
 
 void pwd(noeud *courant)
 {
-}
-
-bool dansArb(noeud *courant, noeud *racine)
-{
-    if (&racine == NULL)
-        return false;
-    if (equal(courant, (racine)))
-        return true;
-    liste_noeud *tmp = racine->fils;
-    while (tmp->succ == NULL)
-    {
-        if (equal(courant, *(tmp->no)) || dansArb(courant, *(tmp->no)))
-            return true;
-        tmp = tmp->succ;
-    }
-    return false;
-}
-
-noeud *dansList(noeud *courant, liste_noeud *tete)
-{
-    if (tete.no == NULL)
-        return NULL;
-    if (equal(courant, *(tete.no)))
-        return (tete.no);
-    return dansList(courant, *(tete.succ));
-}
-
-bool equal(noeud *o1, noeud *o2)
-{
-    return o1.est_dossier == o2.est_dossier && o1.pere == o2.pere && o1.racine == o2.racine && o1.fils == o2.fils && equals(o1.nom, o2.nom);
-}
-
-bool equals(char *a, char *b)
-{
-    if (strlen(a) != strlen(b))
-        return false;
-    for (size_t i = 0; i < strlen(a); ++i)
-    {
-        if (*(a + i) != *(b + i))
-            return false;
-    }
-    return true;
 }

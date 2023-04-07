@@ -2,7 +2,7 @@
 
 extern void ls(noeud *courant);
 
-extern void cd(noeud *courant, char *chem);
+extern noeud *cd(noeud *courant, char *chem);
 
 extern void pwd(noeud *courant);
 
