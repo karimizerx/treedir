@@ -19,58 +19,59 @@ void ls(noeud *courant)
     puts("");
 }
 
-void cd(noeud *courant, char *chem)
+noeud *cd(noeud *courant, char *chemin)
 {
-    // assert if chem existe
-    if (chem == NULL) // Cas 1 : Retour à la racine.
+    if (chemin == NULL) // Cas 1 : Le dossier demandé est la racine.
+    {
         courant = courant->racine;
-    elif (*chem == '/')
+        return courant; // On renvoie ce dossier.
+    }
+    else if (search_noeud(courant, chemin) != NULL && search_noeud(courant, chemin)->est_dossier) // Cas 2 : On trouve le noeud demandé & c'est bien un dossier.
     {
+        courant = search_noeud(courant, chemin);
+        return courant; // On renvoie ce dossier.
+    }
+    else
+    {
+        if (!search_noeud(courant, chemin)->est_dossier) // Cas 3.1 (ERREUR): Le chemin renvoie vers un fichier.
+            printf("Erreur dans 'cd' : Le chemin '%s' pointe vers un fichier.\n", *chemin);
+        else // Cas 3.2 (ERREUR) : Le chemin n'existe pas.
+            printf("Erreur dans 'cd' : Le chemin '%s' n'existe pas.\n", *chemin);
+        exit(EXIT_FAILURE); // On arrête donc le programme.
     }
 }
 
-void pwd(noeud *courant)
+noeud *mkdir(noeud *courant, char *nom) // Créer un dossier à dans le dossier courant & renvoie le dossier créé.
 {
+    noeud *n = creer_noeud(true, nom);
+    n->pere = courant;
+    n->racine = courant->racine;
+    liste_noeud *ln = courant->fils;
+    while (ln != NULL)
+        ln = ln->succ;
+    ln = malloc(sizeof(liste_noeud));
+    ln->no = n;
+    ln->succ = NULL;
+    return n;
 }
 
-bool dansArb(noeud *courant, noeud *racine)
+noeud *touch(noeud *courant, char *nom) // Créer un dossier à dans le dossier courant & renvoie le dossier créé.
 {
-    if (&racine == NULL)
-        return false;
-    if (equal(courant, (racine)))
-        return true;
-    liste_noeud *tmp = racine->fils;
-    while (tmp->succ == NULL)
-    {
-        if (equal(courant, *(tmp->no)) || dansArb(courant, *(tmp->no)))
-            return true;
-        tmp = tmp->succ;
-    }
-    return false;
+    noeud *n = creer_noeud(false, nom);
+    n->pere = courant;
+    n->racine = courant->racine;
+    liste_noeud *ln = courant->fils;
+    while (ln != NULL)
+        ln = ln->succ;
+    ln = malloc(sizeof(liste_noeud));
+    ln->no = n;
+    ln->succ = NULL;
+    return n;
 }
 
-noeud *dansList(noeud *courant, liste_noeud *tete)
+char *pwd(noeud *courant) // Affiche le chemin absolue du noeud n.
 {
-    if (tete.no == NULL)
-        return NULL;
-    if (equal(courant, *(tete.no)))
-        return (tete.no);
-    return dansList(courant, *(tete.succ));
-}
-
-bool equal(noeud *o1, noeud *o2)
-{
-    return o1.est_dossier == o2.est_dossier && o1.pere == o2.pere && o1.racine == o2.racine && o1.fils == o2.fils && equals(o1.nom, o2.nom);
-}
-
-bool equals(char *a, char *b)
-{
-    if (strlen(a) != strlen(b))
-        return false;
-    for (size_t i = 0; i < strlen(a); ++i)
-    {
-        if (*(a + i) != *(b + i))
-            return false;
-    }
-    return true;
+    char *chemin = chemin_noeud(courant, NULL);
+    printf("%s\n", *chemin);
+    return chemin;
 }
