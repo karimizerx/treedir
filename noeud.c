@@ -14,7 +14,7 @@ noeud *creer_noeud(bool b, char *nom) // Créer un noeud.
     return node;
 }
 
-noeud *insert_noeud(noeud *n, char *chemin)
+noeud *insert_noeud(noeud *n, char *chemin) // Insère un noeud en prenant un chemain en argument.
 {
     noeud *tmp = search_noeud(n, chemin);
     if (tmp != NULL && tmp->est_dossier)

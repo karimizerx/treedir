@@ -21,12 +21,17 @@ void ls(noeud *courant)
 
 noeud *cd(noeud *courant, char *chemin)
 {
-    if (chemin == NULL) // Cas 1 : Le dossier demandé est la racine.
+    if (chemin == NULL) // Cas 0 : Le dossier demandé est la racine.
     {
         courant = courant->racine;
         return courant; // On renvoie ce dossier.
     }
-    else if (search_noeud(courant, chemin) != NULL && search_noeud(courant, chemin)->est_dossier) // Cas 2 : On trouve le noeud demandé & c'est bien un dossier.
+    else if (chemin == '/') // Cas 1 : Le chemain est absolue.
+    {
+        courant = courant->racine;
+        ++chemin;
+    }
+    if (search_noeud(courant, chemin) != NULL && search_noeud(courant, chemin)->est_dossier) // Cas 2 : On trouve le noeud demandé & c'est bien un dossier.
     {
         courant = search_noeud(courant, chemin);
         return courant; // On renvoie ce dossier.
