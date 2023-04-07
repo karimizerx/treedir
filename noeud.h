@@ -19,4 +19,9 @@ struct liste_noeud
 
 typedef struct noeud noeud;
 typedef struct liste_noeud liste_noeud;
+
+extern noeud *creer_noeud(bool, char *);
+extern noeud *insert_noeud(noeud *);
+extern noeud *delete_noeud(noeud *);
+extern void print_noeud(noeud *);
 #endif
