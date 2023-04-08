@@ -4,6 +4,8 @@
 #include <stdbool.h>
 #include <string.h>
 #include "lecture.h"
+#include "commandes.h"
+#include "noeud.h"
 
 char **split(char *ligne)
 {
@@ -28,7 +30,7 @@ void quit(char* message){
     exit(EXIT_FAILURE);
 }
 
-void execute(char *command, char *arg1, char *arg2)
+void execute(noeud * courant,char *command, char *arg1, char *arg2)
 {
     if (command == NULL)
     {
@@ -40,12 +42,12 @@ void execute(char *command, char *arg1, char *arg2)
         case 'c':
             if (command[i + 1] == 'd'){
                 if(arg2!=NULL)
-                    cd(arg1);
+                    cd(courant,arg1);
                 else quit("too many arguments");
             }else if (command[i + 1] == 'p'){
                 if(arg1==NULL||arg2==NULL)
                 quit("too few arguments");
-                else cp(arg1,arg2);
+                else cp(courant,arg1,arg2);
             }else {
                 quit("command not recognized");
             }
@@ -54,7 +56,7 @@ void execute(char *command, char *arg1, char *arg2)
             if (command[i + 1] == 'v'){
                 if(arg1==NULL||arg2==NULL)
                     quit("too few arguments");
-                else mv(arg1,arg2);
+                else mv(courant,arg1,arg2);
             }else if(command[i + 1] != 'k'){
                 quit("command not recognized");
             }else if(equals("mkdir",command)){
@@ -62,18 +64,18 @@ void execute(char *command, char *arg1, char *arg2)
                     quit("too few arguments");
                 else if(arg2!=NULL)
                     quit("too many arguments");
-                mkdir(arg1);
+                mkdir(courant,arg1);
             }
             break;
         case 'p':
             if(equals("pwd",command)){
                 if(arg1!=NULL||arg2!=NULL)
                     quit("too many arguments");
-                else print();
+                else print(courant);
             }else if(equals("print",command)){
                 if(arg1!=NULL||arg2!=NULL)
                     quit("too many arguments");
-                else pwd();
+                else pwd(courant);
             }else 
                 quit("command not recognized");
         break;
@@ -82,14 +84,14 @@ void execute(char *command, char *arg1, char *arg2)
                 quit("command not recognized");
             if(arg2==NULL || arg1==NULL)
                 quit("too few arguments");
-            rm(arg1,arg2);
+            rm(courant,arg1);
         break;
         case 'l': 
             if (command[i + 1] != 's')
                 quit("command not recognized");
             if(arg2!=NULL || arg1!=NULL)
                 quit("too many arguments");
-            ls(arg1,arg2);
+            ls(courant);
         break;
         case 't':
             if (equals(command,"touch")){
@@ -97,7 +99,7 @@ void execute(char *command, char *arg1, char *arg2)
                 quit("too few arguments");
             if(arg2!=NULL)
                 quit("too many arguments");
-                touch(arg1);
+                touch(courant,arg1);
             }
         break;
         default:
@@ -174,7 +176,7 @@ char *next(char *w)
     return t;
 }
 
-void read(char *filename)
+void read(noeud *courant,char *filename)
 {
     // 200 poour les deux args, 25 pour ma commande et space
     FILE *flux = fopen(filename, "r");
@@ -190,16 +192,10 @@ void read(char *filename)
     while (fgets(string, 250, flux) != NULL)
     {
         char **tmp = split(string);
-        execute(tmp[0], tmp[1], tmp[2]);
+        execute(courant,tmp[0], tmp[1], tmp[2]);
     }
     free(string);
     int fin = fclose(flux);
     if (fin != 0)
         perror("erreur de fermuture");
-}
-
-int main()
-{
-    read("coms.txt");
-    return EXIT_SUCCESS;
 }
