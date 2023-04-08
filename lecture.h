@@ -17,3 +17,9 @@ extern void read(char *filename);
 
 // Enleve les espaces au debut et a la fin du char
 char *trim(char *string);
+
+//quitte le programme et affiche un message d'erreur
+void quit(char* message);
+
+//teste si deux strings sont egaux
+bool equals(char* a,char* b);

@@ -13,13 +13,19 @@ char **split(char *ligne)
     int nbw = nbwords(nvligne);
     if (nbw > 3)
     {
-        printf("too many arguments \n");
-        exit(EXIT_FAILURE);
+        quit("too many arguments");
     }
+    if(nvligne==NULL)
+        quit("error argument is (null)");
     tmp[0] = next(nvligne);
     tmp[1] = nbw >= 2 ? next(nvligne + strlen(tmp[0]) + 1) : NULL;
     tmp[2] = nbw == 3 ? next(nvligne + strlen(tmp[0]) + strlen(tmp[1]) + 1 + 1) : NULL;
     return tmp;
+}
+
+void quit(char* message){
+    printf("%s \n",message);
+    exit(EXIT_FAILURE);
 }
 
 void execute(char *command, char *arg1, char *arg2)
@@ -29,20 +35,84 @@ void execute(char *command, char *arg1, char *arg2)
         printf("command null");
         exit(EXIT_FAILURE);
     }
-    for (int i = 0; command[i] != '\0'; i++)
-    {
-        switch (command[i])
-        {
+    int i = 0;
+    switch (command[i]){
         case 'c':
-            if (command[i + 1] == 'd')
-                // commande cd
-                break;
-
+            if (command[i + 1] == 'd'){
+                if(arg2!=NULL)
+                    cd(arg1);
+                else quit("too many arguments");
+            }else if (command[i + 1] == 'p'){
+                if(arg1==NULL||arg2==NULL)
+                quit("too few arguments");
+                else cp(arg1,arg2);
+            }else {
+                quit("command not recognized");
+            }
+        break;
+        case 'm':
+            if (command[i + 1] == 'v'){
+                if(arg1==NULL||arg2==NULL)
+                    quit("too few arguments");
+                else mv(arg1,arg2);
+            }else if(command[i + 1] != 'k'){
+                quit("command not recognized");
+            }else if(equals("mkdir",command)){
+                if(arg1==NULL)
+                    quit("too few arguments");
+                else if(arg2!=NULL)
+                    quit("too many arguments");
+                mkdir(arg1);
+            }
+            break;
+        case 'p':
+            if(equals("pwd",command)){
+                if(arg1!=NULL||arg2!=NULL)
+                    quit("too many arguments");
+                else print();
+            }else if(equals("print",command)){
+                if(arg1!=NULL||arg2!=NULL)
+                    quit("too many arguments");
+                else pwd();
+            }else 
+                quit("command not recognized");
+        break;
+        case 'r':
+            if (command[i + 1] != 'm')
+                quit("command not recognized");
+            if(arg2==NULL || arg1==NULL)
+                quit("too few arguments");
+            rm(arg1,arg2);
+        break;
+        case 'l': 
+            if (command[i + 1] != 's')
+                quit("command not recognized");
+            if(arg2!=NULL || arg1!=NULL)
+                quit("too many arguments");
+            ls(arg1,arg2);
+        break;
+        case 't':
+            if (equals(command,"touch")){
+            if(arg1==NULL)
+                quit("too few arguments");
+            if(arg2!=NULL)
+                quit("too many arguments");
+                touch(arg1);
+            }
+        break;
         default:
             printf("Commande %s non reconnu", command);
-            break;
-        }
+        break;
     }
+}
+
+bool equals(char* a,char* b){
+    if(strlen(a)!=strlen(b))
+		return false;
+	for(size_t i=0;i<strlen(a);++i){
+		if(*(a+i)!=*(b+i)) return false;
+	}
+	return true;
 }
 
 int nbwords(char *s)
@@ -81,7 +151,7 @@ char *trim(char *string)
     if (tmp == NULL)
         printf("erreur de memoire");
     memcpy(tmp, string + j, i - j);
-    tmp[c - 1] = '\0';
+    tmp[c] = '\0';
     return tmp;
 }
 
@@ -106,7 +176,7 @@ char *next(char *w)
 
 void read(char *filename)
 {
-    // 200 poour les deux args, 25 pour ma commande et
+    // 200 poour les deux args, 25 pour ma commande et space
     FILE *flux = fopen(filename, "r");
     if (flux == NULL)
     {
