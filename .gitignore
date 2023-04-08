@@ -1,2 +1,4 @@
 # Compile file
 *.o
+*.vscode
+*.JSon
