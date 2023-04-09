@@ -99,7 +99,7 @@ void execute(noeud * courant,char *command, char *arg1, char *arg2)
                 quit("too few arguments");
             if(arg2!=NULL)
                 quit("too many arguments");
-                touch(courant,arg1);
+            touch(courant,arg1);
             }
         break;
         default:

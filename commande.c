@@ -97,7 +97,7 @@ void cp(noeud *courant, char *src, char *dst){
     //reste a tester si dst est dans src
     //on recupere le nom du nouveau fichier/dossier
     size_t i=strlen(dst)-1;
-    for(;dst[i]='\\';i--);
+    for(;dst[i]!='\\';i--);
     ++i;
     size_t size=strlen(dst)-i;
     char *nom=malloc(sizeof(char)*size+1);

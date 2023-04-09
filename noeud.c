@@ -39,7 +39,11 @@ noeud *insert_noeud(noeud *n, char *chemin) // Insère un noeud en prenant un ch
     }
 }
 
-noeud *delete_noeud(noeud *node)
+void delete_list(liste_noeud *list){
+    
+}
+
+void *delete_noeud(noeud *node)
 {
     if(node->est_dossier){
         delete_list(node->fils);
@@ -57,6 +61,9 @@ noeud *delete_noeud(noeud *node)
     free(node);
     tmp->succ=nvsucc;
 }
+
+
+
 
 noeud *search_noeud_list(liste_noeud *ln, char *nom) // Cherche un noeud "nom" dans une liste de fils.
 {
