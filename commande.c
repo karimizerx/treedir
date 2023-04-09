@@ -72,7 +72,10 @@ noeud *touch(noeud *courant, char *nom) // Créer un fichier dans le dossier cou
 
 char *pwd(noeud *courant) // Affiche le chemin absolue du noeud n.
 {
-    char *chemin = chemin_noeud(courant, NULL);
-    printf("%s\n", chemin);
+    char *tmp = chemin_noeud(courant, NULL); // On récupère la valeure absolue du noeud.
+    char *chemin = malloc(strlen(tmp) - 1);
+    memcpy(chemin, tmp, strlen(tmp) - 1); // On retire le "/" à la fin.
+    free(tmp);                            // On libère les ressources temporaires.
+    printf("%s\n", chemin);               // On affiche le chemin absolue.
     return chemin;
 }

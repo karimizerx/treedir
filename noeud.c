@@ -108,12 +108,12 @@ char *chemin_noeud(noeud *n, char *chemin) // Prend un pointeur vers une chaine 
 {
     if (chemin == NULL)
         chemin = malloc(sizeof(char));
-    if (n->pere == n)
+    if (n->pere == n) // Si on arrive à la racine.
     {
-        char *tmp = reverse_cat(chemin, "/");
+        char *tmp = reverse_cat(chemin, "/"); // On ajoute le "/" de la racine.
         chemin = malloc(strlen(tmp) * sizeof(char));
         memcpy(chemin, tmp, strlen(tmp));
-        return chemin;
+        return chemin; // On s'arrête & on renvoie le chemin absolue.
     }
     else
     {
@@ -123,23 +123,24 @@ char *chemin_noeud(noeud *n, char *chemin) // Prend un pointeur vers une chaine 
         tmp = reverse_cat(chemin, n->nom);
         chemin = malloc(strlen(tmp) * sizeof(char));
         memcpy(chemin, tmp, strlen(tmp));
+        free(tmp); // On libère les ressources temporaires.
         return chemin_noeud(n->pere, chemin);
     }
 }
 
-char *reverse_cat(char *s1, char *s2)
+char *reverse_cat(char *s1, char *s2) // Effectue une opération de concaténation à l'envers.
 {
-    size_t len = strlen(s1) + strlen(s2);
+    size_t len = strlen(s1) + strlen(s2); // Taille de la nouvelle chaine.
     char *tmp = malloc(strlen(s1) * sizeof(char));
-    memcpy(tmp, s1, strlen(s1));
-    s1 = malloc((len + 1) * sizeof(char));
-    memcpy(s1, s2, strlen(s2));
-    strcat(s1, tmp);
-    free(tmp);
-    return s1;
+    memcpy(tmp, s1, strlen(s1));           // On copie la valeure de la chaine s1.
+    s1 = malloc((len + 1) * sizeof(char)); // s1 devient mtn vide.
+    memcpy(s1, s2, strlen(s2));            // On y met s2.
+    strcat(s1, tmp);                       // Puis on concatène s1 (valeur = s2) & tmp (valeur = s1).
+    free(tmp);                             // On libère les ressources temporaires.
+    return s1;                             // On renvoie la chaine concaténée.
 }
 
-void print_noeud(noeud *n)
+void print_noeud(noeud *n) // Affiche les informations concernant un noeud.3
 {
     printf("Nom : %s\n", n->nom);
     printf("Racine : %s\n", n->racine->nom);
