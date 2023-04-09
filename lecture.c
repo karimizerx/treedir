@@ -178,7 +178,7 @@ char *next(char *w)
 
 void read(noeud *courant,char *filename)
 {
-    // 200 poour les deux args, 25 pour ma commande et space
+    // 200 pour les deux args, 25 pour ma commande et space
     FILE *flux = fopen(filename, "r");
     if (flux == NULL)
     {
@@ -193,6 +193,10 @@ void read(noeud *courant,char *filename)
     {
         char **tmp = split(string);
         execute(courant,tmp[0], tmp[1], tmp[2]);
+        free(*tmp);
+        free(*tmp+1);
+        free(*tmp+2);
+        free(tmp);
     }
     free(string);
     int fin = fclose(flux);
