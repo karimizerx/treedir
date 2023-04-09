@@ -22,9 +22,32 @@ noeud *init_noeud(bool b, char *nom) // Créer un noeud.
     return node;
 }
 
+noeud *insert_fils(noeud *courant, noeud *newfils) // Ajout le noeud "newfils" comme fils du noeud "courant".
+{
+    if (courant->fils == NULL)
+    {
+        courant->fils = malloc(sizeof(liste_noeud));
+        courant->fils->no = newfils;
+        courant->fils->succ = NULL;
+    }
+    else
+    {
+        liste_noeud *tmp = courant->fils;
+        while (tmp->succ != NULL)
+            tmp = tmp->succ;
+        // Quand on arrive ici, tmp pointe vers le dernier fils de courant.
+        tmp->succ = malloc(sizeof(liste_noeud));
+        tmp->succ->no = newfils;
+        tmp->succ->succ = NULL;
+    }
+    return newfils;
+}
+
 noeud *insert_noeud(noeud *n, char *chemin) // Insère un noeud en prenant un chemain en argument.
 {
+    printf("insert : n->nom : %s\n", n->nom);
     noeud *tmp = search_noeud(n, chemin);
+    printf("insert : n->nom : %s\n", n->nom);
     if (tmp != NULL && tmp->est_dossier)
     {
         n->pere = tmp;

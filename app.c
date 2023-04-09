@@ -113,6 +113,16 @@ int main(int argc, char const *argv[])
     ls(n8);
     puts("");
 
+    // Ajout d'un dossier.
+    // mkdir(n5, "ALlO");
+    ls(n1);
+    puts("");
+    noeud *n9 = creer_noeud(true, n0, n1, "Mickey");
+    insert_fils(n1, n9);
+    // insert_noeud(n0, "BBBB");
+    ls(n1);
+    puts("");
+
     // On libère toutes les ressources.
     free(pwdn0);
     free(pwdn1);
