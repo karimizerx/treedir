@@ -3,7 +3,15 @@
 #include <stdlib.h>
 #include <string.h>
 
-noeud *creer_noeud(bool b, char *nom) // Créer un noeud.
+noeud *creer_noeud(bool dossier, noeud *racine, noeud *pere, char *nom)
+{
+    noeud *n = init_noeud(dossier, nom);
+    n->pere = pere;
+    n->racine = racine;
+    return n;
+}
+
+noeud *init_noeud(bool b, char *nom) // Créer un noeud.
 {
     noeud *node = malloc(sizeof(noeud));
     node->est_dossier = b;
@@ -102,16 +110,41 @@ char *chemin_noeud(noeud *n, char *chemin) // Prend un pointeur vers une chaine 
         chemin = malloc(sizeof(char));
     if (n->pere == n->racine)
     {
-        *chemin = '/' + *chemin;
+        char *c = "/";
+        char *tmp = reverse_cat(chemin, c);
+        chemin = malloc(strlen(tmp) * sizeof(char));
+        memcpy(chemin, tmp, strlen(tmp));
         return chemin;
     }
     else
     {
-        *chemin = *(n->nom) + '/' + *chemin;
+        size_t len = strlen(chemin) + strlen(n->nom);
+        char *tmp = malloc(strlen(chemin) * sizeof(char));
+        memcpy(tmp, chemin, strlen(chemin));
+        chemin = malloc((len + 1) * sizeof(char));
+        memcpy(chemin, n->nom, strlen(n->nom));
+        // strcat(chemin, '/');
+        strcat(chemin, tmp);
+        free(tmp);
         return chemin_noeud(n->pere, chemin);
     }
 }
 
-void print_noeud(noeud *node)
+char *reverse_cat(char *s1, char *s2)
 {
+    size_t len = strlen(s1) + strlen(s2);
+    char *tmp = malloc(strlen(s1) * sizeof(char));
+    memcpy(tmp, s1, strlen(s1));
+    s1 = malloc((len + 1) * sizeof(char));
+    memcpy(s1, s2, strlen(s2));
+    strcat(s1, tmp);
+    free(tmp);
+    return s1;
+}
+
+void print_noeud(noeud *n)
+{
+    printf("Nom : %s\n", n->nom);
+    printf("Racine : %s\n", n->racine->nom);
+    printf("Pere : %s\n", n->pere->nom);
 }
