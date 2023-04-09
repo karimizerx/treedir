@@ -1,4 +1,5 @@
 #include "noeud.h"
+#include "lecture.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -40,7 +41,21 @@ noeud *insert_noeud(noeud *n, char *chemin) // Insère un noeud en prenant un ch
 
 noeud *delete_noeud(noeud *node)
 {
-    return NULL;
+    if(node->est_dossier){
+        delete_list(node->fils);
+    }
+    liste_noeud *tmp=node->pere->fils;
+    while(tmp->succ!=NULL||equals(tmp->succ->no->nom,node->nom)){
+        tmp=tmp->succ;
+    }
+    if(tmp->succ==NULL){
+        quit("fichier pas dans le dossier courant");
+    }
+    liste_noeud *nvsucc=tmp->succ->succ;
+    free(tmp->succ->no);
+    free(tmp->succ);
+    free(node);
+    tmp->succ=nvsucc;
 }
 
 noeud *search_noeud_list(liste_noeud *ln, char *nom) // Cherche un noeud "nom" dans une liste de fils.
@@ -113,4 +128,27 @@ char *chemin_noeud(noeud *n, char *chemin) // Prend un pointeur vers une chaine 
 
 void print_noeud(noeud *node)
 {
+}
+
+noeud *copie_arbre(noeud *node){
+    if(node==NULL)
+        return NULL;
+    noeud *tmp=creer_noeud(node->est_dossier,dupliquer(node->nom));
+    tmp->racine=node->racine;
+    if(node->est_dossier){
+        tmp->fils=copie_liste(node->fils);
+    }
+    return tmp;
+}
+
+liste_noeud* copie_liste(liste_noeud *head){
+    if(head==NULL) return NULL;
+    liste_noeud *tmp=malloc(sizeof(liste_noeud));
+    tmp->no=creer_noeud(head->no->est_dossier,dupliquer(head->no->nom));
+    tmp->no->racine=head->no->racine;
+    tmp->succ=copie_liste(head->succ);
+    if(tmp->no->est_dossier){
+       tmp->no->fils=copie_arbre(head->no->fils); 
+    }
+    return tmp;
 }

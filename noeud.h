@@ -28,4 +28,6 @@ extern noeud *search_noeud_profondeur1(noeud *, char *);
 extern noeud *search_noeud(noeud *, char *);
 extern char *chemin_noeud(noeud *, char *);
 extern void print_noeud(noeud *);
+extern noeud *copie_arbre(noeud *);
+extern liste_noeud *copie_liste(liste_noeud *);
 #endif

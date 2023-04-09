@@ -199,3 +199,9 @@ void read(noeud *courant,char *filename)
     if (fin != 0)
         perror("erreur de fermuture");
 }
+
+char * dupliquer(const char * s){
+	char *tmp=malloc((strlen(s))*sizeof(char));
+	memcpy(tmp,s,strlen(s));
+	return tmp;	
+}

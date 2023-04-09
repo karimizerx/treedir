@@ -1,5 +1,6 @@
 #include "noeud.h"
 #include "commandes.h"
+#include "lecture.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -79,4 +80,33 @@ char *pwd(noeud *courant) // Affiche le chemin absolue du noeud n.
     char *chemin = chemin_noeud(courant, NULL);
     printf("%s\n", *chemin);
     return chemin;
+}
+
+void rm(noeud * courant,char* chem){
+    delete_noeud(search_noeud(courant,chem));
+}
+
+void cp(noeud *courant, char *src, char *dst){
+    if(search_noeud(courant,dst)!=NULL){
+        quit("fichier existant");
+    }
+    noeud *copier= search_noeud(courant,src);
+    if(copier==NULL){
+        quit("fichier n'existe pas");
+    }
+    //reste a tester si dst est dans src
+    //on recupere le nom du nouveau fichier/dossier
+    size_t i=strlen(dst)-1;
+    for(;dst[i]='\\';i--);
+    ++i;
+    size_t size=strlen(dst)-i;
+    char *nom=malloc(sizeof(char)*size+1);
+    memcpy(nom,dst+i,size);
+    nom[size]='\0';
+    dst[i]='\0';
+    insert_noeud(copie_arbre(copier),dst);
+}
+
+void mv(noeud *, char *, char *){
+
 }
