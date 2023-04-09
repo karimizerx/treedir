@@ -31,11 +31,12 @@ noeud *insert_noeud(noeud *n, char *chemin) // Insère un noeud en prenant un ch
     else
     {
         if (!tmp->est_dossier) // Cas 3.1 (ERREUR): Le chemin renvoie vers un fichier.
-            printf("Erreur dans 'cd' : Le chemin '%s' pointe vers un fichier.\n", *chemin);
+            printf("Erreur dans 'insert_noeud' : Le chemin '%d' pointe vers un fichier.\n", *chemin);
         else // Cas 3.2 (ERREUR) : Le chemin n'existe pas.
-            printf("Erreur dans 'cd' : Le chemin '%s' n'existe pas.\n", *chemin);
+            printf("Erreur dans 'insert_noeud' : Le chemin '%d' n'existe pas.\n", *chemin);
         exit(EXIT_FAILURE); // On arrête donc le programme.
     }
+    return NULL;
 }
 
 noeud *delete_noeud(noeud *node)
@@ -65,11 +66,11 @@ noeud *search_noeud_profondeur1(noeud *n, char *nom) // Cherche un noeud "nom" d
 
 noeud *search_noeud(noeud *n, char *chem) // Cherche un noeud au boud du "chem" dans toute l'arborescence.
 {
-    if (*chem == '\0' || *chem == '.') // Cas 1 : On reste dans le dossier actuel (On est arrivé à la fin du chemin ou ".").
+    if (*chem == '\0') // Cas 1 : On reste dans le dossier actuel (On est arrivé à la fin du chemin ou ".").
         return n;
-    else if (*chem == '..') // Cas 2 : On remonte au père avec "..".
+    else if (*chem == '.') // Cas 2 : On reste dans le dossier actuel avec "." ou on remonte au père avec "..".
     {
-        return n->pere;
+        return (*(chem + 1) == '.') ? n->pere : n;
     }
     else
     {
@@ -106,7 +107,7 @@ char *chemin_noeud(noeud *n, char *chemin) // Prend un pointeur vers une chaine 
     }
     else
     {
-        *chemin = n->nom + '/' + *chemin;
+        *chemin = *(n->nom) + '/' + *chemin;
         return chemin_noeud(n->pere, chemin);
     }
 }
