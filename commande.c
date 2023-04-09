@@ -55,12 +55,7 @@ noeud *mkdir(noeud *courant, char *nom) // Créer un dossier dans le dossier cou
 noeud *touch(noeud *courant, char *nom) // Créer un fichier dans le dossier courant & renvoie le fichier créé.
 {
     noeud *n = creer_noeud(false, courant->racine, courant, nom);
-    liste_noeud *ln = courant->fils;
-    while (ln != NULL)
-        ln = ln->succ;
-    ln = malloc(sizeof(liste_noeud));
-    ln->no = n;
-    ln->succ = NULL;
+    insert_fils(courant, n);
     return n;
 }
 
