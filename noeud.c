@@ -108,24 +108,21 @@ char *chemin_noeud(noeud *n, char *chemin) // Prend un pointeur vers une chaine 
 {
     if (chemin == NULL)
         chemin = malloc(sizeof(char));
-    if (n->pere == n->racine)
+    if (n->pere == n)
     {
-        char *c = "/";
-        char *tmp = reverse_cat(chemin, c);
+        char *tmp = reverse_cat(chemin, "/");
         chemin = malloc(strlen(tmp) * sizeof(char));
         memcpy(chemin, tmp, strlen(tmp));
         return chemin;
     }
     else
     {
-        size_t len = strlen(chemin) + strlen(n->nom);
-        char *tmp = malloc(strlen(chemin) * sizeof(char));
-        memcpy(tmp, chemin, strlen(chemin));
-        chemin = malloc((len + 1) * sizeof(char));
-        memcpy(chemin, n->nom, strlen(n->nom));
-        // strcat(chemin, '/');
-        strcat(chemin, tmp);
-        free(tmp);
+        char *tmp = reverse_cat(chemin, "/");
+        chemin = malloc(strlen(tmp) * sizeof(char));
+        memcpy(chemin, tmp, strlen(tmp));
+        tmp = reverse_cat(chemin, n->nom);
+        chemin = malloc(strlen(tmp) * sizeof(char));
+        memcpy(chemin, tmp, strlen(tmp));
         return chemin_noeud(n->pere, chemin);
     }
 }
