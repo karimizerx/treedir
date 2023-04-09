@@ -8,15 +8,14 @@
 #include <string.h>
 #include <math.h>
 
-void ls(noeud *courant)
+void ls(noeud *courant) // Affiche la liste des fils du noeud courant.
 {
-    liste_noeud *liste = courant->fils;
-    while (liste->no != NULL)
+    liste_noeud *tmp = courant->fils;
+    while (tmp != NULL)
     {
-        printf("%s   ", liste->no->nom);
-        liste = liste->succ;
+        printf("%s ", tmp->no->nom);
+        tmp = tmp->succ;
     }
-    puts("");
 }
 
 noeud *cd(noeud *courant, char *chemin)

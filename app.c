@@ -92,9 +92,26 @@ int main(int argc, char const *argv[])
     char *pwdn8 = pwd(n8);
     puts("");
 
-    puts("mkdir(n0, 'Cours')");
-    noeud *n = mkdir(n0, "Cours");
-    printf("%s\n", n->nom);
+    // Affichage des enfants de chaque noeud.
+    printf("ls(n0) : ");
+    ls(n0);
+    printf("\nls(n1) : ");
+    ls(n1);
+    printf("\nls(n2) : ");
+    ls(n2);
+    printf("\nls(n3) : ");
+    ls(n3);
+    printf("\nls(n4) : ");
+    ls(n4);
+    printf("\nls(n5) : ");
+    ls(n5);
+    printf("\nls(n6) : ");
+    ls(n6);
+    printf("\nls(n7) : ");
+    ls(n7);
+    printf("\nls(n8) : ");
+    ls(n8);
+    puts("");
 
     // On libère toutes les ressources.
     free(pwdn0);
@@ -106,5 +123,6 @@ int main(int argc, char const *argv[])
     free(pwdn6);
     free(pwdn7);
     free(pwdn8);
+    free(n0);
     return 0;
 }
