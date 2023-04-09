@@ -39,9 +39,9 @@ noeud *cd(noeud *courant, char *chemin)
     else
     {
         if (!search_noeud(courant, chemin)->est_dossier) // Cas 3.1 (ERREUR): Le chemin renvoie vers un fichier.
-            printf("Erreur dans 'cd' : Le chemin '%d' pointe vers un fichier.\n", *chemin);
+            printf("Erreur dans 'cd' : Le chemin '%s' pointe vers un fichier.\n", chemin);
         else // Cas 3.2 (ERREUR) : Le chemin n'existe pas.
-            printf("Erreur dans 'cd' : Le chemin '%d' n'existe pas.\n", *chemin);
+            printf("Erreur dans 'cd' : Le chemin '%s' n'existe pas.\n", chemin);
         exit(EXIT_FAILURE); // On arrête donc le programme.
     }
 }
@@ -77,6 +77,6 @@ noeud *touch(noeud *courant, char *nom) // Créer un fichier dans le dossier cou
 char *pwd(noeud *courant) // Affiche le chemin absolue du noeud n.
 {
     char *chemin = chemin_noeud(courant, NULL);
-    printf("%d\n", *chemin);
+    printf("%s\n", chemin);
     return chemin;
 }

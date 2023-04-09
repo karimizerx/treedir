@@ -10,7 +10,12 @@ int main(int argc, char const *argv[])
     n0->pere = n0;
     n0->racine = n0;
 
+    puts("pwd(n0)");
+    pwd(n0);
+
+    puts("mkdir(n0, 'Cours')");
     noeud *n = mkdir(n0, "Cours");
-    printf("%s", n->nom);
+    printf("%s\n", n->nom);
+
     return 0;
 }

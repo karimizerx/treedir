@@ -31,9 +31,9 @@ noeud *insert_noeud(noeud *n, char *chemin) // Insère un noeud en prenant un ch
     else
     {
         if (!tmp->est_dossier) // Cas 3.1 (ERREUR): Le chemin renvoie vers un fichier.
-            printf("Erreur dans 'insert_noeud' : Le chemin '%d' pointe vers un fichier.\n", *chemin);
+            printf("Erreur dans 'insert_noeud' : Le chemin '%s' pointe vers un fichier.\n", chemin);
         else // Cas 3.2 (ERREUR) : Le chemin n'existe pas.
-            printf("Erreur dans 'insert_noeud' : Le chemin '%d' n'existe pas.\n", *chemin);
+            printf("Erreur dans 'insert_noeud' : Le chemin '%s' n'existe pas.\n", chemin);
         exit(EXIT_FAILURE); // On arrête donc le programme.
     }
     return NULL;
