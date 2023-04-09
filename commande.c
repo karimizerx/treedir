@@ -107,6 +107,7 @@ void cp(noeud *courant, char *src, char *dst){
     insert_noeud(copie_arbre(copier),dst);
 }
 
-void mv(noeud *, char *, char *){
-
+void mv(noeud *courant, char *src, char *dst){
+    cp(courant,src,dst);
+    rm(courant,src);
 }
