@@ -24,3 +24,6 @@ void quit(char* );
 
 //teste si deux strings sont egaux
 bool equals(char*,char*);
+
+//copie un char[]
+char * dupliquer(const char * s);

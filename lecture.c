@@ -32,6 +32,7 @@ void quit(char* message){
 
 void execute(noeud * courant,char *command, char *arg1, char *arg2)
 {
+    /*
     if (command == NULL)
     {
         printf("command null");
@@ -99,13 +100,14 @@ void execute(noeud * courant,char *command, char *arg1, char *arg2)
                 quit("too few arguments");
             if(arg2!=NULL)
                 quit("too many arguments");
-                touch(courant,arg1);
+            touch(courant,arg1);
             }
         break;
         default:
             printf("Commande %s non reconnu", command);
         break;
     }
+    */
 }
 
 bool equals(char* a,char* b){
@@ -178,7 +180,7 @@ char *next(char *w)
 
 void read(noeud *courant,char *filename)
 {
-    // 200 poour les deux args, 25 pour ma commande et space
+    // 200 pour les deux args, 25 pour ma commande et space
     FILE *flux = fopen(filename, "r");
     if (flux == NULL)
     {
@@ -193,9 +195,24 @@ void read(noeud *courant,char *filename)
     {
         char **tmp = split(string);
         execute(courant,tmp[0], tmp[1], tmp[2]);
+        // free(*tmp);
+        // free(*(tmp+1));
+        // free(*(tmp+2));
+        // free(tmp);
     }
     free(string);
     int fin = fclose(flux);
     if (fin != 0)
         perror("erreur de fermuture");
+}
+
+char * dupliquer(const char * s){
+	char *tmp=malloc((strlen(s))*sizeof(char));
+	memcpy(tmp,s,strlen(s));
+	return tmp;	
+}
+
+int main(){
+    read(creer_noeud(true,NULL,NULL,"racine"),"coms.txt");
+    return EXIT_SUCCESS;
 }
