@@ -1,5 +1,6 @@
 #include "noeud.h"
 #include "lecture.h"
+#include "commandes.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -40,26 +41,31 @@ noeud *insert_noeud(noeud *n, char *chemin) // Insère un noeud en prenant un ch
 }
 
 void delete_list(liste_noeud *list){
-    
+    if(list!=NULL){ 
+        delete_list(list->succ);
+        free(list);
+    }
 }
 
-void *delete_noeud(noeud *node)
+void delete_noeud(noeud *node)
 {
-    if(node->est_dossier){
-        delete_list(node->fils);
+    if(node!=NULL){
+        if(node->est_dossier){
+            delete_list(node->fils);
+        }
+        liste_noeud *tmp=node->pere->fils;
+        while(tmp->succ!=NULL||equals(tmp->succ->no->nom,node->nom)){
+            tmp=tmp->succ;
+        }
+        if(tmp->succ==NULL){
+            quit("fichier pas dans le dossier courant");
+        }
+        liste_noeud *nvsucc=tmp->succ->succ;
+        free(tmp->succ->no);
+        free(tmp->succ);
+        free(node);
+        tmp->succ=nvsucc;
     }
-    liste_noeud *tmp=node->pere->fils;
-    while(tmp->succ!=NULL||equals(tmp->succ->no->nom,node->nom)){
-        tmp=tmp->succ;
-    }
-    if(tmp->succ==NULL){
-        quit("fichier pas dans le dossier courant");
-    }
-    liste_noeud *nvsucc=tmp->succ->succ;
-    free(tmp->succ->no);
-    free(tmp->succ);
-    free(node);
-    tmp->succ=nvsucc;
 }
 
 
@@ -155,7 +161,13 @@ liste_noeud* copie_liste(liste_noeud *head){
     tmp->no->racine=head->no->racine;
     tmp->succ=copie_liste(head->succ);
     if(tmp->no->est_dossier){
-       tmp->no->fils=copie_arbre(head->no->fils); 
+       tmp->no=copie_arbre(head->no); 
     }
     return tmp;
+}
+
+
+int main(){
+    noeud *node= creer_noeud(true,"racine");
+
 }
