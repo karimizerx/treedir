@@ -113,11 +113,21 @@ int main(int argc, char const *argv[])
     ls(n8);
     puts("\n");
 
-    // Ajout d'un dossier.
+    // Ajout d'un dossier/fichier.
     mkdir(n5, "Mickey");
-    touch(n0, "DRAKEN");
-    mkdir(n1, "Baji");
+    printf("ls(n5) : ");
+    ls(n5);
     puts("");
+    touch(n0, "DRAKEN");
+    printf("ls(n0) : ");
+    ls(n0);
+    puts("");
+    mkdir(n1, "Baji");
+    printf("ls(n1) : ");
+    ls(n1);
+    puts("");
+
+    // Déplacement dans un autre noeud.
 
     // On libère toutes les ressources.
     free(pwdn0);
@@ -129,6 +139,5 @@ int main(int argc, char const *argv[])
     free(pwdn6);
     free(pwdn7);
     free(pwdn8);
-    free(n0);
     return 0;
 }
