@@ -25,7 +25,7 @@ noeud *cd(noeud *courant, char *chemin)
         courant = courant->racine;
         return courant; // On renvoie ce dossier.
     }
-    else if (*chemin == '/') // Cas 1 : Le chemain est absolue.
+    else if (*chemin == '/') // Cas 1 : Le chemin est absolue.
     {
         courant = courant->racine;
         ++chemin;

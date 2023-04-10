@@ -128,6 +128,10 @@ int main(int argc, char const *argv[])
     puts("");
 
     // Déplacement dans un autre noeud.
+    noeud *courant = n1;
+    pwd(courant);
+    cd(courant, "ProjetC");
+    pwd(courant);
 
     // On libère toutes les ressources.
     free(pwdn0);
