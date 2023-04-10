@@ -128,6 +128,13 @@ int main(int argc, char const *argv[])
     puts("");
 
     // Déplacement dans un autre noeud.
+    /*     noeud *courant = n1;
+        pwd(courant);
+        cd(courant, "ProjetC");
+        pwd(courant); */
+
+    // Affichage de toute l'arborescence.
+    print(n0, 0);
 
     // On libère toutes les ressources.
     free(pwdn0);
