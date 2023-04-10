@@ -1,5 +1,6 @@
-slama che for
-sdo osx uc
-nc id iv
-qod co
-xi
+print
+    ls
+cd /Cours/Dew
+cd ..
+mkdir lessgo
+touch bruh 

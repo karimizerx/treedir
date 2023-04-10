@@ -83,7 +83,13 @@ char *pwd(noeud *courant) // Affiche le chemin absolue du noeud n.
 }
 
 void rm(noeud * courant,char* chem){
-    delete_noeud(search_noeud(courant,chem));
+    noeud *del=search_noeud(courant,chem);
+    if(del->est_dossier){
+        if(del->fils->no!=NULL ||del->fils->succ!=NULL )
+            quit("dossier n'est pas vide");
+    }
+    free(del->nom);
+    free(del);
 }
 
 void cp(noeud *courant, char *src, char *dst){

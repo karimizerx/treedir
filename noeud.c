@@ -143,6 +143,7 @@ void print_noeud(noeud *node)
 {
 }
 
+//copie un (sous-)arbre, renvoi sa tete avec pere=NULL
 noeud *copie_arbre(noeud *node){
     if(node==NULL)
         return NULL;
@@ -164,10 +165,4 @@ liste_noeud* copie_liste(liste_noeud *head){
        tmp->no=copie_arbre(head->no); 
     }
     return tmp;
-}
-
-
-int main(){
-    noeud *node= creer_noeud(true,"racine");
-
 }

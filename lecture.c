@@ -32,6 +32,11 @@ void quit(char* message){
 
 void execute(noeud * courant,char *command, char *arg1, char *arg2)
 {
+    if(command!=NULL)printf("%s ",command);
+    if(command!=arg1)printf("%s ",arg1);
+    if(command!=arg2)printf("%s ",arg2);
+    puts("\n");
+    /*
     if (command == NULL)
     {
         printf("command null");
@@ -106,6 +111,8 @@ void execute(noeud * courant,char *command, char *arg1, char *arg2)
             printf("Commande %s non reconnu", command);
         break;
     }
+    */
+
 }
 
 bool equals(char* a,char* b){
@@ -162,7 +169,7 @@ char *next(char *w)
     if (w == NULL)
         return NULL;
     size_t i = 0;
-    while (!(w[i] == ' ' || w[i] == '\0'))
+    while (!(w[i] == ' ' || w[i] == '\0'||w[i] == '\n'||w[i] == '\t'))
     {
         ++i;
     }
@@ -193,10 +200,10 @@ void read(noeud *courant,char *filename)
     {
         char **tmp = split(string);
         execute(courant,tmp[0], tmp[1], tmp[2]);
-        free(*tmp);
-        free(*tmp+1);
-        free(*tmp+2);
-        free(tmp);
+        // free(tmp[0]);
+        // free(tmp[1]);
+        // free(tmp[2]);
+        // free(tmp);
     }
     free(string);
     int fin = fclose(flux);
@@ -208,4 +215,10 @@ char * dupliquer(const char * s){
 	char *tmp=malloc((strlen(s))*sizeof(char));
 	memcpy(tmp,s,strlen(s));
 	return tmp;	
+}
+
+
+int main(){
+    read(NULL,"coms.txt");
+    return EXIT_SUCCESS;
 }
