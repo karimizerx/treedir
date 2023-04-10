@@ -66,8 +66,8 @@ noeud *insert_noeud(noeud *n, char *chemin) // Insère un noeud en prenant un ch
             else // Cas 3.2 (ERREUR) : Le chemin n'existe pas.
                 printf("Erreur dans 'insert_noeud' : Le chemin '%s' n'existe pas.\n", chemin);
             exit(EXIT_FAILURE); // On arrête donc le programme.
-        }
-        return NULL; */
+        }*/
+    return NULL;
 }
 
 noeud *delete_noeud(noeud *node)
