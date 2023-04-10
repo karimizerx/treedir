@@ -3,15 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-noeud *creer_noeud(bool dossier, noeud *racine, noeud *pere, char *nom)
-{
-    noeud *n = init_noeud(dossier, nom);
-    n->pere = pere;
-    n->racine = racine;
-    return n;
-}
-
-noeud *init_noeud(bool b, char *nom) // Créer un noeud.
+noeud *init_noeud(bool b, char *nom) // Initialise & renvoie un noeud avec son nom & son type.
 {
     noeud *node = malloc(sizeof(noeud));
     node->est_dossier = b;
@@ -20,6 +12,14 @@ noeud *init_noeud(bool b, char *nom) // Créer un noeud.
     node->racine = NULL;
     node->fils = NULL;
     return node;
+}
+
+noeud *creer_noeud(bool dossier, noeud *racine, noeud *pere, char *nom) // Crée & renvoie un noeud avec toutes ses valeurs.
+{
+    noeud *n = init_noeud(dossier, nom);
+    n->pere = pere;
+    n->racine = racine;
+    return n;
 }
 
 noeud *insert_fils(noeud *courant, noeud *newfils) // Ajout le noeud "newfils" comme fils du noeud "courant".
@@ -45,29 +45,29 @@ noeud *insert_fils(noeud *courant, noeud *newfils) // Ajout le noeud "newfils" c
 
 noeud *insert_noeud(noeud *n, char *chemin) // Insère un noeud en prenant un chemain en argument.
 {
-    printf("insert : n->nom : %s\n", n->nom);
-    noeud *tmp = search_noeud(n, chemin);
-    printf("insert : n->nom : %s\n", n->nom);
-    if (tmp != NULL && tmp->est_dossier)
-    {
-        n->pere = tmp;
-        n->racine = tmp->racine;
-        liste_noeud *ln = tmp->fils;
-        while (ln != NULL)
-            ln = ln->succ;
-        ln = malloc(sizeof(liste_noeud));
-        ln->no = n;
-        ln->succ = NULL;
-    }
-    else
-    {
-        if (!tmp->est_dossier) // Cas 3.1 (ERREUR): Le chemin renvoie vers un fichier.
-            printf("Erreur dans 'insert_noeud' : Le chemin '%s' pointe vers un fichier.\n", chemin);
-        else // Cas 3.2 (ERREUR) : Le chemin n'existe pas.
-            printf("Erreur dans 'insert_noeud' : Le chemin '%s' n'existe pas.\n", chemin);
-        exit(EXIT_FAILURE); // On arrête donc le programme.
-    }
-    return NULL;
+    /*     printf("insert : n->nom : %s\n", n->nom);
+        noeud *tmp = search_noeud(n, chemin);
+        printf("insert : n->nom : %s\n", n->nom);
+        if (tmp != NULL && tmp->est_dossier)
+        {
+            n->pere = tmp;
+            n->racine = tmp->racine;
+            liste_noeud *ln = tmp->fils;
+            while (ln != NULL)
+                ln = ln->succ;
+            ln = malloc(sizeof(liste_noeud));
+            ln->no = n;
+            ln->succ = NULL;
+        }
+        else
+        {
+            if (!tmp->est_dossier) // Cas 3.1 (ERREUR): Le chemin renvoie vers un fichier.
+                printf("Erreur dans 'insert_noeud' : Le chemin '%s' pointe vers un fichier.\n", chemin);
+            else // Cas 3.2 (ERREUR) : Le chemin n'existe pas.
+                printf("Erreur dans 'insert_noeud' : Le chemin '%s' n'existe pas.\n", chemin);
+            exit(EXIT_FAILURE); // On arrête donc le programme.
+        }
+        return NULL; */
 }
 
 noeud *delete_noeud(noeud *node)
@@ -151,6 +151,14 @@ char *chemin_noeud(noeud *n, char *chemin) // Prend un pointeur vers une chaine 
     }
 }
 
+void print_noeud(noeud *n) // Affiche les informations concernant un noeud.
+{
+    printf("Nom : %s\n", n->nom);
+    printf("Racine : %s\n", n->racine->nom);
+    printf("Pere : %s\n", n->pere->nom);
+}
+
+// Fonctions utiles.
 char *reverse_cat(char *s1, char *s2) // Effectue une opération de concaténation à l'envers.
 {
     size_t len = strlen(s1) + strlen(s2); // Taille de la nouvelle chaine.
@@ -161,11 +169,4 @@ char *reverse_cat(char *s1, char *s2) // Effectue une opération de concaténati
     strcat(s1, tmp);                       // Puis on concatène s1 (valeur = s2) & tmp (valeur = s1).
     free(tmp);                             // On libère les ressources temporaires.
     return s1;                             // On renvoie la chaine concaténée.
-}
-
-void print_noeud(noeud *n) // Affiche les informations concernant un noeud.3
-{
-    printf("Nom : %s\n", n->nom);
-    printf("Racine : %s\n", n->racine->nom);
-    printf("Pere : %s\n", n->pere->nom);
 }
