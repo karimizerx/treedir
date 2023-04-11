@@ -1,5 +1,9 @@
-slama che for
-sdo osx uc
-nc id iv
-qod co
-xi
+mkdir Cours
+cd Cours
+mkdir ProjetC
+mkdir Anglais
+cd
+touch edt
+cd Td
+mkdir td1
+mkdir td2
