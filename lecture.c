@@ -4,8 +4,8 @@
 #include <stdbool.h>
 #include <string.h>
 #include "lecture.h"
-#include "commande.c"
-#include "noeud.c"
+#include "commandes.h"
+#include "noeud.h"
 
 char **split(char *ligne)
 {
@@ -62,32 +62,44 @@ void execute(noeud *courant, char *command, char *arg1, char *arg2)
             quit("command not recognized");
         }
         break;
-        case 'm':
-            if (command[i + 1] == 'v'){
-                if(arg1==NULL||arg2==NULL)
-                    quit("too few arguments");
-                else mv(courant,arg1,arg2);
-            }else if(command[i + 1] != 'k'){
-                quit("command not recognized");
-            }else if(equals("mkdir",command)){
-                if(arg1==NULL)
-                    quit("too few arguments");
-                else if(arg2!=NULL)
-                    quit("too many arguments");
-                mkdir(courant,arg1);
-            }
-            break;
-        case 'p':
-            if(equals("pwd",command)){
-                if(arg1!=NULL||arg2!=NULL)
-                    quit("too many arguments");
-                else print(courant);
-            }else if(equals("print",command)){
-                if(arg1!=NULL||arg2!=NULL)
-                    quit("too many arguments for pwd");
-                else print(courant,0);
-            }else 
-                quit("command not recognized");
+    case 'm':
+        if (command[i + 1] == 'v')
+        {
+            if (arg1 == NULL || arg2 == NULL)
+                quit("too few arguments");
+            else
+                mv(courant, arg1, arg2);
+        }
+        else if (command[i + 1] != 'k')
+        {
+            quit("command not recognized");
+        }
+        else if (equals("mkdir", command))
+        {
+            if (arg1 == NULL)
+                quit("too few arguments");
+            else if (arg2 != NULL)
+                quit("too many arguments");
+            mkdir(courant, arg1);
+        }
+        break;
+    case 'p':
+        if (equals("pwd", command))
+        {
+            if (arg1 != NULL || arg2 != NULL)
+                quit("too many arguments");
+            else
+                print(courant, 0);
+        }
+        else if (equals("print", command))
+        {
+            if (arg1 != NULL || arg2 != NULL)
+                quit("too many arguments for pwd");
+            else
+                print(courant, 0);
+        }
+        else
+            quit("command not recognized");
         break;
     case 'r':
         if (command[i + 1] != 'm')
