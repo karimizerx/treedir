@@ -127,14 +127,18 @@ int main(int argc, char const *argv[])
     ls(n1);
     puts("");
 
-    // Déplacement dans un autre noeud.
-    /*     noeud *courant = n1;
-        pwd(courant);
-        cd(courant, "ProjetC");
-        pwd(courant); */
-
     // Affichage de toute l'arborescence.
     print(n0, 0);
+
+    // Déplacement dans un autre noeud.
+    noeud *courant = n1;
+    pwd(courant);
+    noeud *s = search_noeud(n1, "\0");
+    printf("s->nom %s\n", s->nom);
+    cd(courant, "ProjetC");
+    pwd(courant);
+    cd(courant, NULL);
+    pwd(courant);
 
     // On libère toutes les ressources.
     free(pwdn0);

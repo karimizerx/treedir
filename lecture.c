@@ -17,7 +17,7 @@ char **split(char *ligne)
     {
         quit("too many arguments");
     }
-    if(nvligne==NULL)
+    if (nvligne == NULL)
         quit("error argument is (null)");
     tmp[0] = next(nvligne);
     tmp[1] = nbw >= 2 ? next(nvligne + strlen(tmp[0]) + 1) : NULL;
@@ -25,12 +25,13 @@ char **split(char *ligne)
     return tmp;
 }
 
-void quit(char* message){
-    printf("%s \n",message);
+void quit(char *message)
+{
+    printf("%s \n", message);
     exit(EXIT_FAILURE);
 }
 
-void execute(noeud * courant,char *command, char *arg1, char *arg2)
+void execute(noeud *courant, char *command, char *arg1, char *arg2)
 {
     /*
     if (command == NULL)
@@ -77,7 +78,7 @@ void execute(noeud * courant,char *command, char *arg1, char *arg2)
                 if(arg1!=NULL||arg2!=NULL)
                     quit("too many arguments");
                 else pwd(courant);
-            }else 
+            }else
                 quit("command not recognized");
         break;
         case 'r':
@@ -87,7 +88,7 @@ void execute(noeud * courant,char *command, char *arg1, char *arg2)
                 quit("too few arguments");
             rm(courant,arg1);
         break;
-        case 'l': 
+        case 'l':
             if (command[i + 1] != 's')
                 quit("command not recognized");
             if(arg2!=NULL || arg1!=NULL)
@@ -110,13 +111,16 @@ void execute(noeud * courant,char *command, char *arg1, char *arg2)
     */
 }
 
-bool equals(char* a,char* b){
-    if(strlen(a)!=strlen(b))
-		return false;
-	for(size_t i=0;i<strlen(a);++i){
-		if(*(a+i)!=*(b+i)) return false;
-	}
-	return true;
+bool equals(char *a, char *b)
+{
+    if (strlen(a) != strlen(b))
+        return false;
+    for (size_t i = 0; i < strlen(a); ++i)
+    {
+        if (*(a + i) != *(b + i))
+            return false;
+    }
+    return true;
 }
 
 int nbwords(char *s)
@@ -178,7 +182,7 @@ char *next(char *w)
     return t;
 }
 
-void read(noeud *courant,char *filename)
+void read(noeud *courant, char *filename)
 {
     // 200 pour les deux args, 25 pour ma commande et space
     FILE *flux = fopen(filename, "r");
@@ -194,7 +198,7 @@ void read(noeud *courant,char *filename)
     while (fgets(string, 250, flux) != NULL)
     {
         char **tmp = split(string);
-        execute(courant,tmp[0], tmp[1], tmp[2]);
+        execute(courant, tmp[0], tmp[1], tmp[2]);
         // free(*tmp);
         // free(*(tmp+1));
         // free(*(tmp+2));
@@ -206,13 +210,15 @@ void read(noeud *courant,char *filename)
         perror("erreur de fermuture");
 }
 
-char * dupliquer(const char * s){
-	char *tmp=malloc((strlen(s))*sizeof(char));
-	memcpy(tmp,s,strlen(s));
-	return tmp;	
+char *dupliquer(const char *s)
+{
+    char *tmp = malloc((strlen(s)) * sizeof(char));
+    memcpy(tmp, s, strlen(s));
+    return tmp;
 }
 
-int main(){
-    read(creer_noeud(true,NULL,NULL,"racine"),"coms.txt");
+int main()
+{
+    read(creer_noeud(true, NULL, NULL, "racine"), "coms.txt");
     return EXIT_SUCCESS;
 }
