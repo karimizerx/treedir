@@ -25,7 +25,7 @@ noeud *cd(noeud *courant, char *chemin)
         courant = courant->racine;
         return courant; // On renvoie ce dossier.
     }
-    else if (*chemin == '/') // Cas 1 : Le chemain est absolue.
+    else if (*chemin == '/') // Cas 1 : Le chemin est absolue.
     {
         courant = courant->racine;
         ++chemin;
@@ -67,4 +67,39 @@ char *pwd(noeud *courant) // Affiche le chemin absolue du noeud n.
     free(tmp);                            // On libère les ressources temporaires.
     printf("%s\n", chemin);               // On affiche le chemin absolue.
     return chemin;
+}
+
+void print(noeud *courant, int nbSpace)
+{
+    // On affiche le nom du noeud.
+    if (courant->pere == courant)
+        puts(".");
+    else
+    {
+        int i = 0;
+        printf("└");
+        while (i != nbSpace)
+        {
+            printf("─");
+            ++i;
+        }
+        printf("─ %s", courant->nom);
+        if (courant->est_dossier)
+            printf("/\n");
+        else
+            puts("");
+    }
+
+    if (courant->fils == NULL)
+        return;
+    else
+    {
+        liste_noeud *ln = courant->fils;
+        while (ln != NULL)
+        {
+            print(ln->no, nbSpace + 1);
+            ln = ln->succ;
+        }
+        return;
+    }
 }
