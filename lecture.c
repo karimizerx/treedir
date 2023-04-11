@@ -4,8 +4,8 @@
 #include <stdbool.h>
 #include <string.h>
 #include "lecture.h"
-#include "commandes.h"
-#include "noeud.h"
+#include "commande.c"
+#include "noeud.c"
 
 char **split(char *ligne)
 {
@@ -33,26 +33,34 @@ void quit(char *message)
 
 void execute(noeud *courant, char *command, char *arg1, char *arg2)
 {
-    /*
+
     if (command == NULL)
     {
         printf("command null");
         exit(EXIT_FAILURE);
     }
     int i = 0;
-    switch (command[i]){
-        case 'c':
-            if (command[i + 1] == 'd'){
-                if(arg2!=NULL)
-                    cd(courant,arg1);
-                else quit("too many arguments");
-            }else if (command[i + 1] == 'p'){
-                if(arg1==NULL||arg2==NULL)
-                quit("too few arguments");
-                else cp(courant,arg1,arg2);
-            }else {
-                quit("command not recognized");
-            }
+    switch (command[i])
+    {
+    case 'c':
+        if (command[i + 1] == 'd')
+        {
+            if (arg2 == NULL)
+                cd(courant, arg1);
+            else
+                quit("too many arguments for cd");
+        }
+        else if (command[i + 1] == 'p')
+        {
+            if (arg1 == NULL || arg2 == NULL)
+                quit("too few arguments for cp");
+            else
+                cp(courant, arg1, arg2);
+        }
+        else
+        {
+            quit("command not recognized");
+        }
         break;
         case 'm':
             if (command[i + 1] == 'v'){
@@ -76,39 +84,40 @@ void execute(noeud *courant, char *command, char *arg1, char *arg2)
                 else print(courant);
             }else if(equals("print",command)){
                 if(arg1!=NULL||arg2!=NULL)
-                    quit("too many arguments");
-                else pwd(courant);
-            }else
+                    quit("too many arguments for pwd");
+                else print(courant,0);
+            }else 
                 quit("command not recognized");
         break;
-        case 'r':
-            if (command[i + 1] != 'm')
-                quit("command not recognized");
-            if(arg2==NULL || arg1==NULL)
-                quit("too few arguments");
-            rm(courant,arg1);
+    case 'r':
+        if (command[i + 1] != 'm')
+            quit("command not recognized");
+        if (arg2 == NULL || arg1 == NULL)
+            quit("too few arguments for rm");
+        rm(courant, arg1);
         break;
-        case 'l':
-            if (command[i + 1] != 's')
-                quit("command not recognized");
-            if(arg2!=NULL || arg1!=NULL)
-                quit("too many arguments");
-            ls(courant);
+    case 'l':
+        if (command[i + 1] != 's')
+            quit("command not recognized");
+        if (arg2 != NULL || arg1 != NULL)
+            quit("too many arguments for ls");
+        ls(courant);
         break;
-        case 't':
-            if (equals(command,"touch")){
-            if(arg1==NULL)
-                quit("too few arguments");
-            if(arg2!=NULL)
-                quit("too many arguments");
-            touch(courant,arg1);
-            }
+    case 't':
+        if (equals(command, "touch"))
+        {
+            if (arg1 == NULL)
+                quit("too few arguments for touch");
+            if (arg2 != NULL)
+                quit("too many arguments for touch");
+            touch(courant, arg1);
+        }
         break;
-        default:
-            printf("Commande %s non reconnu", command);
+    default:
+        printf("Commande %s non reconnu", command);
+        quit("");
         break;
     }
-    */
 }
 
 bool equals(char *a, char *b)
