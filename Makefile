@@ -1,6 +1,7 @@
 CC = gcc
 CFLAGS = -g -Wall
-DEPS = app.h commande.h noeud.h 
+DEPS = app.h commande.h noeud.h
+O =  app.o commande.o noeud.o
 EXEC = app
 
 all : $(EXEC)
@@ -8,7 +9,7 @@ all : $(EXEC)
 %.o: %.c $(DEPS)
 	$(CC) $(CFLAGS) -c $< 
 
-app : app.o commande.o noeud.o
+app : $(O)
 	$(CC) $(CFLAGS) -o $@ $^
 
 run :
