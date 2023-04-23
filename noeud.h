@@ -31,4 +31,6 @@ extern noeud *search_noeud(noeud *, char *);
 extern char *chemin_noeud(noeud *, char *);
 extern void print_noeud(noeud *);
 extern char *reverse_cat(char *, char *);
+extern void free_noeud(noeud *);
+extern void free_noeud_list(liste_noeud *);
 #endif

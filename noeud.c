@@ -133,6 +133,21 @@ void print_noeud(noeud *n) // Affiche les informations concernant un noeud.
     printf("Pere : %s\n", n->pere->nom);
 }
 
+void free_noeud(noeud *noeud)
+{
+    if (noeud->fils != NULL)
+        free_noeud_list(noeud->fils);
+    free(noeud);
+}
+
+void free_noeud_list(liste_noeud *ln)
+{
+    if (ln->succ != NULL)
+        free_noeud_list(ln->succ);
+    free_noeud(ln->no);
+    free(ln);
+}
+
 // Fonctions utiles.
 char *reverse_cat(char *s1, char *s2) // Effectue une opération de concaténation à l'envers.
 {

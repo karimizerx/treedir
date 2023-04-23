@@ -72,25 +72,25 @@ int main(int argc, char const *argv[])
     // puts("\n");
 
     // Affichage des chemins absolues de tous les noeuds.
-    printf("pwd(n0) : ");
-    char *pwdn0 = pwd(n0);
-    printf("pwd(n1) : ");
-    char *pwdn1 = pwd(n1);
-    printf("pwd(n2) : ");
-    char *pwdn2 = pwd(n2);
-    printf("pwd(n3) : ");
-    char *pwdn3 = pwd(n3);
-    printf("pwd(n4) : ");
-    char *pwdn4 = pwd(n4);
-    printf("pwd(n5) : ");
-    char *pwdn5 = pwd(n5);
-    printf("pwd(n6) : ");
-    char *pwdn6 = pwd(n6);
-    printf("pwd(n7) : ");
-    char *pwdn7 = pwd(n7);
-    printf("pwd(n8) : ");
-    char *pwdn8 = pwd(n8);
-    puts("");
+    // printf("pwd(n0) : ");
+    // char *pwdn0 = pwd(n0);
+    // printf("pwd(n1) : ");
+    // char *pwdn1 = pwd(n1);
+    // printf("pwd(n2) : ");
+    // char *pwdn2 = pwd(n2);
+    // printf("pwd(n3) : ");
+    // char *pwdn3 = pwd(n3);
+    // printf("pwd(n4) : ");
+    // char *pwdn4 = pwd(n4);
+    // printf("pwd(n5) : ");
+    // char *pwdn5 = pwd(n5);
+    // printf("pwd(n6) : ");
+    // char *pwdn6 = pwd(n6);
+    // printf("pwd(n7) : ");
+    // char *pwdn7 = pwd(n7);
+    // printf("pwd(n8) : ");
+    // char *pwdn8 = pwd(n8);
+    // puts("");
 
     // Affichage des enfants de chaque noeud.
     printf("ls(n0) : ");
@@ -132,23 +132,15 @@ int main(int argc, char const *argv[])
 
     // Déplacement dans un autre noeud.
     noeud *courant = n1;
-    pwd(courant);
-    noeud *s = search_noeud(n1, "\0");
-    printf("s->nom %s\n", s->nom);
-    cd(courant, "ProjetC");
-    pwd(courant);
-    cd(courant, NULL);
-    pwd(courant);
+    // pwd(courant);
+    // noeud *s = search_noeud(n1, "\0");
+    // printf("s->nom %s\n", s->nom);
+    // cd(courant, "ProjetC");
+    // pwd(courant);
+    // cd(courant, NULL);
+    // pwd(courant);
 
     // On libère toutes les ressources.
-    free(pwdn0);
-    free(pwdn1);
-    free(pwdn2);
-    free(pwdn3);
-    free(pwdn4);
-    free(pwdn5);
-    free(pwdn6);
-    free(pwdn7);
-    free(pwdn8);
+    free_noeud(n0);
     return 0;
 }
