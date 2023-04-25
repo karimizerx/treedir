@@ -3,10 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <stddef.h>
-#include <stdbool.h>
 #include <string.h>
-#include <math.h>
 
 void ls(noeud *courant) // Affiche la liste des fils du noeud courant.
 {
