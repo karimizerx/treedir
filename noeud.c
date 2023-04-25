@@ -127,10 +127,10 @@ void free_noeud_list(liste_noeud *ln)
     free(ln);
 }
 
-char *chemin_absolue(noeud *courant) // Renvoie le chemin absolue du noeud n.
+char *chemin_absolue(noeud *node) // Renvoie le chemin absolue du noeud node.
 {
     // Deux variables temporaires pour naviguer dans l'arbre & revenir à la position d'origine si nécessaire.
-    noeud n = *courant;
+    noeud n = *node;
     noeud *pn = &n; // Deuxième pointeur vers le noeud courant.
 
     // Etape 1 : Déterminer la longueur de la chaine.
