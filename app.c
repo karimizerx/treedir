@@ -2,9 +2,11 @@
 #include "commandes.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 int main(int argc, char const *argv[])
 {
+
     // Création de la racine.
     char *nom0 = "";
     noeud *n0 = init_noeud(true, nom0);
@@ -51,48 +53,51 @@ int main(int argc, char const *argv[])
     n2->fils->succ->succ = NULL;
 
     // Affichage de chaque noeud.
-    // puts("Noeud n0 :");
-    // print_noeud(n0);
-    // puts("\nNoeud n1 :");
-    // print_noeud(n1);
-    // puts("\nNoeud n2 :");
-    // print_noeud(n2);
-    // puts("\nNoeud n3 :");
-    // print_noeud(n3);
-    // puts("\nNoeud n4 :");
-    // print_noeud(n4);
-    // puts("\nNoeud n5 :");
-    // print_noeud(n5);
-    // puts("\nNoeud n6 :");
-    // print_noeud(n6);
-    // puts("\nNoeud n7 :");
-    // print_noeud(n7);
-    // puts("\nNoeud n8 :");
-    // print_noeud(n8);
-    // puts("\n");
+    puts("\nAffichage de chaque noeud.");
+    puts("Noeud n0 :");
+    print_noeud(n0);
+    puts("\nNoeud n1 :");
+    print_noeud(n1);
+    puts("\nNoeud n2 :");
+    print_noeud(n2);
+    puts("\nNoeud n3 :");
+    print_noeud(n3);
+    puts("\nNoeud n4 :");
+    print_noeud(n4);
+    puts("\nNoeud n5 :");
+    print_noeud(n5);
+    puts("\nNoeud n6 :");
+    print_noeud(n6);
+    puts("\nNoeud n7 :");
+    print_noeud(n7);
+    puts("\nNoeud n8 :");
+    print_noeud(n8);
+    puts("\n");
 
     // Affichage des chemins absolues de tous les noeuds.
-    // printf("pwd(n0) : ");
-    // char *pwdn0 = pwd(n0);
-    // printf("pwd(n1) : ");
-    // char *pwdn1 = pwd(n1);
-    // printf("pwd(n2) : ");
-    // char *pwdn2 = pwd(n2);
-    // printf("pwd(n3) : ");
-    // char *pwdn3 = pwd(n3);
-    // printf("pwd(n4) : ");
-    // char *pwdn4 = pwd(n4);
-    // printf("pwd(n5) : ");
-    // char *pwdn5 = pwd(n5);
-    // printf("pwd(n6) : ");
-    // char *pwdn6 = pwd(n6);
-    // printf("pwd(n7) : ");
-    // char *pwdn7 = pwd(n7);
-    // printf("pwd(n8) : ");
-    // char *pwdn8 = pwd(n8);
-    // puts("");
+    puts("Affichage des chemins absolues de tous les noeuds.");
+    printf("pwd(n0) : ");
+    pwd(n0);
+    printf("pwd(n1) : ");
+    pwd(n1);
+    printf("pwd(n2) : ");
+    pwd(n2);
+    printf("pwd(n3) : ");
+    pwd(n3);
+    printf("pwd(n4) : ");
+    pwd(n4);
+    printf("pwd(n5) : ");
+    pwd(n5);
+    printf("pwd(n6) : ");
+    pwd(n6);
+    printf("pwd(n7) : ");
+    pwd(n7);
+    printf("pwd(n8) : ");
+    pwd(n8);
+    puts("");
 
     // Affichage des enfants de chaque noeud.
+    puts("Affichage des enfants de chaque noeud.");
     printf("ls(n0) : ");
     ls(n0);
     printf("\nls(n1) : ");
@@ -114,6 +119,7 @@ int main(int argc, char const *argv[])
     puts("\n");
 
     // Ajout d'un dossier/fichier.
+    puts("Ajout d'un dossier/fichier.");
     mkdir(n5, "Mickey");
     printf("ls(n5) : ");
     ls(n5);
@@ -128,17 +134,13 @@ int main(int argc, char const *argv[])
     puts("");
 
     // Affichage de toute l'arborescence.
+    puts("Affichage de toute l'arborescence.");
     print(n0, 0);
+    puts("");
 
-    // Déplacement dans un autre noeud.
-    noeud *courant = n1;
-    // pwd(courant);
-    // noeud *s = search_noeud(n1, "\0");
-    // printf("s->nom %s\n", s->nom);
-    // cd(courant, "ProjetC");
-    // pwd(courant);
-    // cd(courant, NULL);
-    // pwd(courant);
+    //  Déplacement dans un autre noeud.
+    puts("Déplacement dans un autre noeud.");
+    // noeud *courant = n5;
 
     // On libère toutes les ressources.
     free_noeud(n0);

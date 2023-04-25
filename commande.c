@@ -7,6 +7,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include <math.h>
+#include <assert.h>
 
 void ls(noeud *courant) // Affiche la liste des fils du noeud courant.
 {
@@ -64,14 +65,19 @@ noeud *touch(noeud *courant, char *nom) // Créer un fichier dans le dossier cou
     return n;
 }
 
-char *pwd(noeud *courant) // Affiche le chemin absolue du noeud n.
+void pwd(noeud *courant) // Affiche le chemin absolue du noeud n.
 {
-    char *tmp = chemin_noeud(courant, NULL); // On récupère la valeure absolue du noeud.
-    char *chemin = malloc(strlen(tmp) - 1);
-    memcpy(chemin, tmp, strlen(tmp) - 1); // On retire le "/" à la fin.
-    free(tmp);                            // On libère les ressources temporaires.
-    printf("%s\n", chemin);               // On affiche le chemin absolue.
-    return chemin;
+    if (courant == NULL)
+    {
+        puts("[ERREUR] dans pwd (ligne 70) : Courant = NULL");
+        exit(EXIT_FAILURE);
+    }
+    else
+    {
+        char *chemin = chemin_absolue(courant);
+        printf("%s\n", chemin); // On affiche la chaine.
+        free(chemin);
+    }
 }
 
 void print(noeud *courant, int nbSpace)

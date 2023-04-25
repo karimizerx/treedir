@@ -14,6 +14,6 @@ extern void cp(noeud *, char *, char *);
 
 extern void mv(noeud *, char *, char *);
 
-extern char *pwd(noeud *);
+extern void pwd(noeud *);
 
 extern void print(noeud *, int);

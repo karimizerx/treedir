@@ -2,10 +2,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <assert.h>
 
 noeud *init_noeud(bool b, char *nom) // Initialise & renvoie un noeud avec son nom & son type.
 {
     noeud *node = malloc(sizeof(noeud));
+    assert(node != NULL); // On vérifie que l'allocation s'est bien passée.
     node->est_dossier = b;
     memcpy(node->nom, nom, 99); // On complète le tableau contenant le nom (avec 99 caractères max).
     node->pere = NULL;
@@ -91,6 +93,7 @@ noeud *search_noeud(noeud *n, char *chemin) // Cherche un noeud au boud du "chem
 
         // Si on arrive ici, c'est que chemin + i pointe vers / ou vers la fin du chemin.
         noeud *dossier_suivant = search_noeud_profondeur1(n, chem);
+        free(chem);
 
         if (dossier_suivant != NULL) // Cas 4.1 : On a trouvé le sous-chmein, on peut donc continuer à chercher à partir de ce sous-dossier.
         {
@@ -99,30 +102,6 @@ noeud *search_noeud(noeud *n, char *chemin) // Cherche un noeud au boud du "chem
         }
         else // Cas 4.2 : On a pas trouvé de sous-chemin correspondant, donc il n'y en a pas.
             return NULL;
-    }
-}
-
-char *chemin_noeud(noeud *n, char *chemin) // Prend un pointeur vers une chaine & écrit dans cette chaine le chemain absolue du noeud n.
-{
-    if (chemin == NULL)
-        chemin = malloc(sizeof(char));
-    if (n->pere == n) // Si on arrive à la racine.
-    {
-        char *tmp = reverse_cat(chemin, "/"); // On ajoute le "/" de la racine.
-        chemin = malloc(strlen(tmp) * sizeof(char));
-        memcpy(chemin, tmp, strlen(tmp));
-        return chemin; // On s'arrête & on renvoie le chemin absolue.
-    }
-    else
-    {
-        char *tmp = reverse_cat(chemin, "/");
-        chemin = malloc(strlen(tmp) * sizeof(char));
-        memcpy(chemin, tmp, strlen(tmp));
-        tmp = reverse_cat(chemin, n->nom);
-        chemin = malloc(strlen(tmp) * sizeof(char));
-        memcpy(chemin, tmp, strlen(tmp));
-        free(tmp); // On libère les ressources temporaires.
-        return chemin_noeud(n->pere, chemin);
     }
 }
 
@@ -148,15 +127,56 @@ void free_noeud_list(liste_noeud *ln)
     free(ln);
 }
 
+char *chemin_absolue(noeud *courant) // Renvoie le chemin absolue du noeud n.
+{
+    // Deux variables temporaires pour naviguer dans l'arbre & revenir à la position d'origine si nécessaire.
+    noeud n = *courant;
+    noeud *pn = &n; // Deuxième pointeur vers le noeud courant.
+
+    // Etape 1 : Déterminer la longueur de la chaine.
+    size_t len = 0;        // Taille de la chaine de caractère du chemin absolue.
+    while (pn != pn->pere) // Tant qu'on a pas atteint la racine.
+    {
+        len = len + strlen(pn->nom) + 1; // On ajoute la taille du nom du dossier + 1 (taille de "/").
+        pn = pn->pere;                   // On passe au père.
+    }
+
+    // Etape 2 : Créer la chaine.
+    if (len == 0)
+    {
+        char *chemin = malloc((len + 2) * sizeof(char)); // La chaine de cacatères du chemin absolue.
+        *chemin = '/';
+        *(chemin + 1) = '\0'; // On respecte les propriétés des chaines de caractères.
+        return chemin;
+    }
+    else
+    {
+        char *chemin = malloc((len + 1) * sizeof(char)); // La chaine de cacatères du chemin absolue.
+        *(chemin + len) = '\0';                          // On respecte les propriétés des chaines de caractères.
+
+        // Etape 3 : Remplire la chaine.
+        pn = &n;                          // On revient à la position d'origine;
+        size_t s = len - strlen(pn->nom); // La position à laquelle on doit écrire dans la chaine.
+        while (pn != pn->pere)            // Tant qu'on a pas atteint la racine.
+        {
+            memcpy(chemin + s, pn->nom, strlen(pn->nom)); // On copie le nom du dossier actuel au bon emplacement.
+            memcpy(chemin + s - 1, "/", 1);               // On le fait précéder d'un "/".
+            s = s - 1 - strlen(pn->pere->nom);            // On met à jour les variables de noeud & de positions.
+            pn = pn->pere;
+        }
+        return chemin;
+    }
+}
+
 // Fonctions utiles.
+
 char *reverse_cat(char *s1, char *s2) // Effectue une opération de concaténation à l'envers.
 {
-    size_t len = strlen(s1) + strlen(s2); // Taille de la nouvelle chaine.
-    char *tmp = malloc(strlen(s1) * sizeof(char));
-    memcpy(tmp, s1, strlen(s1));           // On copie la valeure de la chaine s1.
-    s1 = malloc((len + 1) * sizeof(char)); // s1 devient mtn vide.
-    memcpy(s1, s2, strlen(s2));            // On y met s2.
-    strcat(s1, tmp);                       // Puis on concatène s1 (valeur = s2) & tmp (valeur = s1).
-    free(tmp);                             // On libère les ressources temporaires.
-    return s1;                             // On renvoie la chaine concaténée.
+    size_t len = strlen(s1) + strlen(s2);         // Taille de la nouvelle chaine.
+    char *res = malloc((len + 1) * sizeof(char)); // On crée la nouvelle chaine.
+    assert(res != NULL);                          // On vérifie que l'allocation s'est bien passée.
+    memcpy(res, s2, strlen(s2));                  // On copie la valeure de la chaine s2 au début.
+    memcpy(res + strlen(s2), s1, strlen(s1));     // On copie la valeure de la chaine s1 juste après.
+    *(res + len) = '\0';                          // On respecte les propriétés des chaines de caractère.
+    return res;                                   // On renvoie la chaine finale.
 }
