@@ -140,7 +140,12 @@ int main(int argc, char const *argv[])
 
     //  Déplacement dans un autre noeud.
     puts("Déplacement dans un autre noeud.");
-    // noeud *courant = n5;
+    noeud *courant = n0;
+    printf("Noeud courant : ");
+    pwd(courant);
+    cd(&courant, "Cours/ProjetC");
+    printf("Noeud courant après cd : ");
+    pwd(courant);
 
     // On libère toutes les ressources.
     free_noeud(n0);

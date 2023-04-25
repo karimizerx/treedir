@@ -7,6 +7,12 @@
 
 void ls(noeud *courant) // Affiche la liste des fils du noeud courant.
 {
+    if (courant == NULL)
+    {
+        puts("[ERREUR] dans 'ls' (ligne 10) : Courant = NULL");
+        exit(EXIT_FAILURE);
+    }
+
     liste_noeud *tmp = courant->fils;
     while (tmp != NULL)
     {
@@ -15,25 +21,25 @@ void ls(noeud *courant) // Affiche la liste des fils du noeud courant.
     }
 }
 
-void cd(noeud *courant, char *chemin)
+void cd(noeud **courant, char *chemin)
 {
     noeud *tmp;
     if (chemin == NULL) // Cas 0 : Le dossier demandé est la racine.
     {
-        courant = courant->racine;
+        *courant = (*courant)->racine;
         // return courant; // On renvoie ce dossier.
     }
     else
     {
         if (*chemin == '/') // Cas 1 : Le chemin est absolue.
         {
-            courant = courant->racine;
+            *courant = (*courant)->racine;
             ++chemin;
         }
-        tmp = search_noeud(courant, chemin);
+        tmp = search_noeud(*courant, chemin);
         if (tmp != NULL && tmp->est_dossier) // Cas 2 : On trouve le noeud demandé & c'est bien un dossier.
         {
-            courant = tmp;
+            *courant = tmp;
             // return courant; // On renvoie ce dossier.
         }
         else
@@ -49,12 +55,22 @@ void cd(noeud *courant, char *chemin)
 
 void mkdir(noeud *courant, char *nom) // Créer un dossier dans le dossier courant.
 {
+    if (courant == NULL)
+    {
+        puts("[ERREUR] dans 'mkdir' (ligne 58) : Courant = NULL");
+        exit(EXIT_FAILURE);
+    }
     noeud *n = creer_noeud(true, courant->racine, courant, nom);
     insert_noeud(courant, n);
 }
 
 void touch(noeud *courant, char *nom) // Créer un fichier dans le dossier courant.
 {
+    if (courant == NULL)
+    {
+        puts("[ERREUR] dans 'touch' (ligne 69) : Courant = NULL");
+        exit(EXIT_FAILURE);
+    }
     noeud *n = creer_noeud(false, courant->racine, courant, nom);
     insert_noeud(courant, n);
 }
@@ -63,7 +79,7 @@ void pwd(noeud *courant) // Affiche le chemin absolue du noeud n.
 {
     if (courant == NULL) // Cas d'Erreur.
     {
-        puts("[ERREUR] dans pwd (ligne 70) : Courant = NULL");
+        puts("[ERREUR] dans 'pwd' (ligne 80) : Courant = NULL");
         exit(EXIT_FAILURE);
     }
     else
@@ -76,6 +92,11 @@ void pwd(noeud *courant) // Affiche le chemin absolue du noeud n.
 
 void print(noeud *courant) // Affiche l'arborescence à partir du noeud courant.
 {
+    if (courant == NULL)
+    {
+        puts("[ERREUR] dans 'print' (ligne 95) : Courant = NULL");
+        exit(EXIT_FAILURE);
+    }
     tree(courant, 0);
 }
 

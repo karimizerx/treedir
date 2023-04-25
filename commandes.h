@@ -2,7 +2,7 @@
 
 extern void ls(noeud *);
 
-extern void cd(noeud *, char *);
+extern void cd(noeud **, char *);
 
 extern void mkdir(noeud *, char *);
 
