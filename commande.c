@@ -50,13 +50,13 @@ void cd(noeud *courant, char *chemin)
 void mkdir(noeud *courant, char *nom) // Créer un dossier dans le dossier courant.
 {
     noeud *n = creer_noeud(true, courant->racine, courant, nom);
-    insert_fils(courant, n);
+    insert_noeud(courant, n);
 }
 
 void touch(noeud *courant, char *nom) // Créer un fichier dans le dossier courant.
 {
     noeud *n = creer_noeud(false, courant->racine, courant, nom);
-    insert_fils(courant, n);
+    insert_noeud(courant, n);
 }
 
 void pwd(noeud *courant) // Affiche le chemin absolue du noeud n.

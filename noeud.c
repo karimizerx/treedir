@@ -24,7 +24,7 @@ noeud *creer_noeud(bool dossier, noeud *racine, noeud *pere, char *nom) // Crée
     return n;
 }
 
-noeud *insert_fils(noeud *courant, noeud *newfils) // Ajout le noeud "newfils" comme fils du noeud "courant".
+noeud *insert_noeud(noeud *courant, noeud *newfils) // Ajout le noeud "newfils" comme fils du noeud "courant".
 {
     if (courant->fils == NULL) // Si le noeud courant n'a pas de fils.
     {

@@ -22,8 +22,7 @@ typedef struct liste_noeud liste_noeud;
 
 extern noeud *init_noeud(bool, char *);
 extern noeud *creer_noeud(bool, noeud *, noeud *, char *);
-extern noeud *insert_fils(noeud *, noeud *);
-extern noeud *insert_noeud(noeud *, char *); // Pas fonctionnel.
+extern noeud *insert_noeud(noeud *, noeud *);
 extern noeud *delete_noeud(noeud *);
 extern noeud *search_noeud_list(liste_noeud *, char *);
 extern noeud *search_noeud_profondeur1(noeud *, char *);
