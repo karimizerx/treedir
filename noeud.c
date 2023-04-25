@@ -26,23 +26,26 @@ noeud *creer_noeud(bool dossier, noeud *racine, noeud *pere, char *nom) // Crée
 
 noeud *insert_fils(noeud *courant, noeud *newfils) // Ajout le noeud "newfils" comme fils du noeud "courant".
 {
-    if (courant->fils == NULL)
+    if (courant->fils == NULL) // Si le noeud courant n'a pas de fils.
     {
-        courant->fils = malloc(sizeof(liste_noeud));
-        courant->fils->no = newfils;
+        courant->fils = malloc(sizeof(liste_noeud)); // On crée simplement une structure de liste de noeuds.
+        assert(courant->fils != NULL);               // On vérifie que l'allocation s'est bien passée.
+        courant->fils->no = newfils;                 // On initialise les valeures de cette liste de noeuds.
         courant->fils->succ = NULL;
     }
-    else
+
+    else // Sinon.
     {
         liste_noeud *tmp = courant->fils;
-        while (tmp->succ != NULL)
+        while (tmp->succ != NULL) // On cherche le dernier fils du noeud courant.
             tmp = tmp->succ;
-        // Quand on arrive ici, tmp pointe vers le dernier fils de courant.
-        tmp->succ = malloc(sizeof(liste_noeud));
-        tmp->succ->no = newfils;
+        // Quand on arrive ici, tmp pointe vers le dernier fils du noeud courant.
+        tmp->succ = malloc(sizeof(liste_noeud)); // On crée une structure de liste de noeuds.
+        assert(tmp->succ != NULL);               // On vérifie que l'allocation s'est bien passée.
+        tmp->succ->no = newfils;                 // On initialise les valeures de cette liste de noeuds.
         tmp->succ->succ = NULL;
     }
-    return newfils;
+    return newfils; // On renvoie le fils ajouté.
 }
 
 noeud *delete_noeud(noeud *node)
@@ -88,12 +91,14 @@ noeud *search_noeud(noeud *n, char *chemin) // Cherche un noeud au boud du "chem
         unsigned i = 0;
         while (*(chemin + i) != '/' && *(chemin + i) != '\0') // Tant qu'on est pas arrivé à la fin du chemin ou à un autre dossier ('/').
             ++i;                                              // On avance.
-        char *chem = malloc((i + 1) * sizeof(char));
-        memcpy(chem, chemin, i); // On récupère le nom de ce premier dossier.
+        char *chem = malloc((i + 1) * sizeof(char));          // On sauvegarde ici le nom du premier dossier.
+        assert(chem != NULL);                                 // On vérifie que l'allocation s'est bien passée.
+        memcpy(chem, chemin, i);                              // On récupère le nom de ce premier dossier.
+        *(chem + i) = '\0';                                   // On respecte les propriétés des chaines de caractères.
 
         // Si on arrive ici, c'est que chemin + i pointe vers / ou vers la fin du chemin.
         noeud *dossier_suivant = search_noeud_profondeur1(n, chem);
-        free(chem);
+        free(chem); // On libère la zone mémoire allouée temporairement.
 
         if (dossier_suivant != NULL) // Cas 4.1 : On a trouvé le sous-chmein, on peut donc continuer à chercher à partir de ce sous-dossier.
         {
@@ -112,26 +117,26 @@ void print_noeud(noeud *n) // Affiche les informations concernant un noeud.
     printf("Pere : %s\n", n->pere->nom);
 }
 
-void free_noeud(noeud *noeud)
+void free_noeud(noeud *noeud) // Libère toutes les zones allouées par un noeud.
 {
-    if (noeud->fils != NULL)
-        free_noeud_list(noeud->fils);
-    free(noeud);
+    if (noeud->fils != NULL)          // S'il a des fils.
+        free_noeud_list(noeud->fils); // On free la liste des fils.
+    free(noeud);                      // On libère la zone mémoire allouée par le noeud.
 }
 
-void free_noeud_list(liste_noeud *ln)
+void free_noeud_list(liste_noeud *ln) // Libère toutes les zones allouées dans une liste de noeud.
 {
-    if (ln->succ != NULL)
-        free_noeud_list(ln->succ);
-    free_noeud(ln->no);
-    free(ln);
+    if (ln->succ != NULL)          // S'il y'a d'autres fils.
+        free_noeud_list(ln->succ); // On libère ces autres fils.
+    free_noeud(ln->no);            // On libère le fils courant.
+    free(ln);                      // On libère la structure de liste courante.
 }
 
 char *chemin_absolue(noeud *node) // Renvoie le chemin absolue du noeud node.
 {
     // Deux variables temporaires pour naviguer dans l'arbre & revenir à la position d'origine si nécessaire.
     noeud n = *node;
-    noeud *pn = &n; // Deuxième pointeur vers le noeud courant.
+    noeud *pn = &n; // Deuxième pointeur vers le noeud node.
 
     // Etape 1 : Déterminer la longueur de la chaine.
     size_t len = 0;        // Taille de la chaine de caractère du chemin absolue.
@@ -142,16 +147,18 @@ char *chemin_absolue(noeud *node) // Renvoie le chemin absolue du noeud node.
     }
 
     // Etape 2 : Créer la chaine.
-    if (len == 0)
+    if (len == 0) // Cas 1 : On cherche le chaine absolue de la racine.
     {
         char *chemin = malloc((len + 2) * sizeof(char)); // La chaine de cacatères du chemin absolue.
-        *chemin = '/';
-        *(chemin + 1) = '\0'; // On respecte les propriétés des chaines de caractères.
-        return chemin;
+        assert(chemin != NULL);                          // On vérifie que l'allocation s'est bien passée.
+        *chemin = '/';                                   // La racine ne contient qu'un "/".
+        *(chemin + 1) = '\0';                            // On respecte les propriétés des chaines de caractères.
+        return chemin;                                   // On renvoie le chemin.
     }
-    else
+    else // Cas 2 : Sinon.
     {
         char *chemin = malloc((len + 1) * sizeof(char)); // La chaine de cacatères du chemin absolue.
+        assert(chemin != NULL);                          // On vérifie que l'allocation s'est bien passée.
         *(chemin + len) = '\0';                          // On respecte les propriétés des chaines de caractères.
 
         // Etape 3 : Remplire la chaine.
@@ -159,12 +166,12 @@ char *chemin_absolue(noeud *node) // Renvoie le chemin absolue du noeud node.
         size_t s = len - strlen(pn->nom); // La position à laquelle on doit écrire dans la chaine.
         while (pn != pn->pere)            // Tant qu'on a pas atteint la racine.
         {
-            memcpy(chemin + s, pn->nom, strlen(pn->nom)); // On copie le nom du dossier actuel au bon emplacement.
+            memcpy(chemin + s, pn->nom, strlen(pn->nom)); // On copie le nom du dossier actuel à la bonne position.
             memcpy(chemin + s - 1, "/", 1);               // On le fait précéder d'un "/".
             s = s - 1 - strlen(pn->pere->nom);            // On met à jour les variables de noeud & de positions.
             pn = pn->pere;
         }
-        return chemin;
+        return chemin; // On renvoie le chemin.
     }
 }
 

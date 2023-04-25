@@ -135,7 +135,7 @@ int main(int argc, char const *argv[])
 
     // Affichage de toute l'arborescence.
     puts("Affichage de toute l'arborescence.");
-    print(n0, 0);
+    print(n0);
     puts("");
 
     //  Déplacement dans un autre noeud.

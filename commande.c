@@ -7,7 +7,6 @@
 #include <stdbool.h>
 #include <string.h>
 #include <math.h>
-#include <assert.h>
 
 void ls(noeud *courant) // Affiche la liste des fils du noeud courant.
 {
@@ -51,66 +50,71 @@ void cd(noeud *courant, char *chemin)
     }
 }
 
-noeud *mkdir(noeud *courant, char *nom) // Créer un dossier dans le dossier courant & renvoie le dossier créé.
+void mkdir(noeud *courant, char *nom) // Créer un dossier dans le dossier courant.
 {
     noeud *n = creer_noeud(true, courant->racine, courant, nom);
     insert_fils(courant, n);
-    return n;
 }
 
-noeud *touch(noeud *courant, char *nom) // Créer un fichier dans le dossier courant & renvoie le fichier créé.
+void touch(noeud *courant, char *nom) // Créer un fichier dans le dossier courant.
 {
     noeud *n = creer_noeud(false, courant->racine, courant, nom);
     insert_fils(courant, n);
-    return n;
 }
 
 void pwd(noeud *courant) // Affiche le chemin absolue du noeud n.
 {
-    if (courant == NULL)
+    if (courant == NULL) // Cas d'Erreur.
     {
         puts("[ERREUR] dans pwd (ligne 70) : Courant = NULL");
         exit(EXIT_FAILURE);
     }
     else
     {
-        char *chemin = chemin_absolue(courant);
-        printf("%s\n", chemin); // On affiche la chaine.
-        free(chemin);
+        char *chemin = chemin_absolue(courant); // On récupère le chemin absolue.
+        printf("%s\n", chemin);                 // On l'affiche.
+        free(chemin);                           // On libère la zone mémoire allouée temporairement.
     }
 }
 
-void print(noeud *courant, int nbSpace)
+void print(noeud *courant) // Affiche l'arborescence à partir du noeud courant.
+{
+    tree(courant, 0);
+}
+
+void tree(noeud *courant, int nbSpace) // Affiche l'arborescance à partir du noeud courant (fonction auxiliaire à print, qui prend en argument le décalage).
 {
     // On affiche le nom du noeud.
-    if (courant->pere == courant)
+    if (courant->pere == courant) // Si on est à la racine.
         puts(".");
     else
     {
         int i = 0;
         printf("└");
-        while (i != nbSpace)
+        while (i != nbSpace) // nbSpace est le nb de "-" à afficher.
         {
             printf("─");
             ++i;
         }
-        printf("─ %s", courant->nom);
-        if (courant->est_dossier)
+        printf("─ %s", courant->nom); // Puis on affiche le nom du noeud.
+
+        if (courant->est_dossier) // Si c'est un dossier, on ajoute "/".
             printf("/\n");
         else
-            puts("");
+            puts(""); // Sinon, on passe directement à la ligne.
     }
 
-    if (courant->fils == NULL)
+    if (courant->fils == NULL) // Si le noeud courant n'a pas d'enfant, on arrête le programme.
         return;
-    else
+
+    else // Sinon, on affiche chacun de ses fils.
     {
         liste_noeud *ln = courant->fils;
         while (ln != NULL)
         {
-            print(ln->no, nbSpace + 1);
+            tree(ln->no, nbSpace + 1); // Les enfants sont décalés de +1 par rapport au noeud courant.
             ln = ln->succ;
         }
-        return;
+        return; // On s'arrête.
     }
 }
