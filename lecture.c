@@ -3,15 +3,15 @@
 #include <stddef.h>
 #include <stdbool.h>
 #include <string.h>
+#include <ctype.h>
 #include "lecture.h"
-#include "commandes.h"
+#include "commande.h"
 #include "noeud.h"
 
 char **split(char *ligne)
 {
     char *nvligne = trim(ligne);
-    // free(ligne);
-    char **tmp = malloc(3 * sizeof(char *));
+    char **tmp = malloc(3);
     int nbw = nbwords(nvligne);
     if (nbw > 3)
     {
@@ -20,8 +20,10 @@ char **split(char *ligne)
     if (nvligne == NULL)
         quit("error argument is (null)");
     tmp[0] = next(nvligne);
-    tmp[1] = nbw >= 2 ? next(nvligne + strlen(tmp[0]) + 1) : NULL;
-    tmp[2] = nbw == 3 ? next(nvligne + strlen(tmp[0]) + strlen(tmp[1]) + 1 + 1) : NULL;
+    tmp[1] = nbw >= 2 ? next((nvligne + strlen(tmp[0]) + 1)) : NULL;
+    tmp[2] = nbw == 3 ? next((nvligne + strlen(tmp[0]) + strlen(tmp[1]) + 1 + 1)) : NULL;
+
+    // free(nvligne);
     return tmp;
 }
 
@@ -33,7 +35,14 @@ void quit(char *message)
 
 void execute(noeud *courant, char *command, char *arg1, char *arg2)
 {
-
+    if (command!= NULL)
+        printf("%s ",command);
+    if (arg1!= NULL)
+        printf("%s ", arg1);    
+    if (arg2!= NULL)
+        printf("%s ", arg2);
+    puts("\n");
+    /*
     if (command == NULL)
     {
         printf("command null");
@@ -89,14 +98,14 @@ void execute(noeud *courant, char *command, char *arg1, char *arg2)
             if (arg1 != NULL || arg2 != NULL)
                 quit("too many arguments");
             else
-                print(courant, 0);
+                print(courant);
         }
         else if (equals("print", command))
         {
             if (arg1 != NULL || arg2 != NULL)
                 quit("too many arguments for pwd");
             else
-                print(courant, 0);
+                print(courant);
         }
         else
             quit("command not recognized");
@@ -130,6 +139,7 @@ void execute(noeud *courant, char *command, char *arg1, char *arg2)
         quit("");
         break;
     }
+    */
 }
 
 bool equals(char *a, char *b)
@@ -144,45 +154,38 @@ bool equals(char *a, char *b)
     return true;
 }
 
-int nbwords(char *s)
+int nbwords(char *str)
 {
-    int i = 0;
     int c = 0;
-    while (s[i] != '\0')
-    {
-        if (s[i] == ' ')
-            ++i;
-        else
-        {
-            c++;
-            while (s[i] != ' ' && s[i] != '\t' && s[i] != '\0')
-            {
-                ++i;
+    bool mot = false;
+    for (int i = 0; str[i] != '\0'; i++) {
+        if (!isspace(str[i])) {
+            if (!mot) {
+                mot = true;
+                c++;
             }
         }
+        else mot = false;
     }
     return c;
 }
 
-char *trim(char *string)
-{
-    int j = 0;
-    for (; (string[j] == ' ' || string[j] == '\t') && string[j] != '\0'; ++j)
-        ;
-    int i = strlen(string) - 1;
-    for (; string[i] == ' ' || string[i] == '\t'; --i)
-        ;
-    if (i == strlen(string) - 1 && j == 0)
-        return string;
-    int c = i - j + 1;
-    // char tmp[c];
-    char *tmp = malloc(sizeof(char) * (i - j) + 1);
-    if (tmp == NULL)
-        printf("erreur de memoire");
-    memcpy(tmp, string + j, i - j);
-    tmp[c] = '\0';
-    return tmp;
+char *trim(char *str) {
+    size_t len = strlen(str);
+    char *nv = NULL;
+    size_t deb = 0;
+    size_t fin = len - 1;
+    while (str[deb] == ' ' || str[deb] == '\t' || str[deb] == '\n')deb++;
+    while (fin >= 0 && (str[fin] == ' ' || str[fin] == '\t' || str[fin] == '\n'))fin--;
+    nv =malloc(sizeof(char)*(fin-deb+2));
+    if (nv == NULL)
+        return NULL;
+    int i;
+    for (i = 0; i <= fin - deb; i++)nv[i] = str[deb + i];
+    nv[i] = '\0';
+    return nv;
 }
+
 
 char *next(char *w)
 {
@@ -214,16 +217,23 @@ void read(noeud *courant, char *filename)
     }
     // adresse dans la quelle on stock la ligne
     char *string = malloc(sizeof(char) * 225);
-    if (string == NULL)
+    if (string == NULL){
         printf("erreur de memoire");
-    while (fgets(string, 250, flux) != NULL)
-    {
-        char **tmp = split(string);
+        exit(EXIT_FAILURE);
+    }
+    char **tmp=NULL;
+    while (fgets(string, 250, flux) != NULL){
+        tmp = split(string);
         execute(courant, tmp[0], tmp[1], tmp[2]);
-        // free(*tmp);
-        // free(*(tmp+1));
-        // free(*(tmp+2));
-        // free(tmp);
+        if(tmp!=NULL){
+            if(*tmp!=NULL)
+                free(*tmp);
+            if(*(tmp+1)!=NULL)
+                free(*(tmp+1));
+            if(*(tmp+2)!=NULL)
+                free(*(tmp+2));
+            free(tmp);
+        }
     }
     free(string);
     int fin = fclose(flux);
@@ -240,6 +250,6 @@ char *dupliquer(const char *s)
 
 int main()
 {
-    read(creer_noeud(true, NULL, NULL, "racine"), "coms.txt");
+    read(NULL, "coms.txt");
     return EXIT_SUCCESS;
 }

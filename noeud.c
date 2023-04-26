@@ -186,3 +186,8 @@ char *reverse_cat(char *s1, char *s2) // Effectue une opération de concaténati
     *(res + len) = '\0';                          // On respecte les propriétés des chaines de caractère.
     return res;                                   // On renvoie la chaine finale.
 }
+
+
+noeud *copie_arbre(noeud *cop){
+    return NULL;
+}

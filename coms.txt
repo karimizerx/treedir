@@ -1,4 +1,4 @@
-mkdir Cours
+mkdir Courscw sfd
 cd Cours
 mkdir ProjetC
 mkdir Anglais

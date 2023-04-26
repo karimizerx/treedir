@@ -132,6 +132,11 @@ int main(int argc, char const *argv[])
     printf("ls(n1) : ");
     ls(n1);
     puts("");
+    // rm(n1,"Baji"); 
+    // printf("ls(n1) : ");
+    // rm(n1,"projet");
+    // ls(n1);
+    // puts("");
 
     // Affichage de toute l'arborescence.
     puts("Affichage de toute l'arborescence.");

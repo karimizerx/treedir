@@ -17,13 +17,13 @@ extern int nbwords(char *);
 extern void read(noeud *,char *);
 
 // Enleve les espaces au debut et a la fin du char
-char *trim(char *);
+extern char *trim(char *);
 
 //quitte le programme et affiche un message d'erreur
-void quit(char* );
+extern void quit(char* );
 
 //teste si deux strings sont egaux
-bool equals(char*,char*);
+extern bool equals(char*,char*);
 
 //copie un char[]
-char * dupliquer(const char * s);
+extern char * dupliquer(const char * s);
