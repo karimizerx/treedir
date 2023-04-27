@@ -2,7 +2,7 @@
 #include "noeud.h"
 
 // renvoi un tableau de dim 3
-extern char **split(char *);
+// extern char **split(char *);
 
 // execute la commande
 extern void execute(noeud *,char *, char *, char *);

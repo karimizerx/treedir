@@ -8,138 +8,149 @@
 #include "commande.h"
 #include "noeud.h"
 
-char **split(char *ligne)
+void split(char *ligne,char **tmp)
 {
     char *nvligne = trim(ligne);
-    char **tmp = malloc(3);
     int nbw = nbwords(nvligne);
     if (nbw > 3)
     {
         quit("too many arguments");
+    }else if (nbw <1)
+    {
+        quit("too few arguments");
     }
     if (nvligne == NULL)
         quit("error argument is (null)");
-    tmp[0] = next(nvligne);
-    tmp[1] = nbw >= 2 ? next((nvligne + strlen(tmp[0]) + 1)) : NULL;
-    tmp[2] = nbw == 3 ? next((nvligne + strlen(tmp[0]) + strlen(tmp[1]) + 1 + 1)) : NULL;
-
+    int i=0;
+    if(nbw>=0)
+        tmp[0] = next(nvligne);
+    else 
+        tmp[0]=NULL;
+    i=+(strlen(tmp[0])+1);//taille du mot + l'espace qui separe le deuxieme mot
+    if(nbw >= 2)
+        tmp[1] =next(nvligne + i); 
+    else 
+        tmp[1]=NULL;
+    i=+(strlen(tmp[1])+1);//taille du mot + l'espace qui separe le deuxieme mot
+    if(nbw == 3)
+        tmp[2] =next(nvligne + i); 
+    else 
+        tmp[2]=NULL;
     // free(nvligne);
-    return tmp;
 }
 
 void quit(char *message)
 {
-    printf("%s \n", message);
+    printf("%s\n", message);
     exit(EXIT_FAILURE);
 }
 
 void execute(noeud *courant, char *command, char *arg1, char *arg2)
 {
-    if (command!= NULL)
-        printf("%s ",command);
-    if (arg1!= NULL)
-        printf("%s ", arg1);    
-    if (arg2!= NULL)
-        printf("%s ", arg2);
-    puts("\n");
-    /*
-    if (command == NULL)
+    if (command == NULL || true)
     {
-        printf("command null");
-        exit(EXIT_FAILURE);
+        // printf("command null");
+        if (command!= NULL)
+            printf(" %s ",command);
+        if (arg1!= NULL)
+            printf("%s ", arg1);    
+        if (arg2!= NULL)
+            printf("%s ", arg2);
+        puts("");
     }
-    int i = 0;
-    switch (command[i])
-    {
-    case 'c':
-        if (command[i + 1] == 'd')
-        {
-            if (arg2 == NULL)
-                cd(courant, arg1);
-            else
-                quit("too many arguments for cd");
-        }
-        else if (command[i + 1] == 'p')
-        {
-            if (arg1 == NULL || arg2 == NULL)
-                quit("too few arguments for cp");
-            else
-                cp(courant, arg1, arg2);
-        }
-        else
-        {
-            quit("command not recognized");
-        }
-        break;
-    case 'm':
-        if (command[i + 1] == 'v')
-        {
-            if (arg1 == NULL || arg2 == NULL)
-                quit("too few arguments");
-            else
-                mv(courant, arg1, arg2);
-        }
-        else if (command[i + 1] != 'k')
-        {
-            quit("command not recognized");
-        }
-        else if (equals("mkdir", command))
-        {
-            if (arg1 == NULL)
-                quit("too few arguments");
-            else if (arg2 != NULL)
-                quit("too many arguments");
-            mkdir(courant, arg1);
-        }
-        break;
-    case 'p':
-        if (equals("pwd", command))
-        {
-            if (arg1 != NULL || arg2 != NULL)
-                quit("too many arguments");
-            else
-                print(courant);
-        }
-        else if (equals("print", command))
-        {
-            if (arg1 != NULL || arg2 != NULL)
-                quit("too many arguments for pwd");
-            else
-                print(courant);
-        }
-        else
-            quit("command not recognized");
-        break;
-    case 'r':
-        if (command[i + 1] != 'm')
-            quit("command not recognized");
-        if (arg2 == NULL || arg1 == NULL)
-            quit("too few arguments for rm");
-        rm(courant, arg1);
-        break;
-    case 'l':
-        if (command[i + 1] != 's')
-            quit("command not recognized");
-        if (arg2 != NULL || arg1 != NULL)
-            quit("too many arguments for ls");
-        ls(courant);
-        break;
-    case 't':
-        if (equals(command, "touch"))
-        {
-            if (arg1 == NULL)
-                quit("too few arguments for touch");
-            if (arg2 != NULL)
-                quit("too many arguments for touch");
-            touch(courant, arg1);
-        }
-        break;
-    default:
-        printf("Commande %s non reconnu", command);
-        quit("");
-        break;
-    }
-    */
+    // else{
+    // int i = 0;
+    // switch (command[i])
+    // {
+    // case 'c':
+    //     if (command[i + 1] == 'd')
+    //     {
+    //         if (arg2 == NULL)
+    //             cd(&courant, arg1);
+    //         else
+    //             quit("too many arguments for cd");
+    //     }
+    //     else if (command[i + 1] == 'p')
+    //     {
+    //         if (arg1 == NULL || arg2 == NULL)
+    //             quit("too few arguments for cp");
+    //         else
+    //             cp(courant, arg1, arg2);
+    //     }
+    //     else
+    //     {
+    //         quit("command not recognized");
+    //     }
+    //     break;
+    // case 'm':
+    //     if (command[i + 1] == 'v')
+    //     {
+    //         if (arg1 == NULL || arg2 == NULL)
+    //             quit("too few arguments for mv");
+    //         else
+    //             mv(courant, arg1, arg2);
+    //     }
+    //     else if (command[i + 1] != 'k')
+    //     {
+    //         quit("command not recognized");
+    //     }
+    //     else if (equals("mkdir", command))
+    //     {
+    //         if (arg1 == NULL)
+    //             quit("too few arguments mkdir");
+    //         else if (arg2 != NULL)
+    //             quit("too many arguments for mkdir");
+    //         mkdir(courant, arg1);
+    //     }
+    //     break;
+    // case 'p':
+    //     if (equals("pwd", command))
+    //     {
+    //         if (arg1 != NULL || arg2 != NULL)
+    //             quit("too many arguments for pwd");
+    //         else
+    //             print(courant);
+    //     }
+    //     else if (equals("print", command))
+    //     {
+    //         if (arg1 != NULL || arg2 != NULL)
+    //             quit("too many arguments for pwd");
+    //         else
+    //             print(courant);
+    //     }
+    //     else
+    //         quit("command not recognized");
+    //     break;
+    // case 'r':
+    //     if (command[i + 1] != 'm')
+    //         quit("command not recognized");
+    //     if (arg2 == NULL || arg1 == NULL)
+    //         quit("too few arguments for rm");
+    //     rm(courant, arg1);
+    //     break;
+    // case 'l':
+    //     if (command[i + 1] != 's')
+    //         quit("command not recognized");
+    //     if (arg2 != NULL || arg1 != NULL)
+    //         quit("too many arguments for ls");
+    //     ls(courant);
+    //     break;
+    // case 't':
+    //     if (equals(command, "touch"))
+    //     {
+    //         if (arg1 == NULL)
+    //             quit("too few arguments for touch");
+    //         if (arg2 != NULL)
+    //             quit("too many arguments for touch");
+    //         touch(courant, arg1);
+    //     }
+    //     break;
+    // default:
+    //     printf("Commande %s non reconnu", command);
+    //     quit("");
+    //     break;
+
+    // }}
 }
 
 bool equals(char *a, char *b)
@@ -186,7 +197,6 @@ char *trim(char *str) {
     return nv;
 }
 
-
 char *next(char *w)
 {
     if (w == NULL)
@@ -216,23 +226,33 @@ void read(noeud *courant, char *filename)
         exit(EXIT_FAILURE);
     }
     // adresse dans la quelle on stock la ligne
+
     char *string = malloc(sizeof(char) * 225);
     if (string == NULL){
         printf("erreur de memoire");
         exit(EXIT_FAILURE);
     }
-    char **tmp=NULL;
     while (fgets(string, 250, flux) != NULL){
-        tmp = split(string);
-        execute(courant, tmp[0], tmp[1], tmp[2]);
+        char **tmp=(char**)malloc(3);
+        split(string,tmp);
+        free(string);
+        string = malloc(sizeof(char) * 225);
+        execute(NULL, tmp[0], tmp[1], tmp[2]);
         if(tmp!=NULL){
-            if(*tmp!=NULL)
-                free(*tmp);
-            if(*(tmp+1)!=NULL)
-                free(*(tmp+1));
-            if(*(tmp+2)!=NULL)
-                free(*(tmp+2));
+            if(tmp[2]){
+                free(tmp[2]);
+                tmp[2]=NULL;
+            puts("free tmp[2]");}
+            if(tmp[1]){
+                free(tmp[1]);
+                tmp[1]=NULL;
+            puts("free tmp[1]");}
+            if(tmp[0]){
+                free(tmp[0]);
+                tmp[0]=NULL;
+            puts("free tmp[0]");}
             free(tmp);
+            tmp=NULL;
         }
     }
     free(string);
