@@ -1,9 +1,20 @@
-mkdir Courscw sfd
+mkdir Cours
+ls
 cd Cours
 mkdir ProjetC
-mkdir Anglais
+mkdir Anglais 
+ls
+rm ProjetC
+ls
+cd Anglais
+pwd
 cd
+ls
 touch edt
-cd Td
+mkdir Td
+ls
+rm edt
+ls
 mkdir td1
 mkdir td2
+ls
