@@ -16,7 +16,7 @@ void ls(noeud *courant) // Affiche la liste des fils du noeud courant.
     liste_noeud *tmp = courant->fils;
     while (tmp != NULL)
     {
-        printf("%s ", tmp->no->nom);
+        printf(" %s \n", tmp->no->nom);
         tmp = tmp->succ;
     }
 }

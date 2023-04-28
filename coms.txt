@@ -2,19 +2,18 @@ mkdir Cours
 ls
 cd Cours
 mkdir ProjetC
-mkdir Anglais 
+mkdir Anglais
 ls
 rm ProjetC
 ls
-cd Anglais
-pwd
-cd
+cd 
 ls
 touch edt
 mkdir Td
 ls
-rm edt
-ls
+cd Td
+touch dans_Td
 mkdir td1
 mkdir td2
-ls
+cd td2
+ls 

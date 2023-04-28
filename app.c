@@ -1,11 +1,13 @@
 #include "noeud.h"
 #include "commande.h"
+#include "lecture.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 int main(int argc, char const *argv[])
 {
+    /*
 
     // Création de la racine.
     char *nom0 = "";
@@ -177,4 +179,13 @@ int main(int argc, char const *argv[])
     // On libère toutes les ressources.
     free_noeud(n0);
     return 0;
+
+    */
+
+    char *nom0 = "";
+    noeud *n0 = init_noeud(true, nom0);
+    n0->pere = n0;
+    n0->racine = n0;
+    read(n0,"coms.txt");
+    tree(n0,1);
 }
