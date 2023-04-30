@@ -135,44 +135,59 @@ void tree(noeud *courant, int nbSpace) // Affiche l'arborescance à partir du no
     }
 }
 
-void rm(noeud * courant,char* chem){
-    noeud *del=search_noeud(courant,chem);
-    if(del==NULL)exit(EXIT_FAILURE);
-    if(del->est_dossier){
-        if(del->fils!=NULL ) exit(EXIT_FAILURE);
-            // quit("dossier n'est pas vide");
+void rm(noeud *courant, char *chem)
+{
+    noeud *del = search_noeud(courant, chem);
+    if (del == NULL)
+        exit(EXIT_FAILURE);
+    if (del->est_dossier)
+    {
+        if (del->fils != NULL)
+            exit(EXIT_FAILURE);
+        // quit("dossier n'est pas vide");
     }
-    liste_noeud *list= del->pere->fils;
-    while(strcmp(list->succ->no->nom,del->nom)!=0)list=list->succ;
-    list->succ=list->succ->succ;
+    liste_noeud *list = del->pere->fils;
+    while (strcmp(list->succ->no->nom, del->nom) != 0)
+        list = list->succ;
+    list->succ = list->succ->succ;
     // free(del->nom);
     free(del);
 }
 
-void cp(noeud *courant, char *src, char *dst){
-    if(search_noeud(courant,dst)!=NULL){
+void cp(noeud *courant, char *src, char *dst)
+{
+    if (search_noeud(courant, dst) != NULL)
+    {
         exit(EXIT_FAILURE);
         // quit("fichier existant");
     }
-    noeud *copier= search_noeud(courant,src);
-    if(copier==NULL){
+    noeud *copier = search_noeud(courant, src);
+    if (copier == NULL)
+    {
         exit(EXIT_FAILURE);
         // quit("fichier n'existe pas");
     }
-    //reste a tester si dst est dans l'arborecense de src
-    //on recupere le nom du nouveau fichier/dossier
-    size_t i=strlen(dst)-1;
-    for(;dst[i]!='\\'||i>=0;i--);
+    // reste a tester si dst est dans l'arborecense de src
+    // on recupere le nom du nouveau fichier/dossier
+    size_t i = strlen(dst) - 1;
+    for (; dst[i] != '\\' || i >= 0; i--)
+        ;
     ++i;
-    size_t size=strlen(dst)-i;
-    char *nom=malloc(sizeof(char)*size+1);
-    memcpy(nom,dst+i,size);
-    nom[size]='\0';
-    dst[i]='\0';
+    size_t size = strlen(dst) - i;
+    char *nom = malloc(sizeof(char) * size + 1);
+    memcpy(nom, dst + i, size);
+    nom[size] = '\0';
+    dst[i] = '\0';
     // insert_noeud(copie_arbre(copier),dst);
 }
 
-void mv(noeud *courant, char *src, char *dst){
-    cp(courant,src,dst);
-    rm(courant,src);
+void mv(noeud *courant, char *src, char *dst)
+{
+    cp(courant, src, dst);
+    rm(courant, src);
+}
+
+void info(noeud *courant)
+{
+    print_noeud(courant);
 }

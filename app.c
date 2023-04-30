@@ -134,7 +134,7 @@ int main(int argc, char const *argv[])
     printf("ls(n1) : ");
     ls(n1);
     puts("");
-    // rm(n1,"Baji"); 
+    // rm(n1,"Baji");
     // printf("ls(n1) : ");
     // rm(n1,"projet");
     // ls(n1);
@@ -186,6 +186,6 @@ int main(int argc, char const *argv[])
     noeud *n0 = init_noeud(true, nom0);
     n0->pere = n0;
     n0->racine = n0;
-    read(n0,"coms.txt");
-    tree(n0,1);
+    read(n0, "coms.txt");
+    print(n0);
 }
