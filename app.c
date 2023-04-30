@@ -150,24 +150,24 @@ int main(int argc, char const *argv[])
     cd(&courant, "/Cours");
     printf("Noeud courant après cd '/Cours: ");
     pwd(courant);
-    // // cd(&courant, "TP");
-    // // printf("Noeud courant après cd 'TP' : ");
-    // // pwd(courant);
-    // cd(&courant, "ProjetC");
-    // printf("Noeud courant après cd 'ProjetC' : ");
-    // pwd(courant);
-    // cd(&courant, "/TD");
-    // printf("Noeud courant après cd '/TD' : ");
-    // pwd(courant);
+    cd(&courant, "TP");
+    printf("Noeud courant après cd 'TP' : ");
+    pwd(courant);
+    cd(&courant, "ProjetC");
+    printf("Noeud courant après cd 'ProjetC' : ");
+    pwd(courant);
+    cd(&courant, "/TD");
+    printf("Noeud courant après cd '/TD' : ");
+    pwd(courant);
     cd(&courant, ".");
     printf("Noeud courant après cd '.' : ");
     pwd(courant);
     cd(&courant, "..");
     printf("Noeud courant après cd '..' : ");
     pwd(courant);
-    // cd(&courant, "TD/td1");
-    // printf("Noeud courant après cd 'TD/td1' : ");
-    // pwd(courant);
+    cd(&courant, "TD/td1");
+    printf("Noeud courant après cd 'TD/td1' : ");
+    pwd(courant);
 
     // On libère toutes les ressources.
     free_noeud(n0);
