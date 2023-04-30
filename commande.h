@@ -19,3 +19,5 @@ extern void pwd(noeud *);
 extern void print(noeud *);
 
 extern void tree(noeud *, int);
+
+extern void info(noeud *);

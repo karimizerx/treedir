@@ -1,5 +1,6 @@
 #include "noeud.h"
 #include "commande.h"
+#include "lecture.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -138,19 +139,18 @@ void tree(noeud *courant, int nbSpace) // Affiche l'arborescance à partir du no
 void rm(noeud *courant, char *chem)
 {
     noeud *del = search_noeud(courant, chem);
-    if (del == NULL)
-        exit(EXIT_FAILURE);
+    if (del == NULL){
+        quit("fichier n'existe pas");
+    }
     if (del->est_dossier)
     {
         if (del->fils != NULL)
-            exit(EXIT_FAILURE);
-        // quit("dossier n'est pas vide");
+        quit("dossier n'est pas vide");
     }
     liste_noeud *list = del->pere->fils;
     while (strcmp(list->succ->no->nom, del->nom) != 0)
         list = list->succ;
     list->succ = list->succ->succ;
-    // free(del->nom);
     free(del);
 }
 

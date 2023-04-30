@@ -69,6 +69,52 @@ void execute(noeud *courant, char *command, char *arg1, char *arg2)
             quit("command not recognized");
         }
         break;
+        
+    case 'i':
+        printf("%s", command);
+        if(strcmp(command,"info")){
+            if(arg1==NULL && arg2==NULL)
+                info(courant);       
+            else 
+                quit("too many arguments for info");
+        }
+        else
+        {
+            quit("command not recognized");
+        }
+        break;
+
+    case 'p':
+        if (strcmp("pwd", command))
+        {
+            if (arg1 != NULL || arg2 != NULL)
+                quit("too many arguments for pwd");
+            else
+                pwd(courant);
+        }
+        else if (strcmp("print", command))
+        {
+            if (arg1 != NULL || arg2 != NULL)
+                quit("too many arguments for pwd");
+            else
+            {    
+                print(courant);
+                puts("");
+            }
+        }
+        else
+            quit("command not recognized");
+        break;
+
+    case 'l':
+        if (command[i + 1] != 's')
+            quit("command not recognized");
+        if (arg2 != NULL || arg1 != NULL)
+            quit("too many arguments for ls");
+        ls(courant);
+        puts("");
+        break;
+
     case 'm':
         if (command[i + 1] == 'v')
         {
@@ -81,7 +127,7 @@ void execute(noeud *courant, char *command, char *arg1, char *arg2)
         {
             quit("command not recognized");
         }
-        else if (equals("mkdir", command))
+        else if (strcmp("mkdir", command))
         {
             if (arg1 == NULL)
                 quit("too few arguments mkdir");
@@ -90,25 +136,7 @@ void execute(noeud *courant, char *command, char *arg1, char *arg2)
             mkdir(courant, arg1);
         }
         break;
-    case 'p':
-        if (equals("pwd", command))
-        {
-            if (arg1 != NULL || arg2 != NULL)
-                quit("too many arguments for pwd");
-            else
-                pwd(courant);
-        }
-        else if (equals("print", command))
-        {
-            if (arg1 != NULL || arg2 != NULL)
-                quit("too many arguments for pwd");
-            else
-                print(courant);
-                puts("");
-        }
-        else
-            quit("command not recognized");
-        break;
+
     case 'r':
         if (command[i + 1] != 'm')
             quit("command not recognized");
@@ -118,14 +146,7 @@ void execute(noeud *courant, char *command, char *arg1, char *arg2)
             quit("too few arguments for rm");
         rm(courant, arg1);
         break;
-    case 'l':
-        if (command[i + 1] != 's')
-            quit("command not recognized");
-        if (arg2 != NULL || arg1 != NULL)
-            quit("too many arguments for ls");
-        ls(courant);
-        puts("");
-        break;
+
     case 't':
         if (equals(command, "touch"))
         {
@@ -136,6 +157,7 @@ void execute(noeud *courant, char *command, char *arg1, char *arg2)
             touch(courant, arg1);
         }
         break;
+
     default:
         printf("Commande %s non reconnu", command);
         quit("");
