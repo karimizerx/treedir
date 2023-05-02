@@ -1,5 +1,5 @@
 mkdir Cours
-info
+ls 
 cd Cours
 mkdir ProjetC
 print

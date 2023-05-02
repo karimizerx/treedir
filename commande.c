@@ -138,7 +138,7 @@ void tree(noeud *courant, int nbSpace) // Affiche l'arborescance à partir du no
 
 void rm(noeud *courant, char *chem)
 {   
-    noeud *del = search_noeud(courant, chem);
+    noeud *del = search_noeud(courant, chem);  
     if(is_subdirectory(courant,del)) quit("destination est parent du dossier courant");
     if (del == NULL)
         quit("fichier n'existe pas");
@@ -162,9 +162,9 @@ void cp(noeud *courant, char *src, char *dst)
         chem=chemin_absolue(courant);
     else {
         chem=malloc(sizeof(char)*(newchem));
-        memcpy(chem,dst,newchem);
+        memcpy(chem,dst,newchem+1);
     }
-
+    printf("%s\n",chem);
     noeud *copier = search_noeud(courant, src);
     if (copier == NULL)
     {

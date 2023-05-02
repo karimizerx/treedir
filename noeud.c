@@ -194,16 +194,24 @@ noeud *copie_arbre(noeud *cop){
     liste_noeud *t=tmp->fils;
     while(l!=NULL){
         t=malloc(sizeof(liste_noeud));
-        t->no=copie_arbre(l);
+        t->no=copie_arbre(l->no);
         t=t->succ;
         l=l->succ;
     }    
     return tmp;
 }
 // on veut savoir si node est un fils(ou fils de fils...) de pere
-bool is_subdirectory(noeud *pere,noeud *node){
-    if(node==pere->racine) return false;
-    if(node->pere==pere) return true;
+bool is_subdirectory(noeud *node,noeud *pere){
+    if(node==NULL) {
+        printf("erreur, noeud est (null)");
+        exit(EXIT_FAILURE);
+    }
+    if(node->pere==NULL) {
+        printf("erreur, noeud %s n'a pas de parent",node->nom);
+        exit(EXIT_FAILURE);
+    }
+    if(node==pere->racine) return false;//cas ou on arrive a la racine
+    if(node->pere==pere) return true;// cas ou on a la meme adresse
     return is_subdirectory(pere,node->pere);
 }
 

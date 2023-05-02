@@ -30,3 +30,6 @@ extern char * dupliquer(const char *);
 
 //prend le dernier nom d'un string d'une destination
 extern int getDernierMotIndex(char *);
+
+extern bool espace(char);
+ 

@@ -45,8 +45,9 @@ void quit(char *message)
 
 void execute(noeud *courant, char *command, char *arg1, char *arg2)
 {
-
+    printf("__cette fonction est __%s__ end of exec\n",command);
     int i = 0;
+    if(strlen(command)<=1) quit("command not recognized");
     switch (command[i])
     {
     case 'c':
@@ -70,36 +71,33 @@ void execute(noeud *courant, char *command, char *arg1, char *arg2)
         }
         break;
         
-    case 'i':
-        if(strcmp(command,"info")){
-            if(arg1==NULL && arg2==NULL)
-                info(courant);       
-            else 
-                quit("too many arguments for info");
-        }
-        else
-        {
-            quit("command not recognized");
-        }
-        break;
+    // case 'i':
+    //     if(equals(command,"tree")){
+    //         if(arg1==NULL && arg2==NULL)
+    //             info(courant);       
+    //         else 
+    //             quit("too many arguments for info");
+    //     }
+    //     else
+    //     {
+    //         quit("command not recognized");
+    //     }
+    //     break;
 
     case 'p':
-        if (strcmp("pwd", command))
+        if (equals("pwd", command))
         {
             if (arg1 != NULL || arg2 != NULL)
                 quit("too many arguments for pwd");
             else
                 pwd(courant);
         }
-        else if (strcmp("print", command))
+        else if(equals(command,"print"))
         {
-            if (arg1 != NULL || arg2 != NULL)
-                quit("too many arguments for pwd");
-            else
-            {    
-                print(courant);
-                puts("");
-            }
+            if (arg1 == NULL && arg2 == NULL)
+                print(courant);       
+            else 
+                quit("too many arguments for print");
         }
         else
             quit("command not recognized");
@@ -126,7 +124,7 @@ void execute(noeud *courant, char *command, char *arg1, char *arg2)
         {
             quit("command not recognized");
         }
-        else if (strcmp("mkdir", command))
+        else if (equals("mkdir", command))
         {
             if (arg1 == NULL)
                 quit("too few arguments mkdir");
@@ -155,6 +153,16 @@ void execute(noeud *courant, char *command, char *arg1, char *arg2)
                 quit("too many arguments for touch");
             touch(courant, arg1);
         }
+        else if (strcmp("tree", command)==0)
+        {
+            if (arg1 != NULL || arg2 != NULL)
+                quit("too many arguments for pwd");
+            else
+            {    
+                tree(courant,0);
+                puts("");
+            }
+        }
         break;
 
     default:
@@ -166,12 +174,16 @@ void execute(noeud *courant, char *command, char *arg1, char *arg2)
 
 bool equals(char *a, char *b)
 {
-    if (strlen(a) != strlen(b))
+    if (strlen(a) != strlen(b)){
+        puts("faux chef");
         return false;
+    }
     for (size_t i = 0; i < strlen(a); ++i)
     {
-        if (*(a + i) != *(b + i))
+        if (*(a + i) != *(b + i)){
+            puts("faux chef");
             return false;
+        }
     }
     return true;
 }
@@ -181,7 +193,7 @@ int nbwords(char *str)
     int c = 0;
     bool mot = false;
     for (int i = 0; str[i] != '\0'; i++) {
-        if (!isspace(str[i])) {
+        if (!espace(str[i])) {
             if (!mot) {
                 mot = true;
                 c++;
@@ -197,8 +209,8 @@ char *trim(char *str) {
     char *nv = NULL;
     size_t deb = 0;
     size_t fin = len - 1;
-    while (str[deb] == ' ' || str[deb] == '\t' || str[deb] == '\n')deb++;
-    while (fin >= 0 && (str[fin] == ' ' || str[fin] == '\t' || str[fin] == '\n'))fin--;
+    while (espace(str[deb]) &&str[deb]!='\0')deb++;
+    while (fin >= 0 && espace(str[fin]))fin--;
     nv =malloc(sizeof(char)*(fin-deb+2));
     if (nv == NULL)
         return NULL;
@@ -213,7 +225,7 @@ char *next(char *w)
     if (w == NULL)
         return NULL;
     size_t i = 0;
-    while (!(w[i] == ' ' || w[i] == '\0'))
+    while (!(espace(w[i]) || w[i] == '\0'))
     {
         ++i;
     }
@@ -275,12 +287,15 @@ void read(noeud *courant, char *filename)
         perror("erreur de fermuture");
 }
 
+//renvoie l'indice du dernier / du path
 int getDernierMotIndex(char *src){
     if(src==NULL) return -1;
     int len=strlen(src);
     size_t i;
-    for(i=len-1;src[i]!='/' && i<=0;--i)
-        if(!isalnum(src[i])) 
-            quit("le nom doit etre alpha-numerique");
+    for(i=len-1;src[i]!='/' && i>=0;--i) if(!isalnum(src[i])) quit("le nom doit etre alpha-numerique");
     return i;
+}
+
+bool espace(char c){
+    return c == ' ' || c == '\t' || c == '\n' || c=='\r';
 }

@@ -157,9 +157,9 @@ int main(int argc, char const *argv[])
     cd(&courant, "/Cours");
     printf("Noeud courant après cd '/Cours: ");
     pwd(courant);
-    // // cd(&courant, "TP");
-    // // printf("Noeud courant après cd 'TP' : ");
-    // // pwd(courant);
+    // cd(&courant, "TP");
+    // printf("Noeud courant après cd 'TP' : ");
+    // pwd(courant);
     // cd(&courant, "ProjetC");
     // printf("Noeud courant après cd 'ProjetC' : ");
     // pwd(courant);
