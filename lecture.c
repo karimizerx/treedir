@@ -45,7 +45,6 @@ void quit(char *message)
 
 void execute(noeud *courant, char *command, char *arg1, char *arg2)
 {
-    printf("__cette fonction est __%s__ end of exec\n",command);
     int i = 0;
     if(strlen(command)<=1) quit("command not recognized");
     switch (command[i])
@@ -174,10 +173,8 @@ void execute(noeud *courant, char *command, char *arg1, char *arg2)
 
 bool equals(char *a, char *b)
 {
-    if (strlen(a) != strlen(b)){
-        puts("faux chef");
+    if (strlen(a) != strlen(b))
         return false;
-    }
     for (size_t i = 0; i < strlen(a); ++i)
     {
         if (*(a + i) != *(b + i)){

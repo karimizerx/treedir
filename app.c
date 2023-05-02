@@ -1,6 +1,6 @@
-#include "noeud.h"
-#include "commande.h"
-#include "lecture.h"
+#include "noeud.c"
+#include "commande.c"
+#include "lecture.c"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
