@@ -26,4 +26,7 @@ extern void quit(char* );
 extern bool equals(char*,char*);
 
 //copie un char[]
-extern char * dupliquer(const char * s);
+extern char * dupliquer(const char *);
+
+//prend le dernier nom d'un string d'une destination
+extern int getDernierMotIndex(char *);

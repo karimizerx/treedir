@@ -189,5 +189,21 @@ char *reverse_cat(char *s1, char *s2) // Effectue une opération de concaténati
 
 
 noeud *copie_arbre(noeud *cop){
-    return NULL;
+    noeud *tmp=creer_noeud(cop->est_dossier,cop->racine,cop->racine,cop->nom);
+    liste_noeud *l=cop->fils;
+    liste_noeud *t=tmp->fils;
+    while(l!=NULL){
+        t=malloc(sizeof(liste_noeud));
+        t->no=copie_arbre(l);
+        t=t->succ;
+        l=l->succ;
+    }    
+    return tmp;
 }
+// on veut savoir si node est un fils(ou fils de fils...) de pere
+bool is_subdirectory(noeud *pere,noeud *node){
+    if(node==pere->racine) return false;
+    if(node->pere==pere) return true;
+    return is_subdirectory(pere,node->pere);
+}
+

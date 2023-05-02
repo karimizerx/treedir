@@ -71,7 +71,6 @@ void execute(noeud *courant, char *command, char *arg1, char *arg2)
         break;
         
     case 'i':
-        printf("%s", command);
         if(strcmp(command,"info")){
             if(arg1==NULL && arg2==NULL)
                 info(courant);       
@@ -274,4 +273,14 @@ void read(noeud *courant, char *filename)
     int fin = fclose(flux);
     if (fin != 0)
         perror("erreur de fermuture");
+}
+
+int getDernierMotIndex(char *src){
+    if(src==NULL) return -1;
+    int len=strlen(src);
+    size_t i;
+    for(i=len-1;src[i]!='/' && i<=0;--i)
+        if(!isalnum(src[i])) 
+            quit("le nom doit etre alpha-numerique");
+    return i;
 }
