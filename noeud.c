@@ -79,6 +79,9 @@ noeud *search_noeud_profondeur1(noeud *n, char *nom) // Cherche un noeud "nom" d
 
 noeud *search_noeud(noeud *n, char *chemin) // Cherche un noeud au boud du "chem" dans toute l'arborescence.
 {
+    char *tmp =trim(chemin);
+    if(strlen(tmp)==1 && tmp[0]=='/')
+        return n->racine;
     if (*chemin == '\0') // Cas 1 : On reste dans le dossier actuel (On est arrivé à la fin du chemin ou ".").
         return n;
     else if (*chemin == '.') // Cas 2 : On reste dans le dossier actuel avec "." ou on remonte au père avec "..".

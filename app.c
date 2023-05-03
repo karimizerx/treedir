@@ -188,4 +188,7 @@ int main(int argc, char const *argv[])
     n0->racine = n0;
     read(n0, "coms.txt");
     print(n0);
+    
+    puts("done");
+    return EXIT_SUCCESS;
 }

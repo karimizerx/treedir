@@ -25,11 +25,11 @@ void split(char *ligne,char **tmp)
     int i=0;
     if(nbw>=0){
         *tmp = next(nvligne);
-        i=+(strlen(*tmp)+1);//taille du mot + l'espace qui separe le deuxieme mot
+        i=i+(strlen(*tmp)+1);//taille du mot + l'espace qui separe le deuxieme mot
     }
     if(nbw >= 2){
         *(tmp+1) =next(nvligne + i); 
-        i=+(strlen(*(tmp+1))+1);//taille du mot + l'espace qui separe le deuxieme mot
+        i=i+(strlen(*(tmp+1))+1);//taille du mot + l'espace qui separe le deuxieme mot
     }
     if(nbw == 3)
         *(tmp+2) =next(nvligne + i); 
@@ -288,8 +288,17 @@ void read(noeud *courant, char *filename)
 int getDernierMotIndex(char *src){
     if(src==NULL) return -1;
     int len=strlen(src);
-    size_t i;
-    for(i=len-1;src[i]!='/' && i>=0;--i) if(!isalnum(src[i])) quit("le nom doit etre alpha-numerique");
+    int i=len-1;
+    for(;src[i]!='/' && i>0;i--) 
+    {
+        printf("i= %d, val %d , pour %d",i,isalnum(src[i]),src[i]);
+        puts("");
+        // if(isalnum(src[i])==0)
+        // { 
+        //     quit("le nom doit etre alpha-numerique");
+        // }
+    }
+    printf("%d\n",i);
     return i;
 }
 
