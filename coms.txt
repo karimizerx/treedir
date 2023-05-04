@@ -1,24 +1,18 @@
 mkdir Cours
-ls 
 cd Cours
 mkdir ProjetC
-print
 mkdir Anglais
-print
-rm ProjetC
-print
-cd 
-print
+cd
 touch edt
-print
 mkdir Td
-print
 cd Td
 touch dans_Td
-print
 mkdir td1
-print
 mkdir td2
-print
 cd td2
-print 
+cd
+print
+rm edt
+print
+cd
+print

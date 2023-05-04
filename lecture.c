@@ -9,30 +9,33 @@
 #include "commande.h"
 #include "noeud.h"
 
-void split(char *ligne,char **tmp)
+void split(char *ligne, char **tmp)
 {
-     char *nvligne = trim(ligne);
+    char *nvligne = trim(ligne);
     int nbw = nbwords(nvligne);
     if (nbw > 3)
     {
         quit("too many arguments");
-    }else if (nbw <1)
+    }
+    else if (nbw < 1)
     {
         quit("too few arguments");
     }
     if (nvligne == NULL)
         quit("error argument is (null)");
-    int i=0;
-    if(nbw>=0){
+    int i = 0;
+    if (nbw >= 0)
+    {
         *tmp = next(nvligne);
-        i=i+(strlen(*tmp)+1);//taille du mot + l'espace qui separe le deuxieme mot
+        i = i + (strlen(*tmp) + 1); // taille du mot + l'espace qui separe le deuxieme mot
     }
-    if(nbw >= 2){
-        *(tmp+1) =next(nvligne + i); 
-        i=i+(strlen(*(tmp+1))+1);//taille du mot + l'espace qui separe le deuxieme mot
+    if (nbw >= 2)
+    {
+        *(tmp + 1) = next(nvligne + i);
+        i = i + (strlen(*(tmp + 1)) + 1); // taille du mot + l'espace qui separe le deuxieme mot
     }
-    if(nbw == 3)
-        *(tmp+2) =next(nvligne + i); 
+    if (nbw == 3)
+        *(tmp + 2) = next(nvligne + i);
 
     free(nvligne);
 }
@@ -43,17 +46,18 @@ void quit(char *message)
     exit(EXIT_FAILURE);
 }
 
-void execute(noeud *courant, char *command, char *arg1, char *arg2)
+void execute(noeud **courant, char *command, char *arg1, char *arg2)
 {
     int i = 0;
-    if(strlen(command)<=1) quit("command not recognized");
+    if (strlen(command) <= 1)
+        quit("command not recognized");
     switch (command[i])
     {
     case 'c':
         if (command[i + 1] == 'd')
         {
             if (arg2 == NULL)
-                cd(&courant, arg1);
+                cd(courant, arg1);
             else
                 quit("too many arguments for cd");
         }
@@ -62,26 +66,27 @@ void execute(noeud *courant, char *command, char *arg1, char *arg2)
             if (arg1 == NULL || arg2 == NULL)
                 quit("too few arguments for cp");
             else
-                cp(courant, arg1, arg2);
+                cp(*courant, arg1, arg2);
         }
         else
         {
             quit("command not recognized");
         }
         break;
-        
-    // case 'i':
-    //     if(equals(command,"tree")){
-    //         if(arg1==NULL && arg2==NULL)
-    //             info(courant);       
-    //         else 
-    //             quit("too many arguments for info");
-    //     }
-    //     else
-    //     {
-    //         quit("command not recognized");
-    //     }
-    //     break;
+
+    case 'i':
+        if (equals(command, "info"))
+        {
+            if (arg1 == NULL && arg2 == NULL)
+                info(*courant);
+            else
+                quit("too many arguments for info");
+        }
+        else
+        {
+            quit("command not recognized");
+        }
+        break;
 
     case 'p':
         if (equals("pwd", command))
@@ -89,13 +94,13 @@ void execute(noeud *courant, char *command, char *arg1, char *arg2)
             if (arg1 != NULL || arg2 != NULL)
                 quit("too many arguments for pwd");
             else
-                pwd(courant);
+                pwd(*courant);
         }
-        else if(equals(command,"print"))
+        else if (equals(command, "print"))
         {
             if (arg1 == NULL && arg2 == NULL)
-                print(courant);       
-            else 
+                print(*courant);
+            else
                 quit("too many arguments for print");
         }
         else
@@ -107,7 +112,7 @@ void execute(noeud *courant, char *command, char *arg1, char *arg2)
             quit("command not recognized");
         if (arg2 != NULL || arg1 != NULL)
             quit("too many arguments for ls");
-        ls(courant);
+        ls(*courant);
         puts("");
         break;
 
@@ -117,7 +122,7 @@ void execute(noeud *courant, char *command, char *arg1, char *arg2)
             if (arg1 == NULL || arg2 == NULL)
                 quit("too few arguments for mv");
             else
-                mv(courant, arg1, arg2);
+                mv(*courant, arg1, arg2);
         }
         else if (command[i + 1] != 'k')
         {
@@ -129,7 +134,7 @@ void execute(noeud *courant, char *command, char *arg1, char *arg2)
                 quit("too few arguments mkdir");
             else if (arg2 != NULL)
                 quit("too many arguments for mkdir");
-            mkdir(courant, arg1);
+            mkdir(*courant, arg1);
         }
         break;
 
@@ -138,9 +143,9 @@ void execute(noeud *courant, char *command, char *arg1, char *arg2)
             quit("command not recognized");
         if (arg2 != NULL)
             quit("too many arguments for rm");
-        if(arg1==NULL)  
+        if (arg1 == NULL)
             quit("too few arguments for rm");
-        rm(courant, arg1);
+        rm(*courant, arg1);
         break;
 
     case 't':
@@ -150,15 +155,15 @@ void execute(noeud *courant, char *command, char *arg1, char *arg2)
                 quit("too few arguments for touch");
             if (arg2 != NULL)
                 quit("too many arguments for touch");
-            touch(courant, arg1);
+            touch(*courant, arg1);
         }
-        else if (strcmp("tree", command)==0)
+        else if (strcmp("tree", command) == 0)
         {
             if (arg1 != NULL || arg2 != NULL)
                 quit("too many arguments for pwd");
             else
-            {    
-                tree(courant,0);
+            {
+                tree(*courant, 0);
                 puts("");
             }
         }
@@ -177,7 +182,8 @@ bool equals(char *a, char *b)
         return false;
     for (size_t i = 0; i < strlen(a); ++i)
     {
-        if (*(a + i) != *(b + i)){
+        if (*(a + i) != *(b + i))
+        {
             puts("faux chef");
             return false;
         }
@@ -189,36 +195,45 @@ int nbwords(char *str)
 {
     int c = 0;
     bool mot = false;
-    for (int i = 0; str[i] != '\0'; i++) {
-        if (!espace(str[i])) {
-            if (!mot) {
+    for (int i = 0; str[i] != '\0'; i++)
+    {
+        if (!espace(str[i]))
+        {
+            if (!mot)
+            {
                 mot = true;
                 c++;
             }
         }
-        else mot = false;
+        else
+            mot = false;
     }
     return c;
 }
 
-char *trim(char *str) {
+char *trim(char *str)
+{
     char *nv = NULL;
 
     size_t len = strlen(str);
     size_t deb = 0;
     int fin = len - 1;
-    while (espace(str[deb]) &&str[deb]!='\0'&& deb<len)deb++;
-    while (fin >= 0 && espace(str[fin]))fin--;
-    if(fin==-1){
-        nv=malloc(sizeof(char));
-        nv[0]="";
+    while (espace(str[deb]) && str[deb] != '\0' && deb < len)
+        deb++;
+    while (fin >= 0 && espace(str[fin]))
+        fin--;
+    if (fin == -1)
+    {
+        nv = malloc(sizeof(char *));
+        nv[0] = "";
         return nv;
     }
-    nv =malloc(sizeof(char)*(fin-deb+2));
+    nv = malloc(sizeof(char) * (fin - deb + 2));
     if (nv == NULL)
         return NULL;
     int i;
-    for (i = 0; i <= fin - deb; i++)nv[i] = str[deb + i];
+    for (i = 0; i <= fin - deb; i++)
+        nv[i] = str[deb + i];
     nv[i] = '\0';
     return nv;
 }
@@ -234,7 +249,7 @@ char *next(char *w)
     }
     char *t = malloc(sizeof(char) * i + 1);
     if (i == strlen(w))
-        return strcpy(t,w);
+        return strcpy(t, w);
     if (t == NULL)
         printf("erreur de memoire");
     memcpy(t, w, i);
@@ -242,7 +257,7 @@ char *next(char *w)
     return t;
 }
 
-void read(noeud *courant, char *filename)
+void read(noeud **courant, char *filename)
 {
     // 200 pour les deux args, 25 pour ma commande et space
     FILE *flux = fopen(filename, "r");
@@ -254,34 +269,40 @@ void read(noeud *courant, char *filename)
     // adresse dans la quelle on stock la ligne
 
     char *string = malloc(sizeof(char) * 225);
-    if (string == NULL){
+    if (string == NULL)
+    {
         printf("erreur de memoire");
         exit(EXIT_FAILURE);
     }
-    while (fgets(string, 250, flux) != NULL){
-        char **tmp=malloc(3*sizeof(char*));
-        *(tmp+2)=NULL;
-        *(tmp+1)=NULL;
-        *tmp=NULL;
-        split(string,tmp);
+    while (fgets(string, 250, flux) != NULL)
+    {
+        char **tmp = malloc(3 * sizeof(char *));
+        *(tmp + 2) = NULL;
+        *(tmp + 1) = NULL;
+        *tmp = NULL;
+        split(string, tmp);
         free(string);
         string = malloc(sizeof(char) * 225);
-        execute(courant, *(tmp), *(tmp+1), *(tmp+2));
-        if(tmp!=NULL){
-            if(*(tmp+2)!=NULL){
-                free(*(tmp+2));
-                *(tmp+2)=NULL;
+        execute(courant, *(tmp), *(tmp + 1), *(tmp + 2));
+        if (tmp != NULL)
+        {
+            if (*(tmp + 2) != NULL)
+            {
+                free(*(tmp + 2));
+                *(tmp + 2) = NULL;
             }
-            if(*(tmp+1)){
-                free(*(tmp+1));
-                *(tmp+1)=NULL;
+            if (*(tmp + 1))
+            {
+                free(*(tmp + 1));
+                *(tmp + 1) = NULL;
             }
-            if(*(tmp)){
+            if (*(tmp))
+            {
                 free(*(tmp));
-                *(tmp)=NULL;
+                *(tmp) = NULL;
             }
             free(tmp);
-            tmp=NULL;
+            tmp = NULL;
         }
     }
     free(string);
@@ -290,24 +311,27 @@ void read(noeud *courant, char *filename)
         perror("erreur de fermuture");
 }
 
-//renvoie l'indice du dernier / du path
-int getDernierMotIndex(char *src){
-    if(src==NULL) return -1;
-    int len=strlen(src);
-    int i=len-1;
-    for(;src[i]!='/' && i>0;i--) 
+// renvoie l'indice du dernier / du path
+int getDernierMotIndex(char *src)
+{
+    if (src == NULL)
+        return -1;
+    int len = strlen(src);
+    int i = len - 1;
+    for (; src[i] != '/' && i > 0; i--)
     {
-        printf("i= %d, val %d , pour %d",i,isalnum(src[i]),src[i]);
+        printf("i= %d, val %d , pour %d", i, isalnum(src[i]), src[i]);
         puts("");
         // if(isalnum(src[i])==0)
-        // { 
+        // {
         //     quit("le nom doit etre alpha-numerique");
         // }
     }
-    printf("%d\n",i);
+    printf("%d\n", i);
     return i;
 }
 
-bool espace(char c){
-    return c == ' ' || c == '\t' || c == '\n' || c=='\r';
+bool espace(char c)
+{
+    return c == ' ' || c == '\t' || c == '\n' || c == '\r';
 }

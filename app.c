@@ -1,6 +1,6 @@
-#include "noeud.c"
-#include "commande.c"
-#include "lecture.c"
+#include "noeud.h"
+#include "commande.h"
+#include "lecture.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -186,9 +186,9 @@ int main(int argc, char const *argv[])
     noeud *n0 = init_noeud(true, nom0);
     n0->pere = n0;
     n0->racine = n0;
-    read(n0, "coms.txt");
-    print(n0);
-    
+    read(&n0, "coms.txt");
+    // print(n0);
+
     puts("done");
     return EXIT_SUCCESS;
 }

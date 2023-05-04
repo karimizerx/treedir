@@ -137,9 +137,10 @@ void tree(noeud *courant, int nbSpace) // Affiche l'arborescance à partir du no
 }
 
 void rm(noeud *courant, char *chem)
-{   
-    noeud *del = search_noeud(courant, chem);  
-    if(is_subdirectory(courant,del)) quit("destination est parent du dossier courant");
+{
+    noeud *del = search_noeud(courant, chem);
+    if (is_subdirectory(courant, del))
+        quit("destination est parent du dossier courant");
     if (del == NULL)
         quit("fichier n'existe pas");
     liste_noeud *list = del->pere->fils;
@@ -150,48 +151,49 @@ void rm(noeud *courant, char *chem)
 }
 
 void cp(noeud *courant, char *src, char *dst)
-{    
-    int newchem=getDernierMotIndex(dst);//renvoi l'indice a partir du quelle ya le nom du fichier
-    if(newchem==-1)
+{
+    int newchem = getDernierMotIndex(dst); // renvoi l'indice a partir du quelle ya le nom du fichier
+    if (newchem == -1)
         quit("erreur");
-    if(newchem==strlen(dst))
+    if (newchem == strlen(dst))
         quit("il y a un / la fin du chemin source, commande invalide");
 
-    char* chem;//chemin vers le dossier ou on copie 
-    if(newchem==0)//le dst est le dossier courant
-        chem=chemin_absolue(courant);
-    else {
-        chem=malloc(sizeof(char)*(newchem));
-        memcpy(chem,dst,newchem+1);
+    char *chem;       // chemin vers le dossier ou on copie
+    if (newchem == 0) // le dst est le dossier courant
+        chem = chemin_absolue(courant);
+    else
+    {
+        chem = malloc(sizeof(char) * (newchem));
+        memcpy(chem, dst, newchem + 1);
     }
-    printf("%s\n",chem);
+    printf("%s\n", chem);
     noeud *copier = search_noeud(courant, src);
     if (copier == NULL)
     {
-        printf("dossier %s fichier n'existe pas",src);
+        printf("dossier %s fichier n'existe pas", src);
         quit("");
     }
 
     noeud *dest = search_noeud(courant, chem);
 
-    if(dest==NULL)
+    if (dest == NULL)
         quit("Dossier destination n'existe pas");
-    
-    if(is_subdirectory(copier,dest)) 
+
+    if (is_subdirectory(copier, dest))
         quit("destination est parent du dossier courant");
-    
-    if(!dest->est_dossier)
+
+    if (!dest->est_dossier)
         quit("la destination n'est pas un dossier");
-    
-    if (search_noeud_profondeur1(dest,dst + newchem) != NULL)
+
+    if (search_noeud_profondeur1(dest, dst + newchem) != NULL)
     {
         exit(EXIT_FAILURE);
         quit("fichier de meme nom existant");
     }
-    noeud* tmp=copie_arbre(copier);
-    memcpy(tmp->nom, dst + newchem, strlen(dst)-newchem);
+    noeud *tmp = copie_arbre(copier);
+    memcpy(tmp->nom, dst + newchem, strlen(dst) - newchem);
 
-    insert_noeud(dest,tmp);
+    insert_noeud(dest, tmp);
 }
 
 void mv(noeud *courant, char *src, char *dst)
@@ -203,4 +205,5 @@ void mv(noeud *courant, char *src, char *dst)
 void info(noeud *courant)
 {
     print_noeud(courant);
+    puts("");
 }
