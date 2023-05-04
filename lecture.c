@@ -202,12 +202,18 @@ int nbwords(char *str)
 }
 
 char *trim(char *str) {
-    size_t len = strlen(str);
     char *nv = NULL;
+
+    size_t len = strlen(str);
     size_t deb = 0;
-    size_t fin = len - 1;
-    while (espace(str[deb]) &&str[deb]!='\0')deb++;
+    int fin = len - 1;
+    while (espace(str[deb]) &&str[deb]!='\0'&& deb<len)deb++;
     while (fin >= 0 && espace(str[fin]))fin--;
+    if(fin==-1){
+        nv=malloc(sizeof(char));
+        nv[0]="";
+        return nv;
+    }
     nv =malloc(sizeof(char)*(fin-deb+2));
     if (nv == NULL)
         return NULL;

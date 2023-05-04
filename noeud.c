@@ -1,4 +1,5 @@
 #include "noeud.h"
+#include "lecture.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
