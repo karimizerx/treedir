@@ -34,5 +34,5 @@ extern void free_noeud_list(liste_noeud *);
 extern char *chemin_absolue(noeud *);
 extern noeud *copie_arbre(noeud *);
 extern int is_parent(noeud *, noeud *);
-extern bool is_subdirectory(noeud *, noeud *);
+int is_name_fils_exist(liste_noeud *, char *);
 #endif

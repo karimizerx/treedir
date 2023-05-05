@@ -192,19 +192,38 @@ char *reverse_cat(char *s1, char *s2) // Effectue une opération de concaténati
     return res;                                   // On renvoie la chaine finale.
 }
 
-noeud *copie_arbre(noeud *cop)
+noeud *copie_arbre(noeud *n)
 {
-    noeud *tmp = creer_noeud(cop->est_dossier, cop->racine, cop->racine, cop->nom);
-    liste_noeud *l = cop->fils;
-    liste_noeud *t = tmp->fils;
+    if (n == NULL) // Cas 1 : [ERREUR] Le noeud a copié n'existe pas.
+    {
+        printf("Erreur dans 'copie_arborescence' (noeud.c : ligne 212) : Le noeud à copier n'existe pas.");
+        exit(EXIT_FAILURE);
+    }
+
+    noeud *copie = creer_noeud(n->est_dossier, n->racine, n->racine, n->nom);
+    liste_noeud *l = n->fils;
+    liste_noeud *t = copie->fils;
     while (l != NULL)
     {
+        printf("l->no->nom : %s\n", l->no->nom);
         t = malloc(sizeof(liste_noeud));
-        t->no = copie_arbre(l->no);
+        t->no = creer_noeud(l->no->est_dossier, l->no->racine, l->no->pere, l->no->nom);
+        printf("t->no->nom : %s\n", t->no->nom);
+        if (copie->fils == NULL)
+            printf("----------- copie-Fils == NULL\n");
+        if (t == NULL)
+            printf("----------- t == NULL\n");
         t = t->succ;
         l = l->succ;
+
+        if (copie->fils == NULL)
+            printf("----------- copie-Fils == NULL\n");
+        if (t == NULL)
+            printf("----------- t == NULL\n");
     }
-    return tmp;
+    if (copie->fils == NULL)
+        printf("if : copie-Fils == NULL\n");
+    return copie;
 }
 
 // on veut savoir si node est un fils(ou fils de fils...) de pere
@@ -219,4 +238,14 @@ int is_parent(noeud *courant, noeud *n) // Renvoie 0 si 'n' est un parent du noe
         return 0;
     else // Cas 4 : On regarde si 'n' est le pere du pere de courant, i.e 'n' est un parent.
         return is_parent(courant->pere, n);
+}
+
+int is_name_fils_exist(liste_noeud *courant, char *nom) // Renvoie 0 s'il l'un des fils courant porte le nom "nom";
+{
+    if (courant == NULL) // Cas 1 : [FAUX] Il n'y a (plus) aucun fils, donc aucun fils ne porte ce nom.
+        return 1;
+    else if (strcmp(courant->no->nom, nom) == 0) // Cas 2 : [VRAI] Le fils courant porte le nom "nom".
+        return 0;
+    else // Cas 3 : On regarde dans les autres fils.
+        return is_name_fils_exist(courant->succ, nom);
 }

@@ -12,6 +12,8 @@ mkdir td2
 cd td2
 cd
 print
+cp Td Cours/Alloooooooo
+print
 rm Td
 print
 cd
