@@ -80,9 +80,10 @@ noeud *search_noeud_profondeur1(noeud *n, char *nom) // Cherche un noeud "nom" d
 
 noeud *search_noeud(noeud *n, char *chemin) // Cherche un noeud au boud du "chem" dans toute l'arborescence.
 {
-    char *tmp =trim(chemin);
-    if(strlen(tmp)==1 && tmp[0]=='/')
+    char *tmp = trim(chemin);              // On retire les espaces au début et à la fin de la chaine.
+    if (strlen(tmp) == 1 && tmp[0] == '/') // Si le chemin = '/', on renvoie la racine.
         return n->racine;
+
     if (*chemin == '\0') // Cas 1 : On reste dans le dossier actuel (On est arrivé à la fin du chemin ou ".").
         return n;
     else if (*chemin == '.') // Cas 2 : On reste dans le dossier actuel avec "." ou on remonte au père avec "..".
@@ -191,31 +192,31 @@ char *reverse_cat(char *s1, char *s2) // Effectue une opération de concaténati
     return res;                                   // On renvoie la chaine finale.
 }
 
-
-noeud *copie_arbre(noeud *cop){
-    noeud *tmp=creer_noeud(cop->est_dossier,cop->racine,cop->racine,cop->nom);
-    liste_noeud *l=cop->fils;
-    liste_noeud *t=tmp->fils;
-    while(l!=NULL){
-        t=malloc(sizeof(liste_noeud));
-        t->no=copie_arbre(l->no);
-        t=t->succ;
-        l=l->succ;
-    }    
+noeud *copie_arbre(noeud *cop)
+{
+    noeud *tmp = creer_noeud(cop->est_dossier, cop->racine, cop->racine, cop->nom);
+    liste_noeud *l = cop->fils;
+    liste_noeud *t = tmp->fils;
+    while (l != NULL)
+    {
+        t = malloc(sizeof(liste_noeud));
+        t->no = copie_arbre(l->no);
+        t = t->succ;
+        l = l->succ;
+    }
     return tmp;
 }
-// on veut savoir si node est un fils(ou fils de fils...) de pere
-bool is_subdirectory(noeud *node,noeud *pere){
-    if(node==NULL) {
-        printf("erreur, noeud est (null)");
-        exit(EXIT_FAILURE);
-    }
-    if(node->pere==NULL) {
-        printf("erreur, noeud %s n'a pas de parent",node->nom);
-        exit(EXIT_FAILURE);
-    }
-    if(node==pere->racine) return false;//cas ou on arrive a la racine
-    if(node->pere==pere) return true;// cas ou on a la meme adresse
-    return is_subdirectory(pere,node->pere);
-}
 
+// on veut savoir si node est un fils(ou fils de fils...) de pere
+
+int is_parent(noeud *courant, noeud *n) // Renvoie 0 si 'n' est un parent du noeud courant.
+{
+    if (n == courant->racine) // Cas 1 : [VRAI] Si 'n' est la racine, la racine est pere de tous les noeuds.
+        return 0;
+    if (courant == courant->pere) // Cas 2 : [FAUX] Si courant est la racine & que 'n' ne l'est pas, c'est faux.
+        return 1;
+    if (courant->pere == n) // Cas 3 : [VRAI] Si 'n' est le pere de courant, c'est vrai.
+        return 0;
+    else // Cas 4 : On regarde si 'n' est le pere du pere de courant, i.e 'n' est un parent.
+        return is_parent(courant->pere, n);
+}

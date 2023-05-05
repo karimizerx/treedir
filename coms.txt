@@ -12,7 +12,7 @@ mkdir td2
 cd td2
 cd
 print
-rm edt
+rm Td
 print
 cd
 print

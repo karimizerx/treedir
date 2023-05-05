@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <string.h>
 
-void ls(noeud *courant) // Affiche la liste des fils du noeud courant.
+void ls(noeud *courant) // Affiche la liste des fils du noeud courant.s
 {
     if (courant == NULL)
     {
@@ -136,18 +136,45 @@ void tree(noeud *courant, int nbSpace) // Affiche l'arborescance à partir du no
     }
 }
 
-void rm(noeud *courant, char *chem)
+void rm(noeud *courant, char *chemin)
 {
-    noeud *del = search_noeud(courant, chem);
-    if (is_subdirectory(courant, del))
-        quit("destination est parent du dossier courant");
-    if (del == NULL)
-        quit("fichier n'existe pas");
-    liste_noeud *list = del->pere->fils;
-    while (strcmp(list->succ->no->nom, del->nom) != 0)
-        list = list->succ;
-    list->succ = list->succ->succ;
-    free_noeud(del);
+    noeud *del = search_noeud(courant, chemin); // On cherche le noeud pointé par chemin dans le dossier courant.
+
+    if (del == NULL) // Cas 1 : [ERREUR] Il n'y a pas de noeud pointé par ce chemin.
+    {
+        printf("Erreur dans 'rm' (ligne 141) : Aucun noeud pointé par le chemin '%s' .\n", chemin);
+        exit(EXIT_FAILURE);
+    }
+    else // Cas 2 : On trouve le noeud.
+    {
+        if (del == courant) // Cas 2.1 : [ERREUR] Le noeud renvoyé est le noeud courant.
+        {
+            printf("Erreur dans 'rm' (ligne 150) : Le noeud pointé par le chemin '%s' est le noeud courant.\n", chemin);
+            exit(EXIT_FAILURE);
+        }
+        else if (is_parent(courant, del) == 0) // Cas 2.2 : [ERREUR] Le noeud renvoyé est un parent du noeud courant.
+        {
+            printf("Erreur dans 'rm' (ligne 157) : Le noeud pointé par le chemin '%s' est un parent du noeud courant.\n", chemin);
+            exit(EXIT_FAILURE);
+        }
+        else // Cas 2.3 : On trouve le noeud et on peut le supprimer.
+        {
+            liste_noeud *ln = del->pere->fils;
+            if (ln->no == del) // Si le noeud a supprimé est le premier fils.
+                del->pere->fils = del->pere->fils->succ;
+            else // Sinon, on cherche le noeud à supprimer dans la liste des fils.
+            {
+                while (ln->succ->no != del)
+                    ln = ln->succ;
+                ln->succ = ln->succ->succ; // On change les liaisons pour isoler le noeud à supprimer.
+            }
+            free_noeud(del); // On supprime le noeud demandé.
+        }
+    }
+}
+
+void cp(noeud *courant, char *src, char *dst)
+{
 }
 
 void cp(noeud *courant, char *src, char *dst)
