@@ -1,6 +1,6 @@
-#include "noeud.h"
-#include "commande.h"
-#include "lecture.h"
+#include "noeud.c"
+#include "commande.c"
+#include "lecture.c"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -186,7 +186,33 @@ int main(int argc, char const *argv[])
     noeud *n0 = init_noeud(true, nom0);
     n0->pere = n0;
     n0->racine = n0;
-    read(&n0, "coms.txt");
+
+    // Création des fils de la racine.
+    noeud *n1 = creer_noeud(true, n0, n0, "Cours");
+    noeud *n2 = creer_noeud(true, n0, n0, "TD");
+    noeud *n3 = creer_noeud(true, n0, n0, "TP");
+    noeud *n4 = creer_noeud(false, n0, n0, "edt");
+
+    // Set fils de la racine.
+    n0->fils = malloc(sizeof(liste_noeud));
+    n0->fils->no = n1;
+    n0->fils->succ = malloc(sizeof(liste_noeud));
+    n0->fils->succ->no = n2;
+    n0->fils->succ->succ = malloc(sizeof(liste_noeud));
+    n0->fils->succ->succ->no = n3;
+    n0->fils->succ->succ->succ = malloc(sizeof(liste_noeud));
+    n0->fils->succ->succ->succ->no = n4;
+    n0->fils->succ->succ->succ->succ = NULL;
+
+    noeud *nv= copie_arbre(n0);
+    puts("print du n0");
+    print(n0);
+    puts("print du v0");
+    print(nv);
+    ls(n0);
+    ls(nv);
+
+    // read(&n0, "coms.txt");
     // print(n0);
 
     puts("done");

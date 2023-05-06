@@ -225,7 +225,7 @@ char *trim(char *str)
     if (fin == -1)
     {
         nv = malloc(sizeof(char *));
-        nv[0] = "";
+        nv[0] = '\0';
         return nv;
     }
     nv = malloc(sizeof(char) * (fin - deb + 2));

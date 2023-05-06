@@ -193,29 +193,33 @@ char *reverse_cat(char *s1, char *s2) // Effectue une opération de concaténati
 
 
 noeud *copie_arbre(noeud *cop){
-    noeud *tmp=creer_noeud(cop->est_dossier,cop->racine,cop->racine,cop->nom);
-    liste_noeud *l=cop->fils;
-    liste_noeud *t=tmp->fils;
-    while(l!=NULL){
-        t=malloc(sizeof(liste_noeud));
-        t->no=copie_arbre(l->no);
-        t=t->succ;
-        l=l->succ;
-    }    
+    if(cop==NULL) return NULL;
+    noeud *tmp=creer_noeud(cop->est_dossier,cop->racine,NULL,cop->nom);
+    if(cop->est_dossier){
+        tmp->fils=copie_fils(cop->fils,tmp);
+    }
+    return tmp;
+}
+
+liste_noeud* copie_fils(liste_noeud *cop,noeud *pere){
+    if(cop==NULL) return NULL;
+    liste_noeud* tmp=malloc(sizeof(liste_noeud));
+    tmp->no=copie_arbre(cop->no);
+    tmp->no->pere=pere;
+    tmp->succ=copie_fils(cop->succ,pere);
     return tmp;
 }
 // on veut savoir si node est un fils(ou fils de fils...) de pere
 bool is_subdirectory(noeud *node,noeud *pere){
     if(node==NULL) {
-        printf("erreur, noeud est (null)");
-        exit(EXIT_FAILURE);
+        quit("node est null");
     }
     if(node->pere==NULL) {
         printf("erreur, noeud %s n'a pas de parent",node->nom);
-        exit(EXIT_FAILURE);
+        quit("");
     }
     if(node==pere->racine) return false;//cas ou on arrive a la racine
     if(node->pere==pere) return true;// cas ou on a la meme adresse
-    return is_subdirectory(pere,node->pere);
+    return is_subdirectory(node->pere,pere);
 }
 

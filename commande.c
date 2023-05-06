@@ -144,10 +144,9 @@ void rm(noeud *courant, char *chem)
     if (del == NULL)
         quit("fichier n'existe pas");
     liste_noeud *list = del->pere->fils;
-    while (strcmp(list->succ->no->nom, del->nom) != 0)
+    while (equals(list->succ->no->nom, del->nom))
         list = list->succ;
     list->succ = list->succ->succ;
-    free_noeud(del);
 }
 
 void cp(noeud *courant, char *src, char *dst)
