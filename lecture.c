@@ -320,15 +320,26 @@ int getDernierMotIndex(char *src)
     int i = len - 1;
     for (; src[i] != '/' && i > 0; i--)
     {
-        printf("i= %d, val %d , pour %d", i, isalnum(src[i]), src[i]);
-        puts("");
-        // if(isalnum(src[i])==0)
-        // {
-        //     quit("le nom doit etre alpha-numerique");
-        // }
+        if(!alphanum(src[i]))
+        {
+            quit("le nom doit etre alpha-numerique");
+        }
     }
     printf("%d\n", i);
     return i;
+}
+
+bool alphanum(char c){
+    return (c>=48 && c<=57) || (c>=97 && c<=122) ||(c>=65 && c<=90);
+}
+
+bool wordCheck(char * str){
+    if(str==NULL) quit("erreur str est null");
+    for(size_t i=0;str[i]!='\0';++i){
+        if(!alphanum(str[i]))
+            return false;
+    }
+    return true;
 }
 
 bool espace(char c)

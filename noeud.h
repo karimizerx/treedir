@@ -32,7 +32,9 @@ extern char *reverse_cat(char *, char *);
 extern void free_noeud(noeud *);
 extern void free_noeud_list(liste_noeud *);
 extern char *chemin_absolue(noeud *);
-extern noeud *copie_arbre(noeud *);
+extern noeud *copie_arbre(noeud *,char*);
 liste_noeud* copie_fils(liste_noeud *cop,noeud *pere);
 extern bool is_subdirectory(noeud *,noeud *);
+int is_parent(noeud *, noeud *);
+int is_name_fils_exist(liste_noeud *, char *);
 #endif

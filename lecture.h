@@ -32,3 +32,7 @@ extern char *dupliquer(const char *);
 extern int getDernierMotIndex(char *);
 
 extern bool espace(char);
+
+extern bool alphanum(char);
+
+bool wordCheck(char *);

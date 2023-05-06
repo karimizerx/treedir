@@ -2,17 +2,10 @@ mkdir Cours
 cd Cours
 mkdir ProjetC
 mkdir Anglais
+ls
 cd
-touch edt
-mkdir Td
-cd Td
-touch dans_Td
-mkdir td1
-mkdir td2
-cd td2
+cp Cours/ProjetC Zeb
+cd Zeb
+ls 
 cd
-print
-rm edt
-print
-cd
-print
+ls 

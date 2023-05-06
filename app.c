@@ -182,11 +182,8 @@ int main(int argc, char const *argv[])
 
     */
 
-    char *nom0 = "";
-    noeud *n0 = init_noeud(true, nom0);
-    n0->pere = n0;
-    n0->racine = n0;
 
+/*
     // Création des fils de la racine.
     noeud *n1 = creer_noeud(true, n0, n0, "Cours");
     noeud *n2 = creer_noeud(true, n0, n0, "TD");
@@ -204,17 +201,25 @@ int main(int argc, char const *argv[])
     n0->fils->succ->succ->succ->no = n4;
     n0->fils->succ->succ->succ->succ = NULL;
 
-    noeud *nv= copie_arbre(n0);
+    noeud *nv= copie_arbre(n0,"SLATTTTT");
+    nv->pere=nv;
+    nv->racine=nv;
     puts("print du n0");
     print(n0);
     puts("print du v0");
     print(nv);
     ls(n0);
     ls(nv);
+*/
+    char *nom0 = "";
+    noeud **n0 =malloc(sizeof(noeud*)); 
+    *n0=init_noeud(true, nom0);
+    (*n0)->pere = *n0;
+    (*n0)->racine = *n0;
+    read(n0, "coms.txt");
+    print(*n0);
 
-    // read(&n0, "coms.txt");
-    // print(n0);
-
+    // printf("chef, %d\n",getDernierMotIndex("asd/asdf/ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890abcdefghijklmnopqrstuvwxyz"));
     puts("done");
     return EXIT_SUCCESS;
 }

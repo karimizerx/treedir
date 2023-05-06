@@ -5,8 +5,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <assert.h>
 
-void ls(noeud *courant) // Affiche la liste des fils du noeud courant.
+void ls(noeud *courant) // Affiche la liste des fils du noeud courant.s
 {
     if (courant == NULL)
     {
@@ -139,7 +140,7 @@ void tree(noeud *courant, int nbSpace) // Affiche l'arborescance à partir du no
 void rm(noeud *courant, char *chem)
 {
     noeud *del = search_noeud(courant, chem);
-    if (is_subdirectory(courant, del))
+    if (is_parent(courant, del))
         quit("destination est parent du dossier courant");
     if (del == NULL)
         quit("fichier n'existe pas");
@@ -178,7 +179,7 @@ void cp(noeud *courant, char *src, char *dst)
     if (dest == NULL)
         quit("Dossier destination n'existe pas");
 
-    if (is_subdirectory(copier, dest))
+    if (is_parent(copier, dest))
         quit("destination est parent du dossier courant");
 
     if (!dest->est_dossier)
@@ -189,9 +190,7 @@ void cp(noeud *courant, char *src, char *dst)
         exit(EXIT_FAILURE);
         quit("fichier de meme nom existant");
     }
-    noeud *tmp = copie_arbre(copier);
-    memcpy(tmp->nom, dst + newchem, strlen(dst) - newchem);
-
+    noeud *tmp = copie_arbre(copier,dst + newchem);
     insert_noeud(dest, tmp);
 }
 

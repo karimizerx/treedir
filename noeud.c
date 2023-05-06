@@ -80,9 +80,10 @@ noeud *search_noeud_profondeur1(noeud *n, char *nom) // Cherche un noeud "nom" d
 
 noeud *search_noeud(noeud *n, char *chemin) // Cherche un noeud au boud du "chem" dans toute l'arborescence.
 {
-    char *tmp =trim(chemin);
-    if(strlen(tmp)==1 && tmp[0]=='/')
+    char *tmp = trim(chemin);              // On retire les espaces au début et à la fin de la chaine.
+    if (strlen(tmp) == 1 && tmp[0] == '/') // Si le chemin = '/', on renvoie la racine.
         return n->racine;
+
     if (*chemin == '\0') // Cas 1 : On reste dans le dossier actuel (On est arrivé à la fin du chemin ou ".").
         return n;
     else if (*chemin == '.') // Cas 2 : On reste dans le dossier actuel avec "." ou on remonte au père avec "..".
@@ -102,7 +103,7 @@ noeud *search_noeud(noeud *n, char *chemin) // Cherche un noeud au boud du "chem
         // Si on arrive ici, c'est que chemin + i pointe vers / ou vers la fin du chemin.
         noeud *dossier_suivant = search_noeud_profondeur1(n, chem);
         free(chem); // On libère la zone mémoire allouée temporairement.
-
+        free(tmp);
         if (dossier_suivant != NULL) // Cas 4.1 : On a trouvé le sous-chmein, on peut donc continuer à chercher à partir de ce sous-dossier.
         {
             chemin = *(chemin + i) == '/' ? chemin + i + 1 : chemin + i;
@@ -192,9 +193,15 @@ char *reverse_cat(char *s1, char *s2) // Effectue une opération de concaténati
 }
 
 
-noeud *copie_arbre(noeud *cop){
-    if(cop==NULL) return NULL;
-    noeud *tmp=creer_noeud(cop->est_dossier,cop->racine,NULL,cop->nom);
+noeud *copie_arbre(noeud *cop,char *str){
+    if(cop==NULL) return NULL;    
+    char nvnom [99];
+    int len=strlen(str);
+    if(len>100) quit("erreur");
+    memcpy(nvnom, str,len);
+    nvnom[len]='\0';
+
+    noeud *tmp=creer_noeud(cop->est_dossier,cop->racine,NULL,nvnom);
     if(cop->est_dossier){
         tmp->fils=copie_fils(cop->fils,tmp);
     }
@@ -204,22 +211,31 @@ noeud *copie_arbre(noeud *cop){
 liste_noeud* copie_fils(liste_noeud *cop,noeud *pere){
     if(cop==NULL) return NULL;
     liste_noeud* tmp=malloc(sizeof(liste_noeud));
-    tmp->no=copie_arbre(cop->no);
+    tmp->no=copie_arbre(cop->no,cop->no->nom);
     tmp->no->pere=pere;
     tmp->succ=copie_fils(cop->succ,pere);
     return tmp;
 }
-// on veut savoir si node est un fils(ou fils de fils...) de pere
-bool is_subdirectory(noeud *node,noeud *pere){
-    if(node==NULL) {
-        quit("node est null");
-    }
-    if(node->pere==NULL) {
-        printf("erreur, noeud %s n'a pas de parent",node->nom);
-        quit("");
-    }
-    if(node==pere->racine) return false;//cas ou on arrive a la racine
-    if(node->pere==pere) return true;// cas ou on a la meme adresse
-    return is_subdirectory(node->pere,pere);
+
+
+int is_parent(noeud *courant, noeud *n) // Renvoie 0 si 'n' est un parent du noeud courant.
+{
+    if (n == courant->racine) // Cas 1 : [VRAI] Si 'n' est la racine, la racine est pere de tous les noeuds.
+        return 0;
+    if (courant == courant->pere) // Cas 2 : [FAUX] Si courant est la racine & que 'n' ne l'est pas, c'est faux.
+        return 1;
+    if (courant->pere == n) // Cas 3 : [VRAI] Si 'n' est le pere de courant, c'est vrai.
+        return 0;
+    else // Cas 4 : On regarde si 'n' est le pere du pere de courant, i.e 'n' est un parent.
+        return is_parent(courant->pere, n);
 }
 
+int is_name_fils_exist(liste_noeud *courant, char *nom) // Renvoie 0 s'il l'un des fils courant porte le nom "nom";
+{
+    if (courant == NULL) // Cas 1 : [FAUX] Il n'y a (plus) aucun fils, donc aucun fils ne porte ce nom.
+        return 1;
+    else if (equals(courant->no->nom, nom) == 0) // Cas 2 : [VRAI] Le fils courant porte le nom "nom".
+        return 0;
+    else // Cas 3 : On regarde dans les autres fils.
+        return is_name_fils_exist(courant->succ, nom);
+}
