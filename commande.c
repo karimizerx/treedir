@@ -18,7 +18,7 @@ void ls(noeud *courant) // Affiche la liste des fils du noeud courant.s
     liste_noeud *tmp = courant->fils;
     while (tmp != NULL)
     {
-        printf(" %s \n", tmp->no->nom);
+        printf("%s ", tmp->no->nom);
         tmp = tmp->succ;
     }
 }
@@ -140,14 +140,41 @@ void tree(noeud *courant, int nbSpace) // Affiche l'arborescance à partir du no
 void rm(noeud *courant, char *chem)
 {
     noeud *del = search_noeud(courant, chem);
-    if (is_parent(courant, del))
-        quit("destination est parent du dossier courant");
+    // if (is_parent(courant ,del)) quit("destination est parent du dossier courant");
     if (del == NULL)
         quit("fichier n'existe pas");
-    liste_noeud *list = del->pere->fils;
-    while (equals(list->succ->no->nom, del->nom))
-        list = list->succ;
-    list->succ = list->succ->succ;
+    liste_noeud *list = del->pere->fils;//la tete de la liste des fils du pere 
+    if(equals(list->no->nom,del->nom)){//tete de la liste 
+        if(list->succ==NULL){
+            free_noeud(del);
+            free(list);
+            list=NULL;
+        }else{
+            del->pere->fils=list->succ;
+            free_noeud(list->no);
+            free(list);        
+        }
+    }else{
+        while (list->succ!=NULL){
+            if(equals(list->succ->no->nom, del->nom)){
+                break;
+            }
+            list = list->succ;
+        }
+        if(list->succ==NULL)
+            quit("Erreur dans rm");
+
+        free_noeud(list->succ->no);
+        if(list->succ->succ!=NULL){
+            free(list->succ);
+            list->succ=NULL;
+            list->succ = list->succ->succ;
+            printf("%s \n",list->succ->no->nom);
+        }else{
+            free(list->succ);
+            list->succ=NULL;
+        }
+    }
 }
 
 void cp(noeud *courant, char *src, char *dst)
@@ -164,7 +191,7 @@ void cp(noeud *courant, char *src, char *dst)
     else
     {
         chem = malloc(sizeof(char) * (newchem));
-        memcpy(chem, dst, newchem + 1);
+        memcpy(chem, dst, newchem);
     }
     printf("%s\n", chem);
     noeud *copier = search_noeud(courant, src);
@@ -190,7 +217,7 @@ void cp(noeud *courant, char *src, char *dst)
         exit(EXIT_FAILURE);
         quit("fichier de meme nom existant");
     }
-    noeud *tmp = copie_arbre(copier,dst + newchem);
+    noeud *tmp = copie_arbre(copier,dst + newchem + 1);
     insert_noeud(dest, tmp);
 }
 

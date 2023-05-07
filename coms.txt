@@ -1,11 +1,23 @@
 mkdir Cours
+ls
 cd Cours
 mkdir ProjetC
 mkdir Anglais
 ls
 cd
-cp Cours/ProjetC Zeb
-cd Zeb
-ls 
+touch edt
+cp Cours /Td
+ls
+rm /Td/ProjetC
+rm /Td/Anglais
+ls
+cd Td
+ls
+mkdir td1
+mkdir td2
+ls
+cp /Cours/ProjetC CopieProjet
 cd
-ls 
+ls
+mv Td /Cours/Td
+ls

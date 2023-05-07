@@ -33,6 +33,7 @@ noeud *insert_noeud(noeud *courant, noeud *newfils) // Ajout le noeud "newfils" 
         assert(courant->fils != NULL);               // On vérifie que l'allocation s'est bien passée.
         courant->fils->no = newfils;                 // On initialise les valeures de cette liste de noeuds.
         courant->fils->succ = NULL;
+        newfils->pere=courant;
     }
 
     else // Sinon.
@@ -45,6 +46,7 @@ noeud *insert_noeud(noeud *courant, noeud *newfils) // Ajout le noeud "newfils" 
         assert(tmp->succ != NULL);               // On vérifie que l'allocation s'est bien passée.
         tmp->succ->no = newfils;                 // On initialise les valeures de cette liste de noeuds.
         tmp->succ->succ = NULL;
+        newfils->pere=courant;
     }
     return newfils; // On renvoie le fils ajouté.
 }
@@ -217,7 +219,7 @@ liste_noeud* copie_fils(liste_noeud *cop,noeud *pere){
     return tmp;
 }
 
-
+//n est parent du noeud courant
 int is_parent(noeud *courant, noeud *n) // Renvoie 0 si 'n' est un parent du noeud courant.
 {
     if (n == courant->racine) // Cas 1 : [VRAI] Si 'n' est la racine, la racine est pere de tous les noeuds.

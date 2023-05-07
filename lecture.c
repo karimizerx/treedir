@@ -325,7 +325,6 @@ int getDernierMotIndex(char *src)
             quit("le nom doit etre alpha-numerique");
         }
     }
-    printf("%d\n", i);
     return i;
 }
 
