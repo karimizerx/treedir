@@ -1,38 +1,17 @@
-// Fares
 #include "noeud.h"
 
-// renvoi un tableau de dim 3
-// extern char **split(char *);
+extern void quit(char *msg);
 
-// execute la commande
-extern void execute(noeud **, char *, char *, char *);
+extern bool espace(char c);
 
-// renvoi le prochain mot
-extern char *next(char *);
+extern char *trim(char *str);
 
-// renvoi le nombre de mot par ligne
-extern int nbwords(char *);
+extern int nbwords(char *str);
 
-// lis le fichier
-extern void read(noeud **, char *);
+extern char *next(char *str);
 
-// Enleve les espaces au debut et a la fin du char
-extern char *trim(char *);
+extern void execute(noeud **courant, char *command, char *arg1, char *arg2);
 
-// quitte le programme et affiche un message d'erreur
-extern void quit(char *);
+extern void read(noeud **courant, char *filename);
 
-// teste si deux strings sont egaux
-extern bool equals(char *, char *);
-
-// copie un char[]
-extern char *dupliquer(const char *);
-
-// prend le dernier nom d'un string d'une destination
-extern int getDernierMotIndex(char *);
-
-extern bool espace(char);
-
-extern bool alphanum(char);
-
-bool wordCheck(char *);
+// extern size_t getDernierMotIndex(char *);

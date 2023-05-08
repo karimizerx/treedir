@@ -1,3 +1,6 @@
+#include "noeud.h"
+#include "lecture.h"
+#include "commande.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <stddef.h>
@@ -5,9 +8,70 @@
 #include <string.h>
 #include <ctype.h>
 #include <assert.h>
-#include "lecture.h"
-#include "commande.h"
-#include "noeud.h"
+
+// Affiche le message 'msg' et quitte le programme.
+void quit(char *msg)
+{
+    printf("%s\n", msg);
+    exit(EXIT_FAILURE);
+}
+
+// Renvoie TRUE si le caractère 'c' est un espace.
+bool espace(char c)
+{
+    return c == ' ' || c == '\t' || c == '\n' || c == '\r';
+}
+
+// Supprime les espaces au début et à la fin de la chaine 'str' et renvoie cette nouvelle chaine.
+char *trim(char *str)
+{
+    char *nv = NULL;
+    size_t len = strlen(str);
+    size_t deb = 0;
+    int fin = len - 1;
+
+    while (espace(str[deb]) && str[deb] != '\0' && deb < len)
+        deb++;
+    while (fin >= 0 && espace(str[fin]))
+        fin--;
+
+    if (fin == -1)
+    {
+        nv = malloc(sizeof(char));
+        assert(nv != NULL); // On vérifie que l'allocation s'est bien passée.
+        nv[0] = '\0';
+        return nv;
+    }
+
+    nv = malloc(sizeof(char) * (fin - deb + 2));
+    assert(nv != NULL); // On vérifie que l'allocation s'est bien passée.
+    int i;
+    for (i = 0; i <= fin - deb; i++)
+        nv[i] = str[deb + i];
+    nv[i] = '\0';
+    return nv;
+}
+
+// Renvoie le nombre de mots dans la chaine 'str'.
+int nbwords(char *str)
+{
+    int c = 0; // Compteur du nombre de mots.
+    bool mot = false;
+    for (int i = 0; str[i] != '\0'; i++)
+    {
+        if (!espace(str[i]))
+        {
+            if (!mot) // Si on ne regarde pas déjà un mot, alors on incrémente le compteur de mots.
+            {
+                mot = true;
+                c++;
+            }
+        }
+        else
+            mot = false;
+    }
+    return c;
+}
 
 void split(char *ligne, char **tmp)
 {
@@ -15,14 +79,15 @@ void split(char *ligne, char **tmp)
     int nbw = nbwords(nvligne);
     if (nbw > 3)
     {
-        quit("too many arguments");
+        quit("Erreur : Arguments trop nombreux.");
     }
     else if (nbw < 1)
     {
-        quit("too few arguments");
+        quit("Erreur : Pas assez d'arguments.");
     }
     if (nvligne == NULL)
-        quit("error argument is (null)");
+        quit("Erreur : L'argument est NULL.");
+
     int i = 0;
     if (nbw >= 0)
     {
@@ -40,17 +105,33 @@ void split(char *ligne, char **tmp)
     free(nvligne);
 }
 
-void quit(char *message)
+// Renvoie un pointeur vers le prochain mot dans la chaine 'str'.
+char *next(char *str)
 {
-    printf("%s\n", message);
-    exit(EXIT_FAILURE);
+    if (str == NULL) // Si la chaine 'str' est NULL
+        return NULL;
+    size_t i = 0;
+    while (!(espace(str[i]) || str[i] == '\0'))
+        ++i;
+    char *t = malloc(sizeof(char) * i + 1);
+    assert(t != NULL); // On vérifie que l'allocation s'est bien passée.
+    if (i == strlen(str))
+        return strcpy(t, str);
+    memcpy(t, str, i);
+    t[i] = '\0';
+    return t;
 }
 
+// Exécute la commande 'command' sur le noeud 'courant' avec les arguments 'arg1' & 'arg2'.
 void execute(noeud **courant, char *command, char *arg1, char *arg2)
 {
     int i = 0;
     if (strlen(command) <= 1)
-        quit("command not recognized");
+    {
+        printf("La commande '%s' est inconnue.\n", command);
+        exit(EXIT_FAILURE);
+    }
+
     switch (command[i])
     {
     case 'c':
@@ -59,59 +140,70 @@ void execute(noeud **courant, char *command, char *arg1, char *arg2)
             if (arg2 == NULL)
                 cd(courant, arg1);
             else
-                quit("too many arguments for cd");
+                quit("Erreur : Arguments trop nombreux pour la commande 'cd'.");
         }
         else if (command[i + 1] == 'p')
         {
             if (arg1 == NULL || arg2 == NULL)
-                quit("too few arguments for cp");
+                quit("Erreur : Trop peux d'arguments pour la commande 'cp'.");
             else
                 cp(*courant, arg1, arg2);
         }
         else
         {
-            quit("command not recognized");
+            printf("La commande '%s' est inconnue.\n", command);
+            exit(EXIT_FAILURE);
         }
         break;
 
     case 'i':
-        if (equals(command, "info"))
+        if (strcmp(command, "info") == 0)
         {
             if (arg1 == NULL && arg2 == NULL)
                 info(*courant);
             else
-                quit("too many arguments for info");
+                quit("Erreur : Arguments trop nombreux pour la commande 'info'.");
         }
         else
         {
-            quit("command not recognized");
+            printf("La commande '%s' est inconnue.\n", command);
+            exit(EXIT_FAILURE);
         }
         break;
 
     case 'p':
-        if (equals("pwd", command))
+        if (strcmp("pwd", command) == 0)
         {
             if (arg1 != NULL || arg2 != NULL)
-                quit("too many arguments for pwd");
+                quit("Erreur : Arguments trop nombreux pour la commande 'pwd'.");
             else
                 pwd(*courant);
         }
-        else if (equals(command, "print"))
+        else if (strcmp(command, "print") == 0)
         {
             if (arg1 == NULL && arg2 == NULL)
                 print(*courant);
             else
-                quit("too many arguments for print");
+                quit("Erreur : Arguments trop nombreux pour la commande 'print'.");
         }
         else
-            quit("command not recognized");
+        {
+            printf("La commande '%s' est inconnue.\n", command);
+            exit(EXIT_FAILURE);
+        }
         break;
 
     case 'l':
         if (command[i + 1] != 's')
-            quit("command not recognized");
+        {
+            printf("La commande '%s' est inconnue.\n", command);
+            exit(EXIT_FAILURE);
+        }
         if (arg2 != NULL || arg1 != NULL)
-            quit("too many arguments for ls");
+        {
+            printf("La commande '%s' est inconnue.\n", command);
+            exit(EXIT_FAILURE);
+        }
         ls(*courant);
         puts("");
         break;
@@ -120,160 +212,70 @@ void execute(noeud **courant, char *command, char *arg1, char *arg2)
         if (command[i + 1] == 'v')
         {
             if (arg1 == NULL || arg2 == NULL)
-                quit("too few arguments for mv");
+                quit("Erreur : Trop peux d'arguments pour la commande 'mv'.");
             else
                 mv(*courant, arg1, arg2);
         }
         else if (command[i + 1] != 'k')
         {
-            quit("command not recognized");
+            printf("La commande '%s' est inconnue.\n", command);
+            exit(EXIT_FAILURE);
         }
-        else if (equals("mkdir", command))
+        else if (strcmp("mkdir", command) == 0)
         {
             if (arg1 == NULL)
-                quit("too few arguments mkdir");
+                quit("Erreur : Trop peux d'arguments pour la commande 'mkdir'.");
             else if (arg2 != NULL)
-                quit("too many arguments for mkdir");
+                quit("Erreur : Arguments trop nombreux pour la commande 'mkdir'.");
             mkdir(*courant, arg1);
         }
         break;
 
     case 'r':
         if (command[i + 1] != 'm')
-            quit("command not recognized");
+        {
+            printf("La commande '%s' est inconnue.\n", command);
+            exit(EXIT_FAILURE);
+        }
         if (arg2 != NULL)
-            quit("too many arguments for rm");
+            quit("Erreur : Arguments trop nombreux pour la commande 'rm'.");
         if (arg1 == NULL)
-            quit("too few arguments for rm");
+            quit("Erreur : Trop peux d'arguments pour la commande 'rm'.");
         rm(*courant, arg1);
         break;
 
     case 't':
-        if (equals(command, "touch"))
+        if (strcmp(command, "touch") == 0)
         {
             if (arg1 == NULL)
-                quit("too few arguments for touch");
+                quit("Erreur : Trop peux d'arguments pour la commande 'touch'.");
             if (arg2 != NULL)
-                quit("too many arguments for touch");
+                quit("Erreur : Arguments trop nombreux pour la commande 'touch'.");
             touch(*courant, arg1);
-        }
-        else if (strcmp("tree", command) == 0)
-        {
-            if (arg1 != NULL || arg2 != NULL)
-                quit("too many arguments for pwd");
-            else
-            {
-                tree(*courant, 0);
-                puts("");
-            }
         }
         break;
 
     default:
-        printf("Commande %s non reconnu", command);
+        printf("La commande '%s' est inconnue.\n", command);
         quit("");
         break;
     }
 }
 
-bool equals(char *a, char *b)
-{
-    if (strlen(a) != strlen(b))
-        return false;
-    for (size_t i = 0; i < strlen(a); ++i)
-    {
-        if (*(a + i) != *(b + i))
-        {
-            puts("faux chef");
-            return false;
-        }
-    }
-    return true;
-}
-
-int nbwords(char *str)
-{
-    int c = 0;
-    bool mot = false;
-    for (int i = 0; str[i] != '\0'; i++)
-    {
-        if (!espace(str[i]))
-        {
-            if (!mot)
-            {
-                mot = true;
-                c++;
-            }
-        }
-        else
-            mot = false;
-    }
-    return c;
-}
-
-char *trim(char *str)
-{
-    char *nv = NULL;
-
-    size_t len = strlen(str);
-    size_t deb = 0;
-    int fin = len - 1;
-    while (espace(str[deb]) && str[deb] != '\0' && deb < len)
-        deb++;
-    while (fin >= 0 && espace(str[fin]))
-        fin--;
-    if (fin == -1)
-    {
-        nv = malloc(sizeof(char *));
-        nv[0] = '\0';
-        return nv;
-    }
-    nv = malloc(sizeof(char) * (fin - deb + 2));
-    if (nv == NULL)
-        return NULL;
-    int i;
-    for (i = 0; i <= fin - deb; i++)
-        nv[i] = str[deb + i];
-    nv[i] = '\0';
-    return nv;
-}
-
-char *next(char *w)
-{
-    if (w == NULL)
-        return NULL;
-    size_t i = 0;
-    while (!(espace(w[i]) || w[i] == '\0'))
-    {
-        ++i;
-    }
-    char *t = malloc(sizeof(char) * i + 1);
-    if (i == strlen(w))
-        return strcpy(t, w);
-    if (t == NULL)
-        printf("erreur de memoire");
-    memcpy(t, w, i);
-    t[i] = '\0';
-    return t;
-}
-
+// Lis le fichier de nom 'filename'.
 void read(noeud **courant, char *filename)
 {
     // 200 pour les deux args, 25 pour ma commande et space
     FILE *flux = fopen(filename, "r");
     if (flux == NULL)
     {
-        perror("Probleme ouverture de fichier");
+        perror("Problème pour ouvrir le fichier");
         exit(EXIT_FAILURE);
     }
-    // adresse dans la quelle on stock la ligne
 
-    char *string = malloc(sizeof(char) * 225);
-    if (string == NULL)
-    {
-        printf("erreur de memoire");
-        exit(EXIT_FAILURE);
-    }
+    char *string = malloc(sizeof(char) * 225); // Adresse dans la quelle on stock la ligne.
+    assert(string != NULL);                    // On vérifie que l'allocation s'est bien passé.
+
     while (fgets(string, 250, flux) != NULL)
     {
         char **tmp = malloc(3 * sizeof(char *));
@@ -308,41 +310,18 @@ void read(noeud **courant, char *filename)
     free(string);
     int fin = fclose(flux);
     if (fin != 0)
-        perror("erreur de fermuture");
+        perror("Erreur lors de la fermuture du fichier.");
 }
 
-// renvoie l'indice du dernier / du path
-int getDernierMotIndex(char *src)
-{
-    if (src == NULL)
-        return -1;
-    int len = strlen(src);
-    int i = len - 1;
-    for (; src[i] != '/' && i > 0; i--)
-    {
-        if(!alphanum(src[i]))
-        {
-            quit("le nom doit etre alpha-numerique");
-        }
-    }
-    printf("%d\n", i);
-    return i;
-}
+// Renvoie l'indice du dernier "/" dans le chemin 'str'. Renvoie -1 sinon
+// size_t getDernierMotIndex(char *str)
+// {
+//     if (str == NULL)
+//         return -1;
 
-bool alphanum(char c){
-    return (c>=48 && c<=57) || (c>=97 && c<=122) ||(c>=65 && c<=90);
-}
-
-bool wordCheck(char * str){
-    if(str==NULL) quit("erreur str est null");
-    for(size_t i=0;str[i]!='\0';++i){
-        if(!alphanum(str[i]))
-            return false;
-    }
-    return true;
-}
-
-bool espace(char c)
-{
-    return c == ' ' || c == '\t' || c == '\n' || c == '\r';
-}
+//     int len = strlen(str);
+//     size_t i = len - 1;
+//     while (*(str + i) != '/' && i > 0)
+//         --i;
+//     return i;
+// }
