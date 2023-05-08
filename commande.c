@@ -259,7 +259,6 @@ void cp(noeud *courant, char *chemin1, char *chemin2)
         insert_noeud(n2, copie);
     }
 
-    // On libère les ressources.
     free(dest);
     free(new_nom);
 }

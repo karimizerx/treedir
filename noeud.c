@@ -82,8 +82,11 @@ noeud *search_noeud(noeud *n, char *chemin) // Cherche un noeud au boud du "chem
 {
     char *tmp = trim(chemin);              // On retire les espaces au début et à la fin de la chaine.
     if (strlen(tmp) == 1 && tmp[0] == '/') // Si le chemin = '/', on renvoie la racine.
+    {
+        free(tmp);
         return n->racine;
-
+    }
+    free(tmp);
     if (*chemin == '\0') // Cas 1 : On reste dans le dossier actuel (On est arrivé à la fin du chemin ou ".").
         return n;
     else if (*chemin == '.') // Cas 2 : On reste dans le dossier actuel avec "." ou on remonte au père avec "..".
@@ -195,34 +198,18 @@ char *reverse_cat(char *s1, char *s2) // Effectue une opération de concaténati
 noeud *copie_arbre(noeud *n)
 {
     if (n == NULL) // Cas 1 : [ERREUR] Le noeud a copié n'existe pas.
-    {
-        printf("Erreur dans 'copie_arborescence' (noeud.c : ligne 212) : Le noeud à copier n'existe pas.");
-        exit(EXIT_FAILURE);
-    }
+        quit("Erreur dans 'copie_arborescence' (noeud.c : ligne 212) : Le noeud à copier n'existe pas.");
 
     noeud *copie = creer_noeud(n->est_dossier, n->racine, n->racine, n->nom);
     liste_noeud *l = n->fils;
     liste_noeud *t = copie->fils;
     while (l != NULL)
     {
-        printf("l->no->nom : %s\n", l->no->nom);
         t = malloc(sizeof(liste_noeud));
         t->no = creer_noeud(l->no->est_dossier, l->no->racine, l->no->pere, l->no->nom);
-        printf("t->no->nom : %s\n", t->no->nom);
-        if (copie->fils == NULL)
-            printf("----------- copie-Fils == NULL\n");
-        if (t == NULL)
-            printf("----------- t == NULL\n");
         t = t->succ;
         l = l->succ;
-
-        if (copie->fils == NULL)
-            printf("----------- copie-Fils == NULL\n");
-        if (t == NULL)
-            printf("----------- t == NULL\n");
     }
-    if (copie->fils == NULL)
-        printf("if : copie-Fils == NULL\n");
     return copie;
 }
 
