@@ -14,4 +14,4 @@ extern void execute(noeud **courant, char *command, char *arg1, char *arg2);
 
 extern void read(noeud **courant, char *filename);
 
-// extern size_t getDernierMotIndex(char *);
+// extern int getDernierMotIndex(char *);

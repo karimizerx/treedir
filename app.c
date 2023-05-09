@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <assert.h>
 
 int main(int argc, char const *argv[])
 {
@@ -210,18 +211,14 @@ int main(int argc, char const *argv[])
         ls(n0);
         ls(nv);
     */
-    char *nom0 = "";
-    noeud **n0 = malloc(sizeof(noeud *));
-    *n0 = init_noeud(true, nom0);
+    char *nom0 = "";                      // Nom du noeud racine.
+    noeud **n0 = malloc(sizeof(noeud *)); // On crée un pointeur vers le noeud racine.
+    *n0 = init_noeud(true, nom0);         // On crée le noeud racine.
     (*n0)->pere = *n0;
     (*n0)->racine = *n0;
-    read(n0, "coms.txt");
-    // print(*n0);
-
-    // printf("chef, %d\n",getDernierMotIndex("asd/asdf/ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890abcdefghijklmnopqrstuvwxyz"));
+    read(n0, "coms.txt"); // On lit le fichier contenant la liste des commandes.
     puts("done");
-    noeud *n = *n0;
+    free_noeud((*n0)->racine); // On libère la mémoire alouée.
     free(n0);
-    free_noeud(n);
     return EXIT_SUCCESS;
 }

@@ -314,7 +314,7 @@ void read(noeud **courant, char *filename)
 }
 
 // Renvoie l'indice du dernier "/" dans le chemin 'str'. Renvoie -1 sinon
-// size_t getDernierMotIndex(char *str)
+// int getDernierMotIndex(char *str)
 // {
 //     if (str == NULL)
 //         return -1;

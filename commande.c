@@ -165,9 +165,9 @@ void cp(noeud *courant, char *chemin1, char *chemin2)
             assert(dest != NULL); // On vérifie que l'allocation s'est bien passée.
             *(dest) = '\0';       // dest pointe vers la chaine vide.
             new_nom = malloc((len2 + 1) * sizeof(char));
-            assert(new_nom != NULL);        // On vérifie que l'allocation s'est bien passée.
-            memcpy(new_nom, chemin2, len2); // On copie le nom.
-            *(new_nom + len2) = '\0';       // On respecte les propriétés des chaines de caractères.
+            assert(new_nom != NULL);                       // On vérifie que l'allocation s'est bien passée.
+            memcpy(new_nom, chemin2, len2 * sizeof(char)); // On copie le nom.
+            *(new_nom + len2) = '\0';                      // On respecte les propriétés des chaines de caractères.
         }
         else // Cas 2.1.2 : On copie dans la racine.
         {
@@ -176,21 +176,21 @@ void cp(noeud *courant, char *chemin1, char *chemin2)
             *(dest) = '/';        // dest pointe vers la racine.
             *(dest + 1) = '\0';   // On respecte les propriétés des chaines de caractères.
             new_nom = malloc(len2 * sizeof(char));
-            assert(new_nom != NULL);                // On vérifie que l'allocation s'est bien passée.
-            memcpy(new_nom, chemin2 + 1, len2 - 1); // On copie le nom.
-            *(new_nom + len2 - 1) = '\0';           // On respecte les propriétés des chaines de caractères.
+            assert(new_nom != NULL);                                 // On vérifie que l'allocation s'est bien passée.
+            memcpy(new_nom, chemin2 + 1, (len2 - 1) * sizeof(char)); // On copie le nom.
+            *(new_nom + len2 - 1) = '\0';                            // On respecte les propriétés des chaines de caractères.
         }
     }
     else // Cas 2.2 : On copie dans un autre dossier de l'arborescence.
     {
         dest = malloc((i + 1) * sizeof(char));
-        assert(dest != NULL);     // On vérifie que l'allocation s'est bien passée.
-        memcpy(dest, chemin2, i); // On copie le chemin de la destination.
-        *(dest + i + 1) = '\0';   // On respecte les propriétés des chaines de caractères.
+        assert(dest != NULL);                    // On vérifie que l'allocation s'est bien passée.
+        memcpy(dest, chemin2, i * sizeof(char)); // On copie le chemin de la destination.
+        *(dest + i) = '\0';                      // On respecte les propriétés des chaines de caractères.
         new_nom = malloc((len2 - i) * sizeof(char));
-        assert(new_nom != NULL);                        // On vérifie que l'allocation s'est bien passée.
-        memcpy(new_nom, chemin2 + i + 1, len2 - i - 1); // On copie le nom du nouveau noeud.
-        *(new_nom + len2 - i - 1) = '\0';               // On respecte les propriétés des chaines de caractères.
+        assert(new_nom != NULL);                                         // On vérifie que l'allocation s'est bien passée.
+        memcpy(new_nom, chemin2 + i + 1, (len2 - i - 1) * sizeof(char)); // On copie le nom du nouveau noeud.
+        *(new_nom + len2 - i - 1) = '\0';                                // On respecte les propriétés des chaines de caractères.
     }
 
     noeud *n2 = search_noeud(courant, dest); // On essaye d'atteindre la destination.

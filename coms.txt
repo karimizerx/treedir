@@ -14,3 +14,4 @@ cp Td Cours/Alloo
 print
 cd /Cours/./ProjetC/../Alloo
 print
+cd

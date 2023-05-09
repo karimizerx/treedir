@@ -8,7 +8,7 @@
 // Initialise & renvoie un noeud avec son 'nom' & son type 'is_dossier'. Affiche une ERREUR sinon et quitte le programme.
 noeud *init_noeud(bool is_dossier, char *nom)
 {
-    if (!word_check(nom)) // On vérifie que le nom respecte bien les critères alpha-numériques.
+    if (!word_check(nom) || strlen(nom) > 100) // On vérifie que le nom respecte bien les critères alpha-numériques.
     {
         printf("Erreur dans 'init_noeud' (noeud.c:10) : La nom choisi '%s' n'est pas alpha-numérique.", nom);
         exit(EXIT_FAILURE);
@@ -16,7 +16,7 @@ noeud *init_noeud(bool is_dossier, char *nom)
     noeud *node = malloc(sizeof(noeud));
     assert(node != NULL); // On vérifie que l'allocation s'est bien passée.
     node->est_dossier = is_dossier;
-    memcpy(node->nom, nom, 99); // On complète le tableau contenant le nom (avec 99 caractères max).
+    memcpy(node->nom, nom, (strlen(nom) + 1) * sizeof(char)); // On complète le tableau contenant le nom (avec 99 caractères max).
     node->pere = NULL;
     node->racine = NULL;
     node->fils = NULL;
@@ -45,7 +45,6 @@ noeud *insert_noeud(noeud *courant, noeud *newfils)
         courant->fils->no = newfils;                 // On initialise les valeures de cette liste de noeuds.
         courant->fils->succ = NULL;
     }
-
     else // Sinon.
     {
         liste_noeud *tmp = courant->fils;
@@ -56,7 +55,7 @@ noeud *insert_noeud(noeud *courant, noeud *newfils)
         assert(tmp->succ != NULL);               // On vérifie que l'allocation s'est bien passée.
         tmp->succ->no = newfils;                 // On initialise les valeures de cette liste de noeuds.
         tmp->succ->succ = NULL;
-        free(tmp);
+        // free(tmp);
     }
     newfils->pere = courant; // On met à jour le pere du fils inséré (parfois nécessa).
     return newfils;          // On renvoie le fils inséré.
@@ -108,29 +107,26 @@ noeud *search_noeud(noeud *courant, char *chemin)
             return (*(chemin + 2) == '\0') ? courant->pere : search_noeud(courant->pere, chemin + 3);
         }
     }
-    else
+    // On récupère le premier dossier dans le chemin.
+    unsigned i = 0;
+    while (*(chemin + i) != '/' && *(chemin + i) != '\0') // Tant qu'on est pas arrivé à la fin du chemin ou à un autre dossier ('/').
+        ++i;                                              // On avance.
+    char *chem = malloc((i + 1) * sizeof(char));          // On sauvegarde ici le nom du premier dossier.
+    assert(chem != NULL);                                 // On vérifie que l'allocation s'est bien passée.
+    memcpy(chem, chemin, i);                              // On récupère le nom de ce premier dossier.
+    *(chem + i) = '\0';                                   // On respecte les propriétés des chaines de caractères.
+
+    // Si on arrive ici, c'est que chemin + i pointe vers '/' ou vers la fin du chemin.
+    noeud *dossier_suivant = search_noeud_profondeur1(courant, chem);
+    free(chem); // On libère la zone mémoire allouée temporairement.
+
+    if (dossier_suivant != NULL) // Cas 4.1 : On a trouvé le sous-chmein, on peut donc continuer à chercher à partir de ce sous-dossier.
     {
-        // On récupère le premier dossier dans le chemin.
-        unsigned i = 0;
-        while (*(chemin + i) != '/' && *(chemin + i) != '\0') // Tant qu'on est pas arrivé à la fin du chemin ou à un autre dossier ('/').
-            ++i;                                              // On avance.
-        char *chem = malloc((i + 1) * sizeof(char));          // On sauvegarde ici le nom du premier dossier.
-        assert(chem != NULL);                                 // On vérifie que l'allocation s'est bien passée.
-        memcpy(chem, chemin, i);                              // On récupère le nom de ce premier dossier.
-        *(chem + i) = '\0';                                   // On respecte les propriétés des chaines de caractères.
-
-        // Si on arrive ici, c'est que chemin + i pointe vers '/' ou vers la fin du chemin.
-        noeud *dossier_suivant = search_noeud_profondeur1(courant, chem);
-        free(chem); // On libère la zone mémoire allouée temporairement.
-
-        if (dossier_suivant != NULL) // Cas 4.1 : On a trouvé le sous-chmein, on peut donc continuer à chercher à partir de ce sous-dossier.
-        {
-            chemin = *(chemin + i) == '/' ? chemin + i + 1 : chemin + i;
-            return search_noeud(dossier_suivant, chemin);
-        }
-        else // Cas 4.2 : On a pas trouvé de sous-chemin correspondant, donc il n'y en a pas.
-            return NULL;
+        chemin = *(chemin + i) == '/' ? chemin + i + 1 : chemin + i;
+        return search_noeud(dossier_suivant, chemin);
     }
+    // Cas 4.2 : On a pas trouvé de sous-chemin correspondant, donc il n'y en a pas.
+    return NULL;
 }
 
 // Affiche les informations du noeud 'courant'. Affiche une ERREUR sinon et quitte le programme.
@@ -146,6 +142,8 @@ void print_noeud(noeud *courant)
 // Libère toutes les zones allouées par le noeud 'courant'.
 void free_noeud(noeud *courant)
 {
+    if (courant == NULL)
+        return;
     if (courant->fils != NULL)          // S'il a des fils.
         free_noeud_list(courant->fils); // On free la liste des fils.
     free(courant);                      // On libère la zone mémoire allouée par le noeud.
