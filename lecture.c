@@ -313,49 +313,49 @@ void read(noeud **courant, char *filename)
         perror("Erreur lors de la fermuture du fichier.");
 }
 
-void read(noeud **courant, char *filename)
-{
-    // 200 pour les deux args, 25 pour ma commande et space
-    FILE *flux = fopen(filename, "r");
-    if (flux == NULL)
-    {
-        perror("Problème pour ouvrir le fichier");
-        exit(EXIT_FAILURE);
-    }
+// void read(noeud **courant, char *filename)
+// {
+//     // 200 pour les deux args, 25 pour ma commande et space
+//     FILE *flux = fopen(filename, "r");
+//     if (flux == NULL)
+//     {
+//         perror("Problème pour ouvrir le fichier");
+//         exit(EXIT_FAILURE);
+//     }
 
-    // char *ligne = malloc(sizeof(char) * 225); // Adresse dans la quelle on stock la ligne.
-    // assert(ligne != NULL); // On vérifie que l'allocation s'est bien passé.
-    char *ligne = NULL;
-    size_t len = 0;
+//     // char *ligne = malloc(sizeof(char) * 225); // Adresse dans la quelle on stock la ligne.
+//     // assert(ligne != NULL); // On vérifie que l'allocation s'est bien passé.
+//     char *ligne = NULL;
+//     size_t len = 0;
 
-    while (getline(&ligne, &len, flux) != -1)
-    {
-        char *cmd = malloc(sizeof(char));
-        char *arg1 = malloc(sizeof(char));
-        char *arg2 = malloc(sizeof(char));
-        char *str = malloc((strlen(ligne) + 1) * sizeof(char));
-        strcpy(str, ligne);
-        cmd = strtok(str, " \n \t \r ");
-        arg1 = strtok(str, " \n \t \r ");
-        arg2 = strtok(str, " \n \t \r ");
-        free(str);
-        free(ligne);
+//     while (getline(&ligne, &len, flux) != -1)
+//     {
+//         char *cmd = malloc(sizeof(char));
+//         char *arg1 = malloc(sizeof(char));
+//         char *arg2 = malloc(sizeof(char));
+//         char *str = malloc((strlen(ligne) + 1) * sizeof(char));
+//         strcpy(str, ligne);
+//         cmd = strtok(str, " \n \t \r ");
+//         arg1 = strtok(str, " \n \t \r ");
+//         arg2 = strtok(str, " \n \t \r ");
+//         free(str);
+//         free(ligne);
 
-        execute(courant, cmd, arg1, arg2);
+//         execute(courant, cmd, arg1, arg2);
 
-        if (cmd != NULL)
-            free(cmd);
-        if (arg1 != NULL)
-            free(arg1);
-        if (arg2 != NULL)
-            free(arg2);
-    }
+//         if (cmd != NULL)
+//             free(cmd);
+//         if (arg1 != NULL)
+//             free(arg1);
+//         if (arg2 != NULL)
+//             free(arg2);
+//     }
 
-    free(ligne);
-    int fin = fclose(flux);
-    if (fin != 0)
-        perror("Erreur lors de la fermuture du fichier.");
-}
+//     free(ligne);
+//     int fin = fclose(flux);
+//     if (fin != 0)
+//         perror("Erreur lors de la fermuture du fichier.");
+// }
 
 // Renvoie l'indice du dernier "/" dans le chemin 'str'. Renvoie -1 sinon
 // int getDernierMotIndex(char *str)
