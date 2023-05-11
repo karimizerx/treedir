@@ -124,14 +124,20 @@ void rm(noeud *courant, char *chemin)
         else // Cas 2.3 : On trouve le noeud et on peut le supprimer.
         {
             liste_noeud *ln = del->pere->fils;
+            liste_noeud *l;    // Pointeur vers la structure 'liste_noeud' du noeud à supprimer.
             if (ln->no == del) // Si le noeud a supprimé est le premier fils.
-                del->pere->fils = del->pere->fils->succ;
+            {
+                l = ln;                                  // On garde un pointeur vers cette structure.
+                del->pere->fils = del->pere->fils->succ; // On change les liaisons pour isoler le noeud à supprimer.
+            }
             else // Sinon, on cherche le noeud à supprimer dans la liste des fils.
             {
                 while (ln->succ->no != del)
                     ln = ln->succ;
+                l = ln->succ;              // On garde un pointeur vers cette structure.
                 ln->succ = ln->succ->succ; // On change les liaisons pour isoler le noeud à supprimer.
             }
+            free(l);         // On supprime la strucutre 'list_noeud' du noeud supprimé.
             free_noeud(del); // On supprime le noeud demandé.
         }
     }
