@@ -20,16 +20,38 @@ struct liste_noeud
 typedef struct noeud noeud;
 typedef struct liste_noeud liste_noeud;
 
-extern noeud *init_noeud(bool, char *);
-extern noeud *creer_noeud(bool, noeud *, noeud *, char *);
-extern noeud *insert_noeud(noeud *, noeud *);
-extern noeud *delete_noeud(noeud *);
-extern noeud *search_noeud_list(liste_noeud *, char *);
-extern noeud *search_noeud_profondeur1(noeud *, char *);
-extern noeud *search_noeud(noeud *, char *);
-extern void print_noeud(noeud *);
-extern char *reverse_cat(char *, char *);
-extern void free_noeud(noeud *);
-extern void free_noeud_list(liste_noeud *);
-extern char *chemin_absolue(noeud *);
+// Signatures des fonctions.
+extern noeud *init_noeud(bool is_dossier, char *nom);
+
+extern noeud *creer_noeud(bool is_dossier, noeud *racine, noeud *pere, char *nom);
+
+extern noeud *insert_noeud(noeud *courant, noeud *n);
+
+extern noeud *search_noeud_list(liste_noeud *ln, char *nom);
+
+extern noeud *search_noeud_profondeur1(noeud *courant, char *nom);
+
+extern noeud *search_noeud(noeud *courant, char *chemin);
+
+extern void print_noeud(noeud *courant);
+
+extern void free_noeud(noeud *courant);
+
+extern void free_noeud_list(liste_noeud *ln);
+
+extern char *chemin_absolue(noeud *courant);
+
+extern noeud *copie_arbre(noeud *courant, char *nom);
+
+extern liste_noeud *copie_fils(liste_noeud *ln, noeud *nom);
+
+extern void tree(noeud *courant, int nbSpace);
+
+extern int is_parent(noeud *courant, noeud *n);
+
+extern bool alphanum(char c);
+
+extern bool word_check(char *str);
+
+extern int is_name_fils_exist(liste_noeud *ln, char *nom);
 #endif

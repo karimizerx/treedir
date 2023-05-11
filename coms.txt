@@ -4,6 +4,18 @@ mkdir ProjetC
 mkdir Anglais
 cd
 touch edt
+mkdir Td
 cd Td
+touch dansTd
 mkdir td1
 mkdir td2
+cd
+cp Td Cours/Alloo
+print
+cd /Cours/./ProjetC/../Alloo
+pwd
+cd
+ls
+print
+rm Td
+print

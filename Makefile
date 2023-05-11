@@ -1,7 +1,7 @@
 CC = gcc
 CFLAGS = -g -Wall
-DEPS = app.h commande.h noeud.h
-O =  app.o commande.o noeud.o
+DEPS = app.h commande.h noeud.h lecture.h
+O =  app.o commande.o noeud.o lecture.o
 EXEC = app
 
 all : $(EXEC)
@@ -19,4 +19,4 @@ clean :
 	rm -rf $(EXEC) *.o
 
 leak :
-	valgrind --leak-check=full --show-leak-kinds=all ./$(EXEC) 
+	valgrind --leak-check=full --track-origins=yes ./$(EXEC) 

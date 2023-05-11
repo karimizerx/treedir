@@ -1,11 +1,14 @@
 #include "noeud.h"
 #include "commande.h"
+#include "lecture.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <assert.h>
 
 int main(int argc, char const *argv[])
 {
+    /*
 
     // Création de la racine.
     char *nom0 = "";
@@ -132,6 +135,11 @@ int main(int argc, char const *argv[])
     printf("ls(n1) : ");
     ls(n1);
     puts("");
+    // rm(n1,"Baji");
+    // printf("ls(n1) : ");
+    // rm(n1,"projet");
+    // ls(n1);
+    // puts("");
 
     // Affichage de toute l'arborescence.
     puts("Affichage de toute l'arborescence.");
@@ -150,26 +158,67 @@ int main(int argc, char const *argv[])
     cd(&courant, "/Cours");
     printf("Noeud courant après cd '/Cours: ");
     pwd(courant);
-    cd(&courant, "TP");
-    printf("Noeud courant après cd 'TP' : ");
-    pwd(courant);
-    cd(&courant, "ProjetC");
-    printf("Noeud courant après cd 'ProjetC' : ");
-    pwd(courant);
-    cd(&courant, "/TD");
-    printf("Noeud courant après cd '/TD' : ");
-    pwd(courant);
+    // cd(&courant, "TP");
+    // printf("Noeud courant après cd 'TP' : ");
+    // pwd(courant);
+    // cd(&courant, "ProjetC");
+    // printf("Noeud courant après cd 'ProjetC' : ");
+    // pwd(courant);
+    // cd(&courant, "/TD");
+    // printf("Noeud courant après cd '/TD' : ");
+    // pwd(courant);
     cd(&courant, ".");
     printf("Noeud courant après cd '.' : ");
     pwd(courant);
     cd(&courant, "..");
     printf("Noeud courant après cd '..' : ");
     pwd(courant);
-    cd(&courant, "TD/td1");
-    printf("Noeud courant après cd 'TD/td1' : ");
-    pwd(courant);
+    // cd(&courant, "TD/td1");
+    // printf("Noeud courant après cd 'TD/td1' : ");
+    // pwd(courant);
 
     // On libère toutes les ressources.
     free_noeud(n0);
     return 0;
+
+    */
+
+    /*
+        // Création des fils de la racine.
+        noeud *n1 = creer_noeud(true, n0, n0, "Cours");
+        noeud *n2 = creer_noeud(true, n0, n0, "TD");
+        noeud *n3 = creer_noeud(true, n0, n0, "TP");
+        noeud *n4 = creer_noeud(false, n0, n0, "edt");
+
+        // Set fils de la racine.
+        n0->fils = malloc(sizeof(liste_noeud));
+        n0->fils->no = n1;
+        n0->fils->succ = malloc(sizeof(liste_noeud));
+        n0->fils->succ->no = n2;
+        n0->fils->succ->succ = malloc(sizeof(liste_noeud));
+        n0->fils->succ->succ->no = n3;
+        n0->fils->succ->succ->succ = malloc(sizeof(liste_noeud));
+        n0->fils->succ->succ->succ->no = n4;
+        n0->fils->succ->succ->succ->succ = NULL;
+
+        noeud *nv= copie_arbre(n0,"SLATTTTT");
+        nv->pere=nv;
+        nv->racine=nv;
+        puts("print du n0");
+        print(n0);
+        puts("print du v0");
+        print(nv);
+        ls(n0);
+        ls(nv);
+    */
+    char *nom0 = "";                      // Nom du noeud racine.
+    noeud **n0 = malloc(sizeof(noeud *)); // On crée un pointeur vers le noeud racine.
+    *n0 = init_noeud(true, nom0);         // On crée le noeud racine.
+    (*n0)->pere = *n0;
+    (*n0)->racine = *n0;
+    read(n0, "coms.txt"); // On lit le fichier contenant la liste des commandes.
+    puts("done");
+    free_noeud((*n0)->racine); // On libère la mémoire alouée.
+    free(n0);
+    return EXIT_SUCCESS;
 }
