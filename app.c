@@ -211,14 +211,15 @@ int main(int argc, char const *argv[])
         ls(n0);
         ls(nv);
     */
+    puts("\n");
     char *nom0 = "";                      // Nom du noeud racine.
     noeud **n0 = malloc(sizeof(noeud *)); // On crée un pointeur vers le noeud racine.
     *n0 = init_noeud(true, nom0);         // On crée le noeud racine.
     (*n0)->pere = *n0;
     (*n0)->racine = *n0;
-    read(n0, "coms.txt"); // On lit le fichier contenant la liste des commandes.
-    puts("done");
+    read(n0, "test7.txt");     // On lit le fichier contenant la liste des commandes & on exécute celles-ci.
     free_noeud((*n0)->racine); // On libère la mémoire alouée.
     free(n0);
+    puts("Exécution terminée.");
     return EXIT_SUCCESS;
 }

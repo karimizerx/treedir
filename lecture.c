@@ -23,7 +23,7 @@ bool espace(char c)
 }
 
 // Supprime les espaces au début et à la fin de la chaine 'str' et renvoie cette nouvelle chaine.
-char *trim(char *str)
+char *del_space(char *str)
 {
     char *nv = NULL;
     size_t len = strlen(str);
@@ -75,7 +75,7 @@ int nbwords(char *str)
 
 void split(char *ligne, char **tmp)
 {
-    char *nvligne = trim(ligne);
+    char *nvligne = del_space(ligne);
     int nbw = nbwords(nvligne);
     if (nbw > 3)
     {
@@ -262,10 +262,9 @@ void execute(noeud **courant, char *command, char *arg1, char *arg2)
     }
 }
 
-// Lis le fichier de nom 'filename'.
+// Lis le fichier de nom 'filename' & lance les exécutions.
 void read(noeud **courant, char *filename)
 {
-    // 200 pour les deux args, 25 pour ma commande et space
     FILE *flux = fopen(filename, "r");
     if (flux == NULL)
     {
@@ -273,99 +272,44 @@ void read(noeud **courant, char *filename)
         exit(EXIT_FAILURE);
     }
 
-    char *string = malloc(sizeof(char) * 225); // Adresse dans la quelle on stock la ligne.
-    assert(string != NULL);                    // On vérifie que l'allocation s'est bien passé.
+    // 'c' est le caractère que l'on lit actuellement.
+    int r = 0, debut_ligne = 0, dec = 0, c = 0; // 'debut_ligne' indique où commence une ligne.
+    char *ligne = NULL;                         // Ligne contenant la commande & les arguments.
 
-    while (fgets(string, 250, flux) != NULL)
+    while ((c = fgetc(flux)) != EOF)
     {
-        char **tmp = malloc(3 * sizeof(char *));
-        *(tmp + 2) = NULL;
-        *(tmp + 1) = NULL;
-        *tmp = NULL;
-        split(string, tmp);
-        free(string);
-        string = malloc(sizeof(char) * 225);
-        execute(courant, *(tmp), *(tmp + 1), *(tmp + 2));
-        if (tmp != NULL)
+        if (c != '\n')
+            ++dec;
+        else
         {
-            if (*(tmp + 2) != NULL)
-            {
-                free(*(tmp + 2));
-                *(tmp + 2) = NULL;
-            }
-            if (*(tmp + 1))
-            {
-                free(*(tmp + 1));
-                *(tmp + 1) = NULL;
-            }
-            if (*(tmp))
-            {
-                free(*(tmp));
-                *(tmp) = NULL;
-            }
-            free(tmp);
-            tmp = NULL;
+            r = fseek(flux, debut_ligne, SEEK_SET);
+            assert(r == 0);
+            ligne = malloc((dec + 2) * sizeof(char));
+            fgets(ligne, dec + 2, flux); // On récupère cette ligne.
+            assert(ligne != NULL);       // On vérifie que tout s'est bien passé.
+
+            char **list_arg = malloc(3 * sizeof(char *)); // Pointeur vers des chaines de caractères (cmd, argument1, argument2).
+            *list_arg = NULL;
+            *(list_arg + 1) = NULL;
+            *(list_arg + 2) = NULL;
+            split(ligne, list_arg);                                        // On remplit les strings de cmd, arg1 & arg2.
+            execute(courant, *list_arg, *(list_arg + 1), *(list_arg + 2)); // On exécute cette commande.
+
+            if (ligne != NULL)
+                free(ligne);
+            free(*list_arg);     // On libère la commande.
+            if (*(list_arg + 1)) // S'il y a un argument, on le libère.
+                free(*(list_arg + 1));
+            if (*(list_arg + 2)) // S'il y a un deuxieme argument, on le libère.
+                free(*(list_arg + 2));
+            free(list_arg); // On libère le pointeur général.
+
+            debut_ligne = debut_ligne + dec + 1; // On met à jour les variables pour la lecture.
+            dec = 0;
         }
     }
-    free(string);
-    int fin = fclose(flux);
-    if (fin != 0)
+
+    r = fclose(flux); // On ferme le flux.
+    if (r != 0)       // On vérifie que tout s'est bien passé.
         perror("Erreur lors de la fermuture du fichier.");
 }
-
-// void read(noeud **courant, char *filename)
-// {
-//     // 200 pour les deux args, 25 pour ma commande et space
-//     FILE *flux = fopen(filename, "r");
-//     if (flux == NULL)
-//     {
-//         perror("Problème pour ouvrir le fichier");
-//         exit(EXIT_FAILURE);
-//     }
-
-//     // char *ligne = malloc(sizeof(char) * 225); // Adresse dans la quelle on stock la ligne.
-//     // assert(ligne != NULL); // On vérifie que l'allocation s'est bien passé.
-//     char *ligne = NULL;
-//     size_t len = 0;
-
-//     while (getline(&ligne, &len, flux) != -1)
-//     {
-//         char *cmd = malloc(sizeof(char));
-//         char *arg1 = malloc(sizeof(char));
-//         char *arg2 = malloc(sizeof(char));
-//         char *str = malloc((strlen(ligne) + 1) * sizeof(char));
-//         strcpy(str, ligne);
-//         cmd = strtok(str, " \n \t \r ");
-//         arg1 = strtok(str, " \n \t \r ");
-//         arg2 = strtok(str, " \n \t \r ");
-//         free(str);
-//         free(ligne);
-
-//         execute(courant, cmd, arg1, arg2);
-
-//         if (cmd != NULL)
-//             free(cmd);
-//         if (arg1 != NULL)
-//             free(arg1);
-//         if (arg2 != NULL)
-//             free(arg2);
-//     }
-
-//     free(ligne);
-//     int fin = fclose(flux);
-//     if (fin != 0)
-//         perror("Erreur lors de la fermuture du fichier.");
-// }
-
-// Renvoie l'indice du dernier "/" dans le chemin 'str'. Renvoie -1 sinon
-// int getDernierMotIndex(char *str)
-// {
-//     if (str == NULL)
-//         return -1;
-
-//     int len = strlen(str);
-//     size_t i = len - 1;
-//     while (*(str + i) != '/' && i > 0)
-//         --i;
-//     return i;
-// }

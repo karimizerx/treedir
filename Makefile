@@ -19,4 +19,4 @@ clean :
 	rm -rf $(EXEC) *.o
 
 leak :
-	valgrind --leak-check=full --track-origins=yes ./$(EXEC) 
+	valgrind ./$(EXEC) 
