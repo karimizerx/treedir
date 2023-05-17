@@ -73,20 +73,28 @@ int nbwords(char *str)
     return c;
 }
 
-void split(char *ligne, char **tmp)
+void split(noeud **courant, char *ligne, char **tmp)
 {
     char *nvligne = del_space(ligne);
     int nbw = nbwords(nvligne);
     if (nbw > 3)
     {
+        free_noeud((*courant)->racine);
+        free(courant);
         quit("Erreur : Arguments trop nombreux.");
     }
     else if (nbw < 1)
     {
+        free_noeud((*courant)->racine);
+        free(courant);
         quit("Erreur : Pas assez d'arguments.");
     }
     if (nvligne == NULL)
+    {
+        free_noeud((*courant)->racine);
+        free(courant);
         quit("Erreur : L'argument est NULL.");
+    }
 
     int i = 0;
     if (nbw >= 0)
@@ -128,6 +136,8 @@ void execute(noeud **courant, char *command, char *arg1, char *arg2)
     int i = 0;
     if (strlen(command) <= 1)
     {
+        free_noeud((*courant)->racine);
+        free(courant);
         printf("La commande '%s' est inconnue.\n", command);
         exit(EXIT_FAILURE);
     }
@@ -140,17 +150,27 @@ void execute(noeud **courant, char *command, char *arg1, char *arg2)
             if (arg2 == NULL)
                 cd(courant, arg1);
             else
+            {
+                free_noeud((*courant)->racine);
+                free(courant);
                 quit("Erreur : Arguments trop nombreux pour la commande 'cd'.");
+            }
         }
         else if (command[i + 1] == 'p')
         {
             if (arg1 == NULL || arg2 == NULL)
+            {
+                free_noeud((*courant)->racine);
+                free(courant);
                 quit("Erreur : Trop peux d'arguments pour la commande 'cp'.");
+            }
             else
                 cp(*courant, arg1, arg2);
         }
         else
         {
+            free_noeud((*courant)->racine);
+            free(courant);
             printf("La commande '%s' est inconnue.\n", command);
             exit(EXIT_FAILURE);
         }
@@ -162,10 +182,16 @@ void execute(noeud **courant, char *command, char *arg1, char *arg2)
             if (arg1 == NULL && arg2 == NULL)
                 info(*courant);
             else
+            {
+                free_noeud((*courant)->racine);
+                free(courant);
                 quit("Erreur : Arguments trop nombreux pour la commande 'info'.");
+            }
         }
         else
         {
+            free_noeud((*courant)->racine);
+            free(courant);
             printf("La commande '%s' est inconnue.\n", command);
             exit(EXIT_FAILURE);
         }
@@ -175,7 +201,11 @@ void execute(noeud **courant, char *command, char *arg1, char *arg2)
         if (strcmp("pwd", command) == 0)
         {
             if (arg1 != NULL || arg2 != NULL)
+            {
+                free_noeud((*courant)->racine);
+                free(courant);
                 quit("Erreur : Arguments trop nombreux pour la commande 'pwd'.");
+            }
             else
                 pwd(*courant);
         }
@@ -184,10 +214,16 @@ void execute(noeud **courant, char *command, char *arg1, char *arg2)
             if (arg1 == NULL && arg2 == NULL)
                 print(*courant);
             else
+            {
+                free_noeud((*courant)->racine);
+                free(courant);
                 quit("Erreur : Arguments trop nombreux pour la commande 'print'.");
+            }
         }
         else
         {
+            free_noeud((*courant)->racine);
+            free(courant);
             printf("La commande '%s' est inconnue.\n", command);
             exit(EXIT_FAILURE);
         }
@@ -196,11 +232,15 @@ void execute(noeud **courant, char *command, char *arg1, char *arg2)
     case 'l':
         if (command[i + 1] != 's')
         {
+            free_noeud((*courant)->racine);
+            free(courant);
             printf("La commande '%s' est inconnue.\n", command);
             exit(EXIT_FAILURE);
         }
         if (arg2 != NULL || arg1 != NULL)
         {
+            free_noeud((*courant)->racine);
+            free(courant);
             printf("La commande '%s' est inconnue.\n", command);
             exit(EXIT_FAILURE);
         }
@@ -212,21 +252,35 @@ void execute(noeud **courant, char *command, char *arg1, char *arg2)
         if (command[i + 1] == 'v')
         {
             if (arg1 == NULL || arg2 == NULL)
+            {
+                free_noeud((*courant)->racine);
+                free(courant);
                 quit("Erreur : Trop peux d'arguments pour la commande 'mv'.");
+            }
             else
                 mv(*courant, arg1, arg2);
         }
         else if (command[i + 1] != 'k')
         {
+            free_noeud((*courant)->racine);
+            free(courant);
             printf("La commande '%s' est inconnue.\n", command);
             exit(EXIT_FAILURE);
         }
         else if (strcmp("mkdir", command) == 0)
         {
             if (arg1 == NULL)
+            {
+                free_noeud((*courant)->racine);
+                free(courant);
                 quit("Erreur : Trop peux d'arguments pour la commande 'mkdir'.");
+            }
             else if (arg2 != NULL)
+            {
+                free_noeud((*courant)->racine);
+                free(courant);
                 quit("Erreur : Arguments trop nombreux pour la commande 'mkdir'.");
+            }
             mkdir(*courant, arg1);
         }
         break;
@@ -234,13 +288,23 @@ void execute(noeud **courant, char *command, char *arg1, char *arg2)
     case 'r':
         if (command[i + 1] != 'm')
         {
+            free_noeud((*courant)->racine);
+            free(courant);
             printf("La commande '%s' est inconnue.\n", command);
             exit(EXIT_FAILURE);
         }
         if (arg2 != NULL)
+        {
+            free_noeud((*courant)->racine);
+            free(courant);
             quit("Erreur : Arguments trop nombreux pour la commande 'rm'.");
+        }
         if (arg1 == NULL)
+        {
+            free_noeud((*courant)->racine);
+            free(courant);
             quit("Erreur : Trop peux d'arguments pour la commande 'rm'.");
+        }
         rm(*courant, arg1);
         break;
 
@@ -248,16 +312,26 @@ void execute(noeud **courant, char *command, char *arg1, char *arg2)
         if (strcmp(command, "touch") == 0)
         {
             if (arg1 == NULL)
+            {
+                free_noeud((*courant)->racine);
+                free(courant);
                 quit("Erreur : Trop peux d'arguments pour la commande 'touch'.");
+            }
             if (arg2 != NULL)
+            {
+                free_noeud((*courant)->racine);
+                free(courant);
                 quit("Erreur : Arguments trop nombreux pour la commande 'touch'.");
+            }
             touch(*courant, arg1);
         }
         break;
 
     default:
+        free_noeud((*courant)->racine);
+        free(courant);
         printf("La commande '%s' est inconnue.\n", command);
-        quit("");
+        exit(EXIT_FAILURE);
         break;
     }
 }
@@ -268,6 +342,8 @@ void read(noeud **courant, char *filename)
     FILE *flux = fopen(filename, "r");
     if (flux == NULL)
     {
+        free_noeud((*courant)->racine);
+        free(courant);
         perror("Problème pour ouvrir le fichier");
         exit(EXIT_FAILURE);
     }
@@ -292,7 +368,7 @@ void read(noeud **courant, char *filename)
             *list_arg = NULL;
             *(list_arg + 1) = NULL;
             *(list_arg + 2) = NULL;
-            split(ligne, list_arg);                                        // On remplit les strings de cmd, arg1 & arg2.
+            split(courant, ligne, list_arg);                               // On remplit les strings de cmd, arg1 & arg2.
             execute(courant, *list_arg, *(list_arg + 1), *(list_arg + 2)); // On exécute cette commande.
 
             if (ligne != NULL)
@@ -311,5 +387,9 @@ void read(noeud **courant, char *filename)
 
     r = fclose(flux); // On ferme le flux.
     if (r != 0)       // On vérifie que tout s'est bien passé.
+    {
+        free_noeud((*courant)->racine);
+        free(courant);
         perror("Erreur lors de la fermuture du fichier.");
+    }
 }

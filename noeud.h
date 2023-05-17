@@ -21,11 +21,11 @@ typedef struct noeud noeud;
 typedef struct liste_noeud liste_noeud;
 
 // Signatures des fonctions.
-extern noeud *init_noeud(bool is_dossier, char *nom);
+extern noeud *init_noeud(noeud **courant, bool is_dossier, char *nom);
 
-extern noeud *creer_noeud(bool is_dossier, noeud *racine, noeud *pere, char *nom);
+extern noeud *creer_noeud(noeud **courant, bool is_dossier, noeud *racine, noeud *pere, char *nom);
 
-extern noeud *insert_noeud(noeud *courant, noeud *n);
+extern noeud *insert_noeud(noeud **courant, noeud *n);
 
 extern noeud *search_noeud_list(liste_noeud *ln, char *nom);
 
@@ -41,9 +41,9 @@ extern void free_noeud_list(liste_noeud *ln);
 
 extern char *chemin_absolue(noeud *courant);
 
-extern noeud *copie_arbre(noeud *courant, char *nom);
+extern noeud *copie_arbre(noeud **courant, char *nom);
 
-extern liste_noeud *copie_fils(liste_noeud *ln, noeud *nom);
+extern liste_noeud *copie_fils(liste_noeud **courant, noeud *nom);
 
 extern void tree(noeud *courant, int nbSpace);
 

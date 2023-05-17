@@ -16,4 +16,4 @@ extern void execute(noeud **courant, char *command, char *arg1, char *arg2);
 
 extern void read(noeud **courant, char *filename);
 
-extern void split(char *ligne, char **tmp);
+extern void split(noeud **courant, char *ligne, char **tmp);

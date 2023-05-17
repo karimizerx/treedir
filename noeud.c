@@ -6,10 +6,12 @@
 #include <assert.h>
 
 // Initialise & renvoie un noeud avec son 'nom' & son type 'is_dossier'. Affiche une ERREUR sinon et quitte le programme.
-noeud *init_noeud(bool is_dossier, char *nom)
+noeud *init_noeud(noeud **courant, bool is_dossier, char *nom)
 {
     if (!word_check(nom) || strlen(nom) > 100) // On vérifie que le nom respecte bien les critères alpha-numériques.
     {
+        free_noeud((*courant)->racine);
+        free(courant);
         printf("Erreur dans 'init_noeud' (noeud.c:10) : La nom choisi '%s' n'est pas alpha-numérique.", nom);
         exit(EXIT_FAILURE);
     }
@@ -24,30 +26,34 @@ noeud *init_noeud(bool is_dossier, char *nom)
 }
 
 // Crée un noeud avec sa 'racine', son 'pere', son 'nom' & son type 'is_dossier'.
-noeud *creer_noeud(bool is_dossier, noeud *racine, noeud *pere, char *nom)
+noeud *creer_noeud(noeud **courant, bool is_dossier, noeud *racine, noeud *pere, char *nom)
 {
-    noeud *n = init_noeud(is_dossier, nom);
+    noeud *n = init_noeud(courant, is_dossier, nom);
     n->pere = pere;
     n->racine = racine;
     return n;
 }
 
 // Ajoute le noeud 'newfils' comme fils du noeud 'courant'. Renvoie le noeud ajouté ou affiche une ERREUR et quitte le programme.
-noeud *insert_noeud(noeud *courant, noeud *newfils)
+noeud *insert_noeud(noeud **courant, noeud *newfils)
 {
-    if (courant == NULL)
-        quit("Erreur dans 'insert_noeud' (noeud.c:38) : Le noeud 'courant' n'existe pas. Vous ne pouvez pas y ajouter 'newfils'.");
-
-    if (courant->fils == NULL) // Si le noeud courant n'a pas de fils.
+    if (*courant == NULL)
     {
-        courant->fils = malloc(sizeof(liste_noeud)); // On crée simplement une structure de liste de noeuds.
-        assert(courant->fils != NULL);               // On vérifie que l'allocation s'est bien passée.
-        courant->fils->no = newfils;                 // On initialise les valeures de cette liste de noeuds.
-        courant->fils->succ = NULL;
+        free_noeud((*courant)->racine);
+        free(courant);
+        quit("Erreur dans 'insert_noeud' (noeud.c:38) : Le noeud 'courant' n'existe pas. Vous ne pouvez pas y ajouter 'newfils'.");
+    }
+
+    if ((*courant)->fils == NULL) // Si le noeud courant n'a pas de fils.
+    {
+        (*courant)->fils = malloc(sizeof(liste_noeud)); // On crée simplement une structure de liste de noeuds.
+        assert((*courant)->fils != NULL);               // On vérifie que l'allocation s'est bien passée.
+        (*courant)->fils->no = newfils;                 // On initialise les valeures de cette liste de noeuds.
+        (*courant)->fils->succ = NULL;
     }
     else // Sinon.
     {
-        liste_noeud *tmp = courant->fils;
+        liste_noeud *tmp = (*courant)->fils;
         while (tmp->succ != NULL) // On cherche le dernier fils du noeud courant.
             tmp = tmp->succ;
         // Quand on arrive ici, tmp pointe vers le dernier fils du noeud courant.
@@ -57,8 +63,8 @@ noeud *insert_noeud(noeud *courant, noeud *newfils)
         tmp->succ->succ = NULL;
         // free(tmp);
     }
-    newfils->pere = courant; // On met à jour le pere du fils inséré (parfois nécessa).
-    return newfils;          // On renvoie le fils inséré.
+    newfils->pere = *courant; // On met à jour le pere du fils inséré (parfois nécessa).
+    return newfils;           // On renvoie le fils inséré.
 }
 
 // Cherche un noeud 'nom' dans une liste de fils 'ln'. // Renvoie le noeud trouvé ou NULL.
@@ -133,7 +139,7 @@ noeud *search_noeud(noeud *courant, char *chemin)
 void print_noeud(noeud *courant)
 {
     if (courant == NULL)
-        quit("Erreur dans 'print_noeud' (noeud.c:137) : Le noeud courant est NULL.");
+        return NULL;
     printf("Nom : %s\n", courant->nom);
     printf("Racine : %s\n", courant->racine->nom);
     printf("Pere : %s\n", courant->pere->nom);
@@ -203,9 +209,9 @@ char *chemin_absolue(noeud *courant)
 }
 
 // Copie l'arborescence du noeud 'courant' avec un nouveau 'nom'.
-noeud *copie_arbre(noeud *courant, char *nom)
+noeud *copie_arbre(noeud **courant, char *nom)
 {
-    if (courant == NULL) // Si le noeud 'courant' est NULL, on renvoie NULL.
+    if (*courant == NULL) // Si le noeud 'courant' est NULL, on renvoie NULL.
         return NULL;
     char nvnom[99]; // Le nom du noeud copié.
     size_t len = strlen(nom);
@@ -214,22 +220,22 @@ noeud *copie_arbre(noeud *courant, char *nom)
     memcpy(nvnom, nom, len); // On copie le nouveau nom du fichier
     nvnom[len] = '\0';       // On respecte les règles des chaines de caractère.
 
-    noeud *copie = creer_noeud(courant->est_dossier, courant->racine, NULL, nvnom); // On crée le nouveau noeud.
-    if (courant->est_dossier)
-        copie->fils = copie_fils(courant->fils, copie); // On copie le reste de l'arborescence si nécessaire.
-    return copie;                                       // On renvoie le noeud copié.
+    noeud *copie = creer_noeud(courant, (*courant)->est_dossier, (*courant)->racine, NULL, nvnom); // On crée le nouveau noeud.
+    if ((*courant)->est_dossier)
+        copie->fils = copie_fils((*courant)->fils, copie); // On copie le reste de l'arborescence si nécessaire.
+    return copie;                                          // On renvoie le noeud copié.
 }
 
 // Copie les fils (récursivement) du noeud 'courant'. Utile pour "copie_arbre".
-liste_noeud *copie_fils(liste_noeud *courant, noeud *pere)
+liste_noeud *copie_fils(liste_noeud **courant, noeud *pere)
 {
-    if (courant == NULL) // Si le noeud est NULL, on renvoie NULL.
+    if (*courant == NULL) // Si le noeud est NULL, on renvoie NULL.
         return NULL;
     liste_noeud *ln = malloc(sizeof(liste_noeud));
     assert(ln != NULL); // On vérifie que l'allocation s'est bien passée.
-    ln->no = copie_arbre(courant->no, courant->no->nom);
+    ln->no = copie_arbre((*courant)->no, (*courant)->no->nom);
     ln->no->pere = pere;
-    ln->succ = copie_fils(courant->succ, pere);
+    ln->succ = copie_fils((*courant)->succ, pere);
     return ln;
 }
 
@@ -294,7 +300,8 @@ bool alphanum(char c)
 bool word_check(char *str)
 {
     if (str == NULL)
-        quit("Erreur dans 'word_check' (noeud:259) : La chaine à vérifier est nulle.");
+        // quit("Erreur dans 'word_check' (noeud:259) : La chaine à vérifier est nulle.");
+        return false;
     for (size_t i = 0; str[i] != '\0'; ++i)
     {
         if (!alphanum(str[i]))

@@ -22,8 +22,9 @@ void ls(noeud *courant)
 }
 
 // Affiche les informations du noeud 'courant'. Affiche une ERREUR sinon et quitte le programme.
-void info(noeud *courant)
+void info(noeud **courant)
 {
+    
     print_noeud(courant);
     puts("");
 }
