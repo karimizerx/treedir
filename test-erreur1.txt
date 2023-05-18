@@ -1,0 +1,26 @@
+mkdir Cours
+cd Cours
+mkdir ProjetC
+mkdir Anglais
+cd
+mkdir Td
+cd Td
+mkdir Td1
+mkdir Td2
+cd
+ls
+touch edt
+mkdir Tp
+cd Tp
+mkdir TP1
+cd TP1
+pwd
+touch sujetTp1
+cd
+print
+mv Tp/TP1 Td
+cd
+cp Td/ Td/TP1
+
+#### A la dernière ligne, il y a une erreur : On essaye de copier dans le dossier 'Td' un noeud, en lui donnant 'TP1' comme nom.
+### Mais il y a déjà un noeud portant ce nom (2 lignes plus haut, avec mv).

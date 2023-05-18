@@ -26,4 +26,9 @@ touch sujetTp1
 cd
 print
 mv Tp/TP1 Td
+cd
+cp Td/TP1 Tp/Tp1Copie
+cd Tp/Tp1Copie
+info
+cd
 print

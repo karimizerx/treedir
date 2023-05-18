@@ -246,41 +246,40 @@ void cp(noeud **courant, char *chemin1, char *chemin2)
     }
 
     noeud *n2 = search_noeud(*courant, dest); // On essaye d'atteindre la destination.
-
-    if (n2 == NULL) // Cas 3 : [ERREUR] Le noeud pointé par la destination n'existe pas.
+    if (n2 == NULL)                           // Cas 3 : [ERREUR] Le noeud pointé par la destination n'existe pas.
     {
+        printf("Erreur dans 'cp' (commande.c:248) : Aucun noeud pointé par le chemin '%s'.\n", dest);
         free_noeud((*courant)->racine);
         free(courant);
         free(new_nom);
         free(dest);
-        printf("Erreur dans 'cp' (commande.c:248) : Aucun noeud pointé par le chemin '%s'.\n", dest);
         exit(EXIT_FAILURE);
     }
     else if (!n2->est_dossier) // Cas 4 : [ERREUR] Le noeud pointé par la destination n'est pas un dossier.
     {
+        printf("Erreur dans 'cp' (commande.c:248) : Le noeud pointé par le chemin '%s' n'est pas un dossier.\n", dest);
         free_noeud((*courant)->racine);
         free(courant);
         free(new_nom);
         free(dest);
-        printf("Erreur dans 'cp' (commande.c:248) : Le noeud pointé par le chemin '%s' n'est pas un dossier.\n", dest);
         exit(EXIT_FAILURE);
     }
     else if (is_parent(n2, n1) == 0) // Cas 5 : [ERREUR] Le noeud à copier est parent du noeud destination.
     {
+        printf("Erreur dans 'cp' (commande.c:248) : Le noeud à copier '%s' est parent du noeud destination '%s'\n.", n1->nom, new_nom);
         free_noeud((*courant)->racine);
         free(courant);
         free(new_nom);
         free(dest);
-        printf("Erreur dans 'cp' (commande.c:248) : Le noeud à copier '%s' est parent du noeud destination '%s'\n.", n1->nom, new_nom);
         exit(EXIT_FAILURE);
     }
     else if (is_name_fils_exist(n2->fils, new_nom) == 0) // Cas 6 : [ERREUR] Il existe déjà un noeud portant le nom "new_nom" dans la destination pointée par chemin2.
     {
+        printf("Erreur dans 'cp' (commande.c:248) : Il existe déjà un noeud portant le nom '%s' parmi les fils du noeud destination.\n", new_nom);
         free_noeud((*courant)->racine);
         free(courant);
         free(new_nom);
         free(dest);
-        printf("Erreur dans 'cp' (commande.c:248) : Il existe déjà un noeud portant le nom '%s' parmi les fils du noeud destination.\n", new_nom);
         exit(EXIT_FAILURE);
     }
     else // Cas 7 : On peut copier le noeud.
