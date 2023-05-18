@@ -44,6 +44,9 @@ noeud *insert_noeud(noeud **courant, noeud *newfils)
         quit("Erreur dans 'insert_noeud' (noeud.c:38) : Le noeud 'courant' n'existe pas. Vous ne pouvez pas y ajouter 'newfils'.");
     }
 
+    if (!(*courant)->est_dossier)
+        quit("Erreur dans 'insert_noeud' (noeud.c:41) : Le noeud 'courant' n'est pas un dossier. Vous ne pouvez pas y ajouter 'newfils'.");
+
     if ((*courant)->fils == NULL) // Si le noeud courant n'a pas de fils.
     {
         (*courant)->fils = malloc(sizeof(liste_noeud)); // On crée simplement une structure de liste de noeuds.
