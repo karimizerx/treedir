@@ -12,7 +12,7 @@ noeud *init_noeud(noeud **courant, bool is_dossier, char *nom)
     {
         free_noeud((*courant)->racine);
         free(courant);
-        printf("Erreur dans 'init_noeud' (noeud.c:10) : La nom choisi '%s' n'est pas alpha-numérique.", nom);
+        printf("Erreur dans 'init_noeud' (noeud.c:11) : La nom choisi '%s' n'est pas alpha-numérique.", nom);
         exit(EXIT_FAILURE);
     }
     noeud *node = malloc(sizeof(noeud));
@@ -41,12 +41,14 @@ noeud *insert_noeud(noeud **courant, noeud *newfils)
     {
         free_noeud((*courant)->racine);
         free(courant);
-        quit("Erreur dans 'insert_noeud' (noeud.c:38) : Le noeud 'courant' n'existe pas. Vous ne pouvez pas y ajouter 'newfils'.");
+        quit("Erreur dans 'insert_noeud' (noeud.c:40) : Le noeud courant n'existe pas. Vous ne pouvez pas y ajouter 'newfils'.");
     }
-
     if (!(*courant)->est_dossier)
-        quit("Erreur dans 'insert_noeud' (noeud.c:41) : Le noeud 'courant' n'est pas un dossier. Vous ne pouvez pas y ajouter 'newfils'.");
-
+    {
+        free_noeud((*courant)->racine);
+        free(courant);
+        quit("Erreur dans 'insert_noeud' (noeud.c:46) : Le noeud courant n'est pas un dossier. Vous ne pouvez pas y ajouter 'newfils'.");
+    }
     if ((*courant)->fils == NULL) // Si le noeud courant n'a pas de fils.
     {
         (*courant)->fils = malloc(sizeof(liste_noeud)); // On crée simplement une structure de liste de noeuds.
@@ -64,7 +66,6 @@ noeud *insert_noeud(noeud **courant, noeud *newfils)
         assert(tmp->succ != NULL);               // On vérifie que l'allocation s'est bien passée.
         tmp->succ->no = newfils;                 // On initialise les valeures de cette liste de noeuds.
         tmp->succ->succ = NULL;
-        // free(tmp);
     }
     newfils->pere = *courant; // On met à jour le pere du fils inséré (parfois nécessa).
     return newfils;           // On renvoie le fils inséré.
