@@ -217,7 +217,7 @@ int main(int argc, char const *argv[])
     *n0 = init_noeud(true, nom0);         // On crée le noeud racine.
     (*n0)->pere = *n0;
     (*n0)->racine = *n0;
-    read(n0, "test7.txt");     // On lit le fichier contenant la liste des commandes & on exécute celles-ci.
+    read(n0, "test.txt");      // On lit le fichier contenant la liste des commandes & on exécute celles-ci.
     free_noeud((*n0)->racine); // On libère la mémoire alouée.
     free(n0);
     puts("Exécution terminée.");

@@ -241,63 +241,58 @@ void cp(noeud *courant, char *chemin1, char *chemin2)
 // Déplace le noeud pointé par le chemin 'src' dans le noeud pointé par le chemin 'dst'.
 void mv(noeud *courant, char *src, char *dst)
 {
-    cp(courant, src, dst);
-    rm(courant, src);
+    if (src == NULL || dst == NULL)
+        quit("Erreur dans 'mv' (commande.c:244) : Il n'y a pas assez d'arguments.");
+
+    noeud *source = search_noeud(courant, src);
+    if (source == NULL) // Cas 1 : [ERREUR] Le chemin a copié n'existe pas.
+    {
+        printf("Erreur dans 'mv' (commande.c:248) : Aucun noeud pointé par le chemin '%s'.\n", src);
+        exit(EXIT_FAILURE);
+    }
+    noeud *destination = search_noeud(courant, dst);
+
+    if (destination == NULL) // Cas 2 : [ERREUR] Le noeud pointé par la destination n'existe pas.
+    {
+        printf("Erreur dans 'mv' (commande.c:255) : Aucun noeud pointé par le chemin '%s'.\n", dst);
+        exit(EXIT_FAILURE);
+    }
+    if (!destination->est_dossier) // Cas 3 : [ERREUR] Le noeud pointé par la destination n'est pas un dossier.
+    {
+        printf("Erreur dans 'mv' (commande.c:260) : Le noeud pointé par le chemin '%s' n'est pas un dossier.\n", dst);
+        exit(EXIT_FAILURE);
+    }
+    else if (is_parent(destination, source) == 0) // Cas 4 : [ERREUR] Le noeud à déplacer est parent du noeud destination.
+    {
+        printf("Erreur dans 'mv' (commande.c:267) : Le noeud à copier '%s' est parent du noeud destination '%s'\n.", source->nom, destination->nom);
+        exit(EXIT_FAILURE);
+    }
+    else if (is_name_fils_exist(destination->fils, source->nom) == 0) // Cas 5 : [ERREUR] Il existe déjà un noeud portant le nom du noeud à déplacer dans la destination.
+    {
+        printf("Erreur dans 'mv' (commande.c:272) : Il existe déjà un noeud portant le nom '%s' parmi les fils du noeud destination.\n", source->nom);
+        exit(EXIT_FAILURE);
+    }
+    else // Cas 7 : On peut déplacer le noeud.
+    {
+        // On supprime la connection entre le noeud source et son père.
+        noeud *src_pere = source->pere;
+        liste_noeud *ln = src_pere->fils;
+        liste_noeud *l;       // Pointeur vers la structure 'liste_noeud' du noeud à déplacer.
+        if (ln->no == source) // Si le noeud a déplacer est le premier fils.
+        {
+            l = ln;                                // On garde un pointeur vers cette structure.
+            src_pere->fils = src_pere->fils->succ; // On change les liaisons pour isoler le noeud à déplacer.
+        }
+        else // Sinon, on cherche le noeud à déplacer dans la liste des fils.
+        {
+            while (ln->succ->no != source)
+                ln = ln->succ;
+            l = ln->succ;              // On garde un pointeur vers cette structure.
+            ln->succ = ln->succ->succ; // On change les liaisons pour isoler le noeud à supprimer.
+        }
+        free(l); // On supprime la strucutre 'list_noeud' du noeud déplacé.
+
+        // On relie le noeud à son nouveau père.
+        insert_noeud(destination, source);
+    }
 }
-
-// void rm(noeud *courant, char *chem)
-// {
-//     noeud *del = search_noeud(courant, chem);
-//     if (is_parent(courant, del) == 0)
-//         quit("destination est parent du dossier courant");
-//     if (del == NULL)
-//         quit("fichier n'existe pas");
-//     liste_noeud *list = del->pere->fils;
-//     while (equals(list->succ->no->nom, del->nom))
-//         list = list->succ;
-//     list->succ = list->succ->succ;
-// }
-
-// void cp(noeud *courant, char *src, char *dst)
-// {
-//     int newchem = getDernierMotIndex(dst); // renvoi l'indice a partir du quelle ya le nom du fichier
-//     if (newchem == -1)
-//         quit("erreur");
-//     if (newchem == strlen(dst))
-//         quit("il y a un / la fin du chemin source, commande invalide");
-
-//     char *chem;       // chemin vers le dossier ou on copie
-//     if (newchem == 0) // le dst est le dossier courant
-//         chem = chemin_absolue(courant);
-//     else
-//     {
-//         chem = malloc(sizeof(char) * (newchem));
-//         memcpy(chem, dst, newchem);
-//     }
-//     printf("%s\n", chem);
-//     noeud *copier = search_noeud(courant, src);
-//     if (copier == NULL)
-//     {
-//         printf("dossier %s fichier n'existe pas", src);
-//         quit("");
-//     }
-
-//     noeud *dest = search_noeud(courant, chem);
-
-//     if (dest == NULL)
-//         quit("Dossier destination n'existe pas");
-
-//     if (is_parent(copier, dest) == 0)
-//         quit("destination est parent du dossier courant");
-
-//     if (!dest->est_dossier)
-//         quit("la destination n'est pas un dossier");
-
-//     if (search_noeud_profondeur1(dest, dst + newchem) != NULL)
-//     {
-//         exit(EXIT_FAILURE);
-//         quit("fichier de meme nom existant");
-//     }
-//     noeud *tmp = copie_arbre(copier, dst + newchem + 1);
-//     insert_noeud(dest, tmp);
-// }

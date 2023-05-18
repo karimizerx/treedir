@@ -3,4 +3,27 @@ cd azertyuiopqsdfghjklmwxcvbn
 mkdir nbvcxwmlkjhgfdsqpoiuytreza
 cd nbvcxwmlkjhgfdsqpoiuytreza
 cd ../../azertyuiopqsdfghjklmwxcvbn/nbvcxwmlkjhgfdsqpoiuytreza/../../azertyuiopqsdfghjklmwxcvbn/nbvcxwmlkjhgfdsqpoiuytreza/../../azertyuiopqsdfghjklmwxcvbn/nbvcxwmlkjhgfdsqpoiuytreza/../../azertyuiopqsdfghjklmwxcvbn/nbvcxwmlkjhgfdsqpoiuytreza/../../azertyuiopqsdfghjklmwxcvbn/nbvcxwmlkjhgfdsqpoiuytreza/../../azertyuiopqsdfghjklmwxcvbn/nbvcxwmlkjhgfdsqpoiuytreza/../../azertyuiopqsdfghjklmwxcvbn/nbvcxwmlkjhgfdsqpoiuytreza/../../azertyuiopqsdfghjklmwxcvbn/nbvcxwmlkjhgfdsqpoiuytreza/../../azertyuiopqsdfghjklmwxcvbn/nbvcxwmlkjhgfdsqpoiuytreza/../../azertyuiopqsdfghjklmwxcvbn/nbvcxwmlkjhgfdsqpoiuytreza
-printcd
+cd
+print
+rm azertyuiopqsdfghjklmwxcvbn
+print
+mkdir Cours
+cd Cours
+mkdir ProjetC
+mkdir Anglais
+cd
+mkdir Td
+cd Td
+mkdir Td1
+mkdir Td2
+cd
+touch edt
+mkdir Tp
+cd Tp
+mkdir TP1
+cd TP1
+touch sujetTp1
+cd
+print
+mv Tp/TP1 Td
+print
