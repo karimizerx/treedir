@@ -337,7 +337,7 @@ void execute(noeud **courant, char *command, char *arg1, char *arg2)
 }
 
 // Lis le fichier de nom 'filename' & lance les exécutions.
-void read(noeud **courant, char *filename)
+void read(noeud **courant,const char *filename)
 {
     FILE *flux = fopen(filename, "r");
     if (flux == NULL)
