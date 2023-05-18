@@ -34,7 +34,7 @@ void info(noeud **courant)
         free(courant);
         quit("Erreur dans 'info' (commande.c:31) : Le noeud courant est NULL.");
     }
-    print_noeud(courant);
+    print_noeud(*courant);
     puts("");
 }
 
@@ -285,8 +285,8 @@ void cp(noeud **courant, char *chemin1, char *chemin2)
     }
     else // Cas 7 : On peut copier le noeud.
     {
-        noeud *copie = copie_arbre(n1, new_nom);
-        insert_noeud(n2, copie);
+        noeud *copie = copie_arbre(&n1, new_nom);
+        insert_noeud(&n2, copie);
     }
     free(dest);
     free(new_nom);
@@ -361,6 +361,6 @@ void mv(noeud **courant, char *src, char *dst)
         free(l); // On supprime la strucutre 'list_noeud' du noeud déplacé.
 
         // On relie le noeud à son nouveau père.
-        insert_noeud(destination, source);
+        insert_noeud(&destination, source);
     }
 }

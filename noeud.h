@@ -43,7 +43,7 @@ extern char *chemin_absolue(noeud *courant);
 
 extern noeud *copie_arbre(noeud **courant, char *nom);
 
-extern liste_noeud *copie_fils(liste_noeud **courant, noeud *nom);
+extern liste_noeud *copie_fils(liste_noeud *courant, noeud *nom);
 
 extern void tree(noeud *courant, int nbSpace);
 

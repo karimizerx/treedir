@@ -4,9 +4,7 @@ mkdir nbvcxwmlkjhgfdsqpoiuytreza
 cd nbvcxwmlkjhgfdsqpoiuytreza
 cd ../../azertyuiopqsdfghjklmwxcvbn/nbvcxwmlkjhgfdsqpoiuytreza/../../azertyuiopqsdfghjklmwxcvbn/nbvcxwmlkjhgfdsqpoiuytreza/../../azertyuiopqsdfghjklmwxcvbn/nbvcxwmlkjhgfdsqpoiuytreza/../../azertyuiopqsdfghjklmwxcvbn/nbvcxwmlkjhgfdsqpoiuytreza/../../azertyuiopqsdfghjklmwxcvbn/nbvcxwmlkjhgfdsqpoiuytreza/../../azertyuiopqsdfghjklmwxcvbn/nbvcxwmlkjhgfdsqpoiuytreza/../../azertyuiopqsdfghjklmwxcvbn/nbvcxwmlkjhgfdsqpoiuytreza/../../azertyuiopqsdfghjklmwxcvbn/nbvcxwmlkjhgfdsqpoiuytreza/../../azertyuiopqsdfghjklmwxcvbn/nbvcxwmlkjhgfdsqpoiuytreza/../../azertyuiopqsdfghjklmwxcvbn/nbvcxwmlkjhgfdsqpoiuytreza
 cd
-print
 rm azertyuiopqsdfghjklmwxcvbn
-print
 mkdir Cours
 cd Cours
 mkdir ProjetC
@@ -17,11 +15,13 @@ cd Td
 mkdir Td1
 mkdir Td2
 cd
+ls
 touch edt
 mkdir Tp
 cd Tp
 mkdir TP1
 cd TP1
+pwd
 touch sujetTp1
 cd
 print

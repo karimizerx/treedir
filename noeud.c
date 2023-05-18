@@ -142,8 +142,6 @@ noeud *search_noeud(noeud *courant, char *chemin)
 // Affiche les informations du noeud 'courant'. Affiche une ERREUR sinon et quitte le programme.
 void print_noeud(noeud *courant)
 {
-    if (courant == NULL)
-        return NULL;
     printf("Nom : %s\n", courant->nom);
     printf("Racine : %s\n", courant->racine->nom);
     printf("Pere : %s\n", courant->pere->nom);
@@ -220,7 +218,12 @@ noeud *copie_arbre(noeud **courant, char *nom)
     char nvnom[99]; // Le nom du noeud copié.
     size_t len = strlen(nom);
     if (len > 100)
-        quit("Le nouveau nom possède trop de caractères (maximum 100).");
+    {
+        free_noeud((*courant)->racine);
+        free(courant);
+        printf("Le nouveau nom '%s' possède dépasse la limite autorisée (100).", nom);
+        exit(EXIT_FAILURE);
+    }
     memcpy(nvnom, nom, len); // On copie le nouveau nom du fichier
     nvnom[len] = '\0';       // On respecte les règles des chaines de caractère.
 
@@ -231,15 +234,15 @@ noeud *copie_arbre(noeud **courant, char *nom)
 }
 
 // Copie les fils (récursivement) du noeud 'courant'. Utile pour "copie_arbre".
-liste_noeud *copie_fils(liste_noeud **courant, noeud *pere)
+liste_noeud *copie_fils(liste_noeud *courant, noeud *pere)
 {
-    if (*courant == NULL) // Si le noeud est NULL, on renvoie NULL.
+    if (courant == NULL) // Si le noeud est NULL, on renvoie NULL.
         return NULL;
     liste_noeud *ln = malloc(sizeof(liste_noeud));
     assert(ln != NULL); // On vérifie que l'allocation s'est bien passée.
-    ln->no = copie_arbre((*courant)->no, (*courant)->no->nom);
+    ln->no = copie_arbre(&(courant->no), courant->no->nom);
     ln->no->pere = pere;
-    ln->succ = copie_fils((*courant)->succ, pere);
+    ln->succ = copie_fils(courant->succ, pere);
     return ln;
 }
 

@@ -165,7 +165,7 @@ void execute(noeud **courant, char *command, char *arg1, char *arg2)
                 quit("Erreur : Trop peux d'arguments pour la commande 'cp'.");
             }
             else
-                cp(*courant, arg1, arg2);
+                cp(courant, arg1, arg2);
         }
         else
         {
@@ -180,7 +180,7 @@ void execute(noeud **courant, char *command, char *arg1, char *arg2)
         if (strcmp(command, "info") == 0)
         {
             if (arg1 == NULL && arg2 == NULL)
-                info(*courant);
+                info(courant);
             else
             {
                 free_noeud((*courant)->racine);
@@ -207,12 +207,12 @@ void execute(noeud **courant, char *command, char *arg1, char *arg2)
                 quit("Erreur : Arguments trop nombreux pour la commande 'pwd'.");
             }
             else
-                pwd(*courant);
+                pwd(courant);
         }
         else if (strcmp(command, "print") == 0)
         {
             if (arg1 == NULL && arg2 == NULL)
-                print(*courant);
+                print(courant);
             else
             {
                 free_noeud((*courant)->racine);
@@ -244,7 +244,7 @@ void execute(noeud **courant, char *command, char *arg1, char *arg2)
             printf("La commande '%s' est inconnue.\n", command);
             exit(EXIT_FAILURE);
         }
-        ls(*courant);
+        ls(courant);
         puts("");
         break;
 
@@ -258,7 +258,7 @@ void execute(noeud **courant, char *command, char *arg1, char *arg2)
                 quit("Erreur : Trop peux d'arguments pour la commande 'mv'.");
             }
             else
-                mv(*courant, arg1, arg2);
+                mv(courant, arg1, arg2);
         }
         else if (command[i + 1] != 'k')
         {
@@ -281,7 +281,7 @@ void execute(noeud **courant, char *command, char *arg1, char *arg2)
                 free(courant);
                 quit("Erreur : Arguments trop nombreux pour la commande 'mkdir'.");
             }
-            mkdir(*courant, arg1);
+            mkdir(courant, arg1);
         }
         break;
 
@@ -305,7 +305,7 @@ void execute(noeud **courant, char *command, char *arg1, char *arg2)
             free(courant);
             quit("Erreur : Trop peux d'arguments pour la commande 'rm'.");
         }
-        rm(*courant, arg1);
+        rm(courant, arg1);
         break;
 
     case 't':
@@ -323,7 +323,7 @@ void execute(noeud **courant, char *command, char *arg1, char *arg2)
                 free(courant);
                 quit("Erreur : Arguments trop nombreux pour la commande 'touch'.");
             }
-            touch(*courant, arg1);
+            touch(courant, arg1);
         }
         break;
 
